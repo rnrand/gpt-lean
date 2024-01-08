@@ -1,0 +1,5 @@
+[package]
+name = "gpt-lean"
+version = "0.1"
+lean_version = "leanprover/lean4:v4.5.0-rc1"
+path = "lean4"
