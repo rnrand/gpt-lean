@@ -1,22 +1,29 @@
-[tool.poetry]
+[project]
 name = "coq_to_lean"
 version = "0.1.0"
-description = ""
-authors = ["Fady Adal <2masadel@gmail.com>"]
+description = "Default template for PDM package"
+authors = [{ name = "Fady Adal", email = "2masadel@gmail.com" }]
+dependencies = [
+    "python-dotenv>=1.0.1",
+    "lean-dojo>=1.5.1",
+    "llama-cpp-python>=0.2.39",
+]
 readme = "README.md"
+requires-python = "==3.10.*"
+license = { text = "MIT" }
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.11"
-openai = "^1.9.0"
-python-dotenv = "^1.0.0"
-lean-dojo = "^1.5.1"
-llama-cpp-python = "^0.2.37"
+# [build-system]
+# requires = ["hatchling"]
+# build-backend = "hatchling.build"
 
+[project.scripts]
+main = "coq_to_lean:main"
 
-[tool.poetry.group.dev.dependencies]
-python-lsp-server = { version = "^1.10.0", extras = ["all"] }
-ipython = "^8.20.0"
+[tool.pdm.scripts]
+main = { call = "coq_to_lean:main" }
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["coq_to_lean"]
