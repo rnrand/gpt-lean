@@ -97,7 +97,10 @@ def main(project_root, file, model):
             good = Confirm.ask("Looks good?")
             if not good:
                 lean_cmd = prompt(
-                    "lean4> ", lexer=PygmentsLexer(Lean3Lexer), multiline=True
+                    "lean4> ",
+                    lexer=PygmentsLexer(Lean3Lexer),
+                    multiline=True,
+                    default=lean_cmd,
                 )
 
             new_state = dojo.run_cmd(state, lean_cmd)
