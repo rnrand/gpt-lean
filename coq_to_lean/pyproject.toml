@@ -7,6 +7,10 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "lean-dojo>=1.5.1",
     "llama-cpp-python>=0.2.39",
+    "rich>=13.7.0",
+    "click>=8.1.7",
+    "pygments>=2.17.2",
+    "prompt-toolkit>=3.0.43",
 ]
 readme = "README.md"
 requires-python = "==3.10.*"
@@ -20,7 +24,7 @@ license = { text = "MIT" }
 main = "coq_to_lean:main"
 
 [tool.pdm.scripts]
-main = { call = "coq_to_lean:main" }
+main = { call = "coq_to_lean.cli:main" }
 
 [tool.hatch.metadata]
 allow-direct-references = true

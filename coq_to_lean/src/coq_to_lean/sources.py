@@ -67,7 +67,6 @@ class CoqLsp:
     # This function assumes synchronous execution
     def communicate(self, method, params) -> dict:
         id_ = self._write_message(method, params)
-        print(f"{id_=}")
         while True:
             response = self._read_message()
             if response.get("id") == id_:
