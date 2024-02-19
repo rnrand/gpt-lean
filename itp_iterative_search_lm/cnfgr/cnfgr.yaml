@@ -1,0 +1,21 @@
+llm:
+  model: EleutherAI/llemma_7b
+  tensor_parallel_size: 1
+  dtype: bfloat16
+  max_num_batched_tokens: 4096
+search:
+  num_samples: 8
+  temperatures: [0]
+  max_iters: 128
+  max_tokens: 256
+  timeout: 6 * 30
+language_server:
+  language: lean
+  version: 4.5.0
+  num_servers: 1
+prompt: cnfgr/prompts/llemma_lean_formal2formal.yaml
+hydra:
+  job:
+    chdir: false
+    # name: search
+  # verbose: false
