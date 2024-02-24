@@ -1,9 +1,10 @@
-import abc
 import json
 import os
 import subprocess
 from pathlib import Path
-from typing import Any, Iterable, Iterator, Optional
+from typing import Any, Iterator, Optional
+
+from coq_to_lean.sources import Source
 
 
 class CoqLsp:
@@ -75,18 +76,6 @@ class CoqLsp:
 
     def send_notification(self, method, params):
         self._write_message(method, params, is_notification=True)
-
-
-class Source(abc.ABC, Iterable[str]):
-    @abc.abstractmethod
-    def get_next_part(self) -> str:
-        raise NotImplementedError
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return self.get_next_part()
 
 
 class Coq(Source):
