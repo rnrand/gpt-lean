@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 2</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 2</h1>
+
+
+	<h2>Natural Deduction</h2>
+
+	<p>Consider the following proposition:
+		
+	<p>$\neg(A \vee B) \wedge A \to C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$
+		
+	<p>It isn't to hard to see why this is (vacuously) true: $A$ contradicts $\neg (A \vee B)$. On the other hand, we don't want to construct a truth table for this:
+		
+		<table>
+	        <tr> <th>$A$<th>$B$<th>$C$<th>$D$<th>$E$<th>$F$<th>$G$<th>$H$<th>$I$<th>$J$<th>$A \vee B$<th>$\dots$
+	        <tr> <td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$\dots$
+	        <tr> <td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$F$<td>$T$<td>$\dots$
+	        <tr> <td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$F$<td>$T$<td>$T$<td>$\dots$
+	        <tr> <td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$T$<td>$\dots$
+	        <tr> <td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$<td>$\dots$
+	    </table>
+		And so on for $1024$ lines.
+		
+
+    <p> In general, if you have $n$ different propositional variables, you're looking at a truth table of size $2^n$. To avoid this, we use <em>inference rules</em> to allow us to deduce propositions from other propositions. In this class we will use a system called <em>natural deduction</em>, though several equivalent systems exists. In natural deduction, we write
+\begin{prooftree}
+\AxiomC{P}
+\UnaryInfC{Q}
+\end{prooftree}
+to say that we can use P (which appears on the top as an assumption) to prove Q (our conclusion).
+
+<h3>And and Or Rules</h3>
+
+<p>For every connective we have some number of <em>introduction</em> and <em>elimination</em> rules, which respectively allow us to derive a compound proposition and to use one. To illustrate this, let's start with the introduction and elimination rules for conjunction:
+\begin{prooftree}
+\AxiomC{$P$}
+\AxiomC{$Q$}
+\RightLabel{$\wedge$-I$\qquad$}
+\BinaryInfC{$P \wedge Q$}
+\AxiomC{$P \wedge Q$}
+\RightLabel{$\wedge$-E-L$\qquad$}
+\UnaryInfC{$P$}
+\AxiomC{$P \wedge Q$}
+\RightLabel{$\wedge$-E-R}
+\UnaryInfC{$Q$}
+\end{prooftree}
+
+<p>The introduction rule ($\wedge$-I) says that if we know that $P$ is true and that $Q$ is true, we can derive that $P \wedge Q$ is true. Conversely the elimination rules $\wedge$-I-L and $\wedge$-I-R say that if I know that $P \wedge Q$ is true then I may derive that $P$ is true (the "L", or left elimination rule) or that $Q$ is (the right elimination rule).
+	
+<p>For "Or" we have two introduction rules and only a single, slightly more complex, elimination rule:
+\begin{prooftree}
+\AxiomC{$P$}
+\RightLabel{$\vee$-I-L$\qquad$}
+\UnaryInfC{$P \vee Q$}
+\AxiomC{$Q$}
+\RightLabel{$\vee$-I-R$\qquad$}
+\UnaryInfC{$P \vee Q$}
+\AxiomC{$P \vee Q$}
+\AxiomC{$P \to R$}
+\AxiomC{$Q \to R$}
+\RightLabel{$\vee$-E}
+\TrinaryInfC{$R$}
+\end{prooftree}
+
+The left and right introduction rules are both straightforward: Given $P$ or $Q$, we can derive that $P \vee Q$. However, the reverse direction isn't so easy: $P \vee Q$ doesn't tell us which of $P$ and $Q$ is true. Instead, we need to know that $P$ implies $R$ and so does $Q$. Using these two additional pieces of information, we can derive that $R$ is true.
+
+<p>Now that we have two rules, let's perform a deduction! We want to assume that $A \wedge B$ is true in order to prove $B \vee A$:
+
+\begin{prooftree}
+\AxiomC{$A \wedge B$}
+\RightLabel{$\wedge$-E-L$\qquad$}
+\UnaryInfC{$A$}
+\RightLabel{$\vee$-I-R$\qquad$}
+\UnaryInfC{$B \vee A$}
+\end{prooftree}
+
+<h3>Constructing an Implication</h3>
+
+<p>Finally we get to implication. The elimination rule for implication is straightforward: If we know that $P \to Q$ and also know that $P$ is true, we can derive $Q$. This is such an old and fundamental rule that it has a well-known latin name, <em>modus ponendo ponens</em>, or modus ponens for short (in English "the mode where affirming affirms"). 
+	
+<p>The introduction rule for $\to$ is slightly more complex:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$n$}
+\UnaryInfC{$P$}
+\UnaryInfC{$\vdots$}
+\UnaryInfC{$Q$}
+\RightLabel{$\to$-I-$n\qquad\qquad$}
+\UnaryInfC{$P \to Q$}
+\qquad
+\AxiomC{$P$}
+\LeftLabel{$\qquad\qquad$}
+\AxiomC{$P \to Q$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$Q$}
+\end{prooftree}
+This says that if we assume $P$ and are eventually able to conclude $Q$, we can remove $P$ as an assumption (via the top horizonal bar) and conclude that $P \to Q$. We will annotate both the final step in our deduction and the top vertical bar with a number (here represented by $n$) so that we can tell which assumption is being discharged. 
+
+<p>These two rules are fundamental to essentially every logical system. If I know that $P$ implies $Q$ and know $P$, I need to be able to derive $Q$. On the other hand, if I want to show that $P \to Q$, I need to start by assuming $P$ and somehow reach $Q$. I can then conclude $P \to Q$. We will return to this when we explore less formal proofs: We will always start by assuming whatever claims we are permitted to assume ("Assume $P$ and $Q$. We have...") and then use those claims to derive our goal ("...therefore R").
+
+<p>Let's try using the implication and OR rules together! One desirable property of OR is that it should be symmetric: From $A \vee B$ we should be able to derive $B \vee A$:
+	
+\begin{prooftree}
+\AxiomC{$P \vee Q$}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$P$}
+\RightLabel{$\vee$-I-R}
+\UnaryInfC{$Q \vee P$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$P \to Q \vee P$}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$Q$}
+\RightLabel{$\vee$-I-L}
+\UnaryInfC{$Q \vee P$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$Q \to Q \vee P$}
+\RightLabel{$\vee$-E}
+\TrinaryInfC{$Q \vee P$}
+\end{prooftree}
+
+<p>Note that we could use a final application of the arrow introduction rule to discharge the assumption of $P \vee Q$, leaving us with the tautology $P \vee Q \rightarrow Q \vee P$.
+
+<!-- <p>Returning to our earlier theorem that $A \to (B \to A)$, we can produce the following proof:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$A$}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$B$}
+\RightLabel{$\wedge$-I}
+\BinaryInfC{$A \wedge B$}
+\RightLabel{$\wedge$-E-L}
+\UnaryInfC{$A$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$B \to A$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$A \to (B \to A)$}
+\end{prooftree}
+
+<p>Note that we discarded $B$ fairly early in this derivation. That's fine! Unlike $A$, $B$ wasn't important to the proof, we merely needed to assume it in order to discharge it in $\to$-I$(2)$. You can think of think as a convoluted extension of the simple fact that $A \to A$. (Try proving this!) -->
+	
+<h3>Negation and Falsehood</h3>
+	
+<p>What about negation? Most deductive systems treat $\neg P$ as simple shorthand for $P \to \bot$, which we read as "P implies false". $\bot$ comes with a single elimination rule:
+\begin{prooftree}
+\AxiomC{$\bot$}
+\RightLabel{$\bot$-E}
+\UnaryInfC{$P$}
+\end{prooftree}
+<p> Note that the $P$ on the bottom can be any statement in propositional logic. Essentially, this says that if everything is a lie, then everything is true (or, as a programmer might say, "you hacked the system"). This is also important enough to have earned its own Harry Potter-style incantation, <em>ex falso quodlibet</em> ("from fallacy, anything follows"), and Marvel-movie name, the "principle of explosion".
+
+<p>In practice, this is the rule that allows us to prove things on the basis of a contradiction. Let's return to the example with which we started the class $\neg(A \vee B) \wedge A \to C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$. Since $C$ through $J$ don't appear on the left hand side, we will have to derive them using the principle of explosion:
+
+\begin{prooftree}
+\AxiomC{$\bot$}
+\RightLabel{$\bot$-E}
+\UnaryInfC{$C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$}
+\end{prooftree}
+
+<p>There is no introduction rule for $\bot$ so we'll have to conclude it from our negated assumption (which, recall, is shorthand for $P \vee Q \to \bot$):
+	
+\begin{prooftree}
+\AxiomC{$A \vee B$}
+\AxiomC{$\neg(A \vee B)$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\bot$-E}
+\UnaryInfC{$C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$}
+\end{prooftree}
+
+<p> Completing the proof:	
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$\neg (A \vee B) \wedge A$}
+\RightLabel{$\bot$-E-R}
+\UnaryInfC{$A$}
+\UnaryInfC{$A \vee B$}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$\neg (A \vee B) \wedge A$}
+\RightLabel{$\bot$-E-L}
+\UnaryInfC{$\neg(A \vee B)$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\bot$-E}
+\UnaryInfC{$C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$}
+\RightLabel{$\to$-E-$1$}
+\UnaryInfC{$\neg (A \vee B) \wedge A \to C \wedge D \wedge F \wedge G \wedge H \wedge I \wedge J$}
+\end{prooftree}
+
+<p>Note that we discharge two instances of $\neg (A \vee B) \wedge A$ in the final step. This is fine: Classical logic allows you to duplicate assumptions. (If you prohibit this, you get an interesting system called <em>linear</em> or <em>affine logic</em> that plays a key role in Rust's type system, as well as some quantum programming languages.) We can treat both instances of $\neg (A \vee B) \wedge A$ as copies of the same assumption, placed in different locations in the tree. Hence we label them with the same identifier for discharging.
+
+<p>Our system is not yet complete. In the next class, we'll discuss the <em>Law of the Excluded Middle</em> ($P \vee \neg P$) before generalizing our system to Predicate Calculus.
+
+

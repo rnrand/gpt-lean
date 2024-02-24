@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 1</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Introduction</h1>
+
+    <p>Welcome to CMSC 27100! Basic course information can be found on the home page of the <a href="../">course website</a>.
+
+    <h2>What is this course about?</h2>
+    <p>This course is <em>discrete</em> mathematics, to be contrasted with <em>continuous</em> mathematics. Continuous mathematics is the kind of math that people like Euclid (Geometry) and Newton (Calculus) studied, requiring them to come up with notions like <em>irrational</em> numbers. By contrast, we will only be concerned with things like integers and rational numbers, which are conveniently the numbers that we use to count and to program computers.
+		
+	<p> It is also fundamentally about proof. Proof forms the foundation of mathematics, which in turn formed the foundation of computer science: Turing, von Neumann, Hopper and the other founders of CS were all mathematicians. As a result, every theoretical computer science course you take will have proof at its foundations (and more courses involve deep theory than you may realize).
+
+    <h2>Why should you take this course?</h2>
+	<blockquote>
+    <p>I don't remember what the world looked like before I studied logic and probability theory, but I imagine it was fuzzy.
+    <footer>&mdash;<cite>David A. Johnson, Logician</cite></footer>
+    </blockquote>
+	
+	
+	<p>There are two good reasons to take this course:</p>
+	
+	<p><em>This course will enable you to become a computer scientist</em>. It will give you the foundations to analyze the running time of algorithm (Algorithms), to classify problems according to their difficulty (Complexity Theory) and solvability (Computability Theory). It will allow you to reason about deductive systems (Type Theory), number theory (Cryptography) and stochastic processes (Machine Learning). Ultimately, it will allow you to do computer science.</p>
+	
+	<p>The other core math course for doing any advanced computer science is Linear Algebra, which forms the basis for key areas of computer science from Machine Learning to Quantum Computing. Unfortunately, we will not have time to cover Linear Algebra in this course, but we highly recommend you take a linear algebra course in the course of your studies.</p>
+		
+	<p><em>This course will help you in life</em>. Two of the subjects covered in this course, logic and probability theory, are core to making good decisions in almost every endeavor. While "logic" in our context is not precisely the logic of Mr. Spock from Star Trek (fortunately) or "logic" in its colloquial sense, it is broadly useful. At their core, the arguments you encounter in everyday life approximate the kind of formal logic we will study in this class. Translating these arguments into formal logic will allow you to see holes where they exist and identify fallacies. Probability theory proves even more central to life, from allowing you to win games to helping you assess risk in investing. Probability is essential to a wide variety of endeavors, from allowing you to model elections to balancing risk against rewards in a (hypothetical) pandemic.</p>
+		
+    <h2>What will we be covering in this course?</h2>
+    <p>This course covers a number of fun areas of (discrete) mathematics.
+
+    <ol>
+        <li><em>Logic and set theory.</em> These form the basis for the ideas and proof strategies that we'll use throughout the course.
+        <li><em>Number theory.</em> Number theory is the study of the properties of numbers and, in particular, the prime numbers. It's useful in our context for learning proof strategies, but also for cryptography and frittering your life away on <a href="https://en.wikipedia.org/wiki/Collatz_conjecture">impossible problems</a>. 
+        <li><em>Combinatorics.</em> Combinatorics is the study of how to count things. This sounds trivial until you have to start trying to figure out how many ways there are to count things and the subtle distinctions that can take a problem from having $20$ configurations to $10^{20^{20}}$ configurations.  
+        <li><em>Probability theory.</em> Probability is the study of quantifying the likelihood that events will occur. We focus on <em>discrete</em> probability, where events occur with countably many possible outcomes. (Think rolling a die rather than shooting an arrow at a target.)
+        <li><em>Graph theory.</em> Graph theory is the study of graphs. These are not graphs in the calculus or stats sense, but graphs as a set of circles connected by lines. Graphs can represent relations among a set of objects.
+    </ol>
+
+    <p>Keep in mind that while this is an explicit list of content that we expect to cover, there is a lot more that we'll be covering implicitly, in the course of studying these topics. As already mentioned, a big part of this course is to develop your skills in mathematical proof.
+
+<p>I hope you enjoy it!</p>
+
+</body>

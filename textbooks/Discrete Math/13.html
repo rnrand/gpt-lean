@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 13</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 13</h1>
+
+<h3>Fundamental Theorem of Arithmetic (continued)</h3>
+
+    <p><strong>Theorem 12.1 (Euclid's Lemma).</strong> If $p$ is prime, and $a,b$ are integers such that $p \mid a \cdot b$, then $p \mid a$ or $p \mid b$.
+
+    <p><em>Proof.</em> Without loss of generality, suppose $p \not \mid a$. Then $\gcd(p,a) = 1$ and there exist integers $x$ and $y$ such that $xa + yp = 1$. Then multiplying both sides by $b$, we have
+    $$b = xab + ypb.$$
+    Since $p \mid ab$, let $n$ be an integer such that $ab = pn$. Then we have 
+    $$b = xab + ypb = xpn + ypb = p \cdot (xn+yb).$$
+    Therefore, by definition of divisibility, $p \mid b$.
+    $$\tag*{$\Box$}$$
+
+    <p>Notice that this proof makes use of Bézout's lemma. Since Bézout's lemma appears about 2000 years after Euclid, it is safe to say that this is not the proof that appears in the Elements.
+
+    <p>Now, we will prove the following lemma, which will allow us to prove the uniqueness part of the Fundamental Theorem of Arithmetic.
+
+    <p><strong>Lemma 12.2.</strong> If $p, p_1, \dots, p_k$ are prime and $p \mid p_1 \cdots p_k$, then $p = p_i$ for some $i$.
+
+    <p><em>Proof.</em> We will prove this by induction on $k$, the number of primes.
+
+    <p><strong>Base case.</strong> In this case, $p \mid p_1$. Since $p$ and $p_1$ are both prime, it must be the case that $p = p_1$.
+
+    <p><strong>Inductive case.</strong> Suppose our lemma is true for $k$ and consider $p \mid p_1 \cdots p_k \cdot p_{k+1}$. By Theorem 12.1, if $p \mid a \cdot b$, then $p \mid a$ or $p \mid b$. Let $a = p_1 \cdots p_k$ and $p_{k+1} = b$. If $p \mid a$, then $p = p_i$ for some $i$ with $1 \leq i \leq k$ by our inductive hypothesis and our result holds. If $p \mid b$, then $p = p_{k+1}$ and our result holds.
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Proof of the Fundamental Theorem of Arithmetic (Uniqueness).</strong> 
+	
+	<p>Claim: $\forall~a,p_1,p_2,\dots,p_n,q_1,q_2,\dots q_m$ where every $p_i$ and $q_i$ is prime, if
+		$$a = p_1p_2\dots p_n = q_1q_2 \dots q_m$$
+		then the $p_i$s and $q_i$s are the same (that is, they form the same multiset).
+		
+     <p>We'll prove this by induction on $n$.
+		 
+     <p>Our base case is where $n=1$. Since $p_1$ is prime, there can only be one $q_i$ and $q_i$ must equal $p_i$.
+
+     <p>For the inductive case assume for all $a$, $p$s and $q$s, we have $a = p_1p_2\dots p_k = q_1q_2 \dots q_m$ implies the $p_i$s and $q_i$s are the same. Consider $a' = p_1p_2\dots p_kp_{k+1} = q_1q_2 \dots q_m$. Since $p_{k+1}$ divides $q_1q_2 \dots q_m$, there must be some $p_j$ such that $p_j = p_{k+1}$ by lemma 12.2. By our inductive hypothesis, $p_1p_2\dots p_k = q_1q_2 \dots q_{j-1}q_{j+1}q_m$ implies the $p_i$s and $q_i$s are identical. Hence multiplying both by $p_k+1 = q_j$ preserves the identity and demonstrates uniqueness.     				
+		
+	<p>Alternative Proof via minimality: We showed that every natural number $n \gt 1$ has a prime factorization. Suppose that prime factorizations are not unique. Let $n$ be the smallest number that doesn't have a unique prime factorization, so
+    $$n = p_1 \cdots p_k = q_1 \cdots q_\ell,$$
+    where $p_i$ is prime for $1 \leq i \leq k$ and $q_j$ is prime for $1 \leq j \leq \ell$. Clearly, $p_1 \mid n$. Then by Lemma 12.2, $p_1 = q_j$ for some $j$. Now, we divide each factorization by $p_1$. This gives us 
+    $$\frac n {p_1} = p_2 p_3 \cdots p_k = q_1 q_1 \cdots q_{j-1} q_{j+1} \cdots q_\ell.$$ 
+    But this is a smaller number with more than one prime factorization, contradicting the minimality of $n$.
+    $\tag*{$\Box$}$
+
+	<h3> Euclid's Theorem </h3>
+
+    <p><strong>Theorem 12.3 (Euclid's Theorem).</strong> There exist infinitely many primes.
+
+    <p><em>Proof.</em> Assume for a contradiction that there are only finitely many primes $p_1, p_2, \dots, p_k$. Consider $n = p_1 \cdot p_2 \cdots p_k + 1$. Since $n \gt p_i$ for all $i$, it cannot be a prime. Observe that for each prime $p_i$, we can write $n = q \cdot p_i + 1$ for some integer $q$. 
+
+    <p>By the division theorem, this means that we have a remainder of 1 when dividing $n$ by any of the primes $p_i$. Since $1 \neq 0$ and $1 \lt p_i$, it must be the case that $p_i$ does not divide $n$ for all $i$. In other words, $n$ cannot be factored into primes. But this is a contradiction of the Fundamental Theorem of Arithmetic. Therefore, our assumption that there were only finitely many primes was incorrect and there must exist infinitely many primes.
+    $\tag*{$\Box$}$
+
+
+
+    <!-- <p><strong>Theorem 12.4.</strong> If $a$ and $b$ are relatively prime and $a$ and $c$ are relatively prime, then $a$ and $bc$ are relatively prime.
+
+    <p><em>Proof.</em> Let $d = \gcd(a,bc)$. Since $a$ and $b$ are relatively prime and $a$ and $c$ are relatively prime, we have
+    \begin{align*}
+    1 &= am_1 + bn_1 \\
+    1 &= am_2 + cn_2
+    \end{align*}
+    for some integers $m_1, m_2, n_1, n_2$ by Bézout's lemma. Multiplying the two equations, we get
+    \begin{align*}
+    1 &= a^2 m_1 m_2 + a c m_1 n_2 + a b m_2 n_1 + bcn_1 n_2 \\
+    &= a(a m_1 m_2 + c m_1 n_2 + b m_2 n_1) + bc (n_1 n_2).
+    \end{align*}
+    Let $m = a m_1 m_2 + c m_1 n_2 + b m_2 n_1$ and $n = n_1 n_2$, both of which are integers. Since $d = \gcd(a,b)$, we have that $d \mid (am + bcn)$. But this means that $d \mid 1$, so $\gcd(a,bc) = 1$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Theorem 12.5.</strong> If $a$ and $b$ are relatively prime, and $a \mid n$ and $b \mid n$, then $ab \mid n$.
+
+    <p><em>Proof.</em> Since $a \mid n$, there exists an integer $s$ such that $as = n$. Similarly, there exists an integer $t$ such that $bt = n$. Since $\gcd(a,b) = 1$, there exist integers $x,y$ such that $ax + by = 1$. We can write
+    \begin{align*}
+    n &= axn + byn \\
+    &= axbt + byas \\
+    &= ab(xt + ys)
+    \end{align*}
+    and therefore $ab \mid n$.
+    $\tag*{$\Box$}$ -->
+
+
+	<!-- <h3>Wilson's Theorem</h3>
+
+    <p>The following result is called Wilson's Theorem, because it was stated by John Wilson in the 1700s. It turns out that it was stated around 700 years prior by an Arab mathematician, Hasan Ibn al-Haytham.
+
+    <p><strong>Theorem 12.4 (Wilson's Theorem).</strong> For all primes $p$, $(p-1)! = -1 \pmod p$.
+
+    <p><em>Proof.</em> Consider the equation $x^2 = 1 \pmod p$. We can rewrite this as $x^2 - 1 = 0 \pmod p$ and factor it to get $(x+1)(x-1) = 0 \pmod p$. Then $p \mid (p+1)(p-1)$ and therefore by Theorem 12.1, $p \mid (p+1)$ or $p \mid (p-1)$. Thus, $x+1 = 0 \pmod p$ or $x-1 = 0 \pmod p$ and therefore $x = \pm 1 \pmod p$.
+
+    <p>This means that for $2 \leq x \leq p-2$, $x \neq x^{-1} \pmod p$. Since each element has a multiplicative inverse and the inverses are unique, each of $2, 3, \dots, p-2$ can be paired with its inverse to cancel out to 1. Thus, we have
+    $$1 \cdot 2 \cdot \cdots \cdot p-2 \cdot p-1 = 1 \cdot p-1  = 1 \cdot -1 = -1 \pmod p.$$
+    $\tag*{$\Box$}$ -->
+
+    <!-- <p>The following theorem is due to Pierre de Fermat, which is called Fermat's <em>Little</em> Theorem, to distinguish it from the more famous Fermat theorem, Fermat's <em>Last</em> Theorem (there are no integers $a,b,c$ such that $a^n + b^n = c^n$ for $n \gt 2$). Much like Fermat's Last Theorem, Fermat stated the result in the mid 1600s but declined to give a proof of it because the proof was "too long".
+
+    <p>While it would be about 400 years before Fermat's Last Theorem gets proven (by Andrew Wiles in 1995), Fermat's Little Theorem was proved only about 100 years later, by Leonhard Euler. The following proof, using modular arithmetic, is due to James Ivory in the early 1800s and a bit later by Dirichlet.
+
+    <p><strong>Theorem 12.5 (Fermat's Little Theorem).</strong> For all prime numbers $p$ and integers $a$ such that $\gcd(a,p) = 1$, $a^{p-1} \equiv 1 \pmod p$. -->
+		
+	    <h3>Strong Induction: The Frobenius problem</h3>
+
+	    <p>The following is an instance of the <em>Frobenius problem</em>, due to Ferdinand Frobenius in the late 1800s. In general, the Frobenius problem asks, given positive relatively prime integers $x_1, x_2, \dots, x_n$, what is the largest integer not representable as a non-negative integer linear combination of the $x_i$.
+
+	    <p>We can think of this as a currency denomination problem. In the US, pennies are still in use, so every integer is representable, since we can just fill in the gaps with the 1 cent coins. However, in Canada, the penny was eliminated in 2012 and the smallest coin that is still minted is the nickel, which is 5 cents. Combined with the fact that the other coin denominations are 10 and 25 cents, this means that no integer number of cents that is not divisble by 5 can be represented (which is why we require relatively prime integers).
+
+	    <p><strong>Theorem 11.7.</strong> Every natural number $n \geq 12$ can be written as $n = 4a + 5b$ for $a,b \in \mathbb N$.
+
+	    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+	    <p><strong>Base case.</strong> For $n = 12$, we observe that $12 = 4 \cdot 3$.
+
+	    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 12$ and assume $k = 4a + 5b$ for $a,b \in \mathbb N$. Consider $n = k+1$. There are two cases to consider.
+	    <ul>
+	    <li>Suppose that $a \geq 1$. Then $k+1 = 4(a-1) + 5(b+1)$.
+	    <li>Suppose that $a = 0$. In other words, $k = 5b$. Since $k \geq 12$, we have $b \geq 3$. Then $k+1 = 4 \cdot 4 + 5(b-3)$.
+	    </ul>
+	    $\tag*{$\Box$}$
+
+	    <p>We can also prove this via strong induction. Recall that strong induction says that for a statement $P(n)$, if
+	    <ol>
+	    <li>$P(0)$, and
+	    <li>for all $k \in \mathbb N$, if $P(j)$ for all $j \leq k$, then $P(k+1)$
+	    </ol>
+	    <p> are both true, then the following is true:
+	    <ol start="3">
+	    <li>for all $n \in \mathbb N$, $P(n)$ holds.
+	    </ol>
+    
+	    <p><em>Proof.</em> We will prove this by strong induction on $n$.
+
+	    <p><strong>Base case.</strong> We will show that this is true for $n = 12, 13, 14, 15$. We have
+	    \begin{align*}
+	    12 &= 4 \cdot 3 + 5 \cdot 0, \\
+	    13 &= 4 \cdot 2 + 5 \cdot 1, \\
+	    14 &= 4 \cdot 1 + 5 \cdot 2, \\
+	    15 &= 4 \cdot 0 + 5 \cdot 3.
+	    \end{align*}
+
+	    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 15$ and assume for all $12 \leq j \leq k$ that $j = 4a + 5b$ for some $a,b \in \mathbb N$. Consider $n = k+1$. Since $k \geq 15$, we have that $k - 3 \geq 12$ and $k-3 = 4a + 5b$ with $a,b \in \mathbb N$. Then $k+1 = 4(a+1) + 5b$.
+	    $\tag*{$\Box$}$
+
+	    <p>You can find the proof of this in the Rosen textbook, where the question is formulated in terms of stamps and stamp denominations. This is not a perfect analogy like the coin formulation of the problem because an envelope has a finite amount of space for you to place stamps. This leads to a variant of the problem, where you also limit the number of stamps you can use.
+
+	    <p>Another instance of the Frobenius problem was formulated as a question not about coins, but about boxes of McNuggets. At the time the problem was posed, McNuggets came in boxes of 6, 9, and 20 in the UK, which is where Picciotto, who posed the problem, was from. So if you wanted to, say, split a bunch of nuggets evenly between seven people, you had to get at least 35 nuggets because there would be no way to get 7, 14, 21, or 28. It turns out that 43 is the smallest non-representable number.
+
+	    <p><strong>Theorem 11.8.</strong> Every natural number $n \geq 44$ can be written as $n = 20a + 9b + 6c$ for some $a,b,c \in \mathbb N$.
+
+	    <p><em>Proof.</em> We will prove this by strong induction on $n$.
+
+	    <p><strong>Base case.</strong> We will show that this is true for $n = 44, 45, 46, 47, 48, 49$. We have
+	    \begin{align*}
+	    44 &= 20 \cdot 1 + 9 \cdot 0 + 6 \cdot 4 \\
+	    45 &= 20 \cdot 0 + 9 \cdot 3 + 6 \cdot 3 \\
+	    46 &= 20 \cdot 2 + 9 \cdot 0 + 6 \cdot 1 \\
+	    47 &= 20 \cdot 1 + 9 \cdot 3 + 6 \cdot 0 \\
+	    48 &= 20 \cdot 0 + 9 \cdot 0 + 6 \cdot 8 \\
+	    49 &= 20 \cdot 2 + 9 \cdot 1 + 6 \cdot 0 \\
+	    \end{align*}
+
+	    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary with $k \geq 50$ and assume for all $44 \leq j \leq k$ that $j = 20a + 9b + 6c$ for some $a,b,c \in \mathbb N$. Consider $n = k+1$. Since $k \geq 50$, we have that $k - 6 \geq 44$ and therefore $k-6 = 20a + 9b + 6c$ with $a,b,c \in \mathbb N$. Then $k+1 = 20a + 9b + 6(c+1)$.
+	    $\tag*{$\Box$}$
+
+	    <p>Nowadays, nuggets don't come in odd-numbered denominations, at least not in the US or Canada.
+		

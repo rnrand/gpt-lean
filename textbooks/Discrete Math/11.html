@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 11</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 11</h1>
+
+<p> Let's review the technique of induction:
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you want to prove and what you'll be performing induction on.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> Let $k$ be an arbitrary natural number and state the <em>inductive hypothesis (IH)</em> $P(k)$ and the statement $P(k+1)$ to be proven. Then, using the assumption $P(k)$, prove $P(k+1)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>	
+
+<h2>Induction over a series</h2>
+	
+    <p><strong>Theorem 10.1.</strong> For every $n \in \mathbb N$,
+    $$\sum_{i=0}^n i = \frac{n(n+1)}2.$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 0$. Then 
+    $$\sum_{i = 0}^0 i = 0 \quad \text{and} \quad \frac{0 \cdot (0+1)}2 = 0,$$
+    so clearly $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=0$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k i = \frac{k(k+1)}2$. We will show that $\sum_{i=0}^{k+1} i = \frac{k+1(k+2)}2$. We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} i &= \sum_{i=0}^k i + (k+1) \\
+    &= \frac{k(k+1)}2 + (k+1) & \text{by ind. hyp.} \\
+    &= (k+1) \cdot \left(\frac k 2 + 1 \right) \\
+    &= (k+1) \cdot \left(\frac k 2 + \frac 2 2 \right) \\
+    &= \frac{(k+1)(k+2)}2
+    \end{align*}
+    Thus, we have shown that $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for $n=k+1$. Therefore, $\sum_{i=0}^n i = \frac{n(n+1)}2$ holds for all $n \in \mathbb N$.
+    $\tag*{$\Box$}$
+	
+<h2>The Factorial Function</h3>
+
+    <p><strong>Theorem 10.2.</strong> In both this class and algorithms, we will see a lot of instances of the factorial function $n! = 1 \cdot 2 \cdot \dots \cdot n$. Let's try to prove some useful bounds on it: 
+    $$\forall n, n \geq 4 \to 2^n \lt n! \lt n^n$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 0$. This is vacuously true since $0 \lt 4$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $k \geq 4 \to 2^k \lt k! \lt k^k$. We want to show that $k \geq k \to 2^k \lt k! \lt k^k$. We first have to deal with the case where $k+1 \geq 4$ but our inductive hypothesis isn't helpful. Fortunately, this is only when $k=3$ and $k+1=4$, where we can simply show that $2^{k+1} = 16 \lt 4! = 24 \lt 4^4 = 256$. 
+		
+	<p>Now for the "real" inductive case, where $k \geq 4$. 
+<ul>
+	<li>By our inductive hypothesis $2^k \lt k! \lt k^k$</li>
+	<li>Multiplying by $k+1$ we get $2^k(k+1) \lt k!(k+1) = (k+1)! \lt k^k(k+1)$</li>
+	<li>Since $k \gt 4$, $2^{k+1} \lt 2^k(k+1) \lt (k+1)!$ solving the left side of our inequality.</li>
+	<li>For the right-hand side, we would like to have $k^k(k+1) \leq (k+1)^k(k+1) = (k+1)^{k+1}$.</li>
+	<li>Since that's not immediately obvious, let's prove a more general version as a lemma.</li>
+</ul>
+
+    <p><strong>Lemma 10.3.</strong>$\forall k,n \in \mathbb{N}, k^n \leq (k+1)^n$. 
+<ul>
+    <li>Proof: Fix $k$ and do induction on $n$ (note that we had a choice here).</li>
+    <li>Base case: $n=0$. $k^0 = 1 \leq 1 = (k+1)^0$</li>
+    <li>Inductive hypothesis: Let $k = m$. Assume that $k^m \leq (k+1)^m$.</li>
+    <li>Multiplying both sides by $k$, we get $k^m k \leq (k+1)^m k$.</li>
+    <li>So $k^{m+1} \leq (k+1)^m k \lt (k + 1)^m (k+1) = (k+1)^{m+1}$.</li>
+	<li>This proves our lemma, and thereby Theorem 10.2</li>
+</ul>
+    $\tag*{$\Box$}$
+
+	<p>Note that in theorem 10.3, we were able to use our standard base case of $0$, even though it was vacuous. This, however, made us go through an extra step in the inductive case. Often, for a proof about numbers greater or equal to some $k$, we will treat $k$ as the base case, even though a base case of $0$ will always work. Note, however, that we used the fact that $k$ was greater than $4$ in our in proof, so that was important information to keep around.
+
+<h2>Induction over Sets</h2>
+
+<p>Now let's jump back to set theory. In lecture four we stated the following theorem.
+
+<p><strong>Theorem 4.8.</strong> If $A$ is a finite set, then $|\mathcal P(A)| = 2^{|A|}$.
+
+    <p>Now, using induction, we can prove this.
+
+    <p><em>Proof.</em> We will prove this by induction on the size of $A$, $n = |A|$.
+
+    <p><strong>Base case.</strong> We have $|A| = 0$ and therefore, $A = \emptyset$. Then $\mathcal P(A) = \{\emptyset\}$. Observe that $|P(\emptyset)| = |\{\emptyset\}| = 1 = 2^0$.
+
+    <p><strong>Inductive case.</strong> Let $n = k$ and assume that for every set $X$ with $|X| = k$, then $|\mathcal P(X)| = 2^k$. Let $|A| = k+1$ and we will show that $|\mathcal P(A)| = 2^{k+1}$.
+
+    <p>Choose an element $a \in A$. We define the set $A' = \{x \in A \mid x \neq a\}$ containing all elements of $A$ except $a$. Then $|A'| = |A| - 1$, since we removed $a$. Then $|A'| = k$ and by our inductive hypothesis, $|\mathcal P(A')| = 2^k$.
+
+    <p>Now, consider a subset of $A'$, $B \in \mathcal P(A')$. For each subset $B \subseteq A'$, we can obtain two subsets of $A$, $B$ and $B \cup \{a\}$. Therefore, we have $2 \cdot 2^k = 2^{k+1}$ subsets of $A$.
+    $\tag*{$\Box$}$
+
+			
+	<h2>Much more induction</h2>
+		
+	Here are some nice examples that we didn't get to in class, but make for nice induction practice:
+
+<h3>Tiling Problems</h3>
+    
+    <p>A <em>triomino</em> is a tile consisting of three unit squares in the shape of an L.
+
+    <p><img src="triomino.png" alt="A single triomino" width="80px" max-width="800px" class="center">
+
+    <p><strong>Theorem 10.4.</strong> For all $n \in \mathbb N$, all $2^n \times 2^n$ grid of squares with one square removed can be covered by triominoes.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then our board is $1 \times 1$, which is our "removed" square and so our tiling consists of 0 triominoes.
+
+    <p>For the purposes of proof, this is perfectly fine. However, some people may not be convinced by this. Let's look at $n = 1$. Then our board is $2 \times 2$. We can remove any square and rotate a single triomino to tile what's left.
+
+    <p><img src="triomino3.png" alt="A simple tiling" width="80px" max-width="800px" class="center">
+
+    <p><strong>Inductive case.</strong> Assume that for $k \in \mathbb N$, the $2^k \times 2^k$ with one square removed can be tiled by triominoes. Now, consider an arbitrary grid of size $2^{k+1} \times 2^{k+1}$ with one square removed.
+
+    <p>We split the grid into four $2^k \times 2^k$ grids. The square that is removed from our grid falls into one of these four subgrids. By our inductive hypothesis, each of these four grids can be tiled with triominoes with one square removed. So we have a tiling for the subgrid with our designated square removed and three other subgrids. 
+
+    <p><img src="triomino-final-3.png" alt="Our inductive case" width="200px" max-width="800px" class="center">
+
+    <p>Our inductive hypothesis also implies we can tile the remaining three grids when their interior corners are removed:
+
+    <p><img src="triomino-final-1.png" alt="Just one last step" width="200px" max-width="800px" class="center">
+		
+  <p>This leaves a spot for our last triomino, allowing us to tile the recomposed $2^{k+1} \times 2^{k+1}$ grid with only our designated tile missing.
+    $\tag*{$\Box$}$ 
+
+<h3>More Sums</h3>
+	
+    <p>Suppose we wish to determine a formula for the sum of the first $n$ consecutive odd numbers, $\sum_{i=0}^n (2i+1)$. We would have to try out a few values and see where we end up.
+    \begin{align*}
+    1 &= 1 \\
+    1 + 3 &= 4 \\
+    1 + 3 + 5 &= 9 \\
+    1 + 3 + 5 + 7 &= 16 \\
+    1 + 3 + 5 + 7 + 9 &= 25 \\
+    \end{align*}
+    So it looks like a familiar pattern has developed, so we can attempt to prove it.
+
+    <p><strong>Theorem 10.5.</strong> For all $n \in \mathbb N$, 
+    $$\sum_{i=0}^n (2i+1) = (n+1)^2.$$
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then $\sum_{i=0}^0 (2i+1) = 1 = 1^2$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $\sum_{i=0}^k (2i+1) = (k+1)^2$.  We want to show that $\sum_{i=0}^{k+1} (2i+1) = (k+2)^2$.
+    We have
+    \begin{align*}
+    \sum_{i=0}^{k+1} (2i+1) &= \sum_{i=0}^{k} (2i+1) + 2(k+1) + 1 \\
+    &= (k+1)^2 + 2(k+1) + 1 &\text{ind. hyp.} \\
+    &= k^2 + 2k + 1 + 2k + 2 + 1 \\
+    &= k^2 + 4k + 4 \\
+    &= (k+2)^2
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Now here we happened to end up with a recognizable pattern. But what happens if you don't? The snide answer is to Google it and that might work if you happen to be looking for a relatively famous sequence. However, Google isn't great if you just throw a bunch of numbers at it. So you might be expecting me to build up to show you how to do this "properly" but in my opinion, that's a lot of work and a bit outside the scope of the course. 
+
+    <p>Instead, I'd like to highlight the excellent <a href="https://oeis.org">Online Encyclopedia of Integer Sequences</a>, founded by Neil Sloane. The OEIS is purpose-built to be a search engine for integer sequences and it contains more sequences than you can ever have imagined, complete with bibliographic links and other related sequences.
+
+    <p>We can also use induction to prove inequalities. Something that we do in the analysis of algorithms is compare the growth rate of functions. We can use inductive arguments to do the same, since we often use functions with the domain $\mathbb N$ when quantifying computational resources like time or space.
+
+    <p><strong>Theorem 10.6.</strong> For all $n \in \mathbb N$ and $x \geq 0$, $(1+x)^n \geq 1+nx$.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then $(1+x)^0 = 1 \geq 1 = 1 + 0 \cdot x$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that $(1+x)^k \geq 1+kx$. Consider $n = k+1$.
+    \begin{align*}
+    (1+x)^{k+1} &= (1+x)^k (1+x) \\
+    &\geq (1+kx) (1+x) & \text{ind. hyp.} \\
+    &= 1 + kx + x + kx^2 \\
+    &= 1 + (k+1)x + kx^2 \\
+    &\geq 1+(k+1)x & kx^2 \geq 0
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p>Note that in this result, our functions had two variables, $x$ and $n$. This is a great example of why what you're applying induction to needs to be carefully considered and clearly stated.
+
+	<h3>Generalizing De Morgan's Laws</h3>
+
+    <p>If we have a result for some fixed integer, we can often generalize those arguments by using induction. For instance, consider the following generalization of De Morgan's laws.
+
+    <p><strong>Theorem 10.7.</strong> Let $p_1, p_2, \dots, p_n$ be propositional variables for $n \geq 1$. Then
+    $$\neg \left( \bigwedge_{i=1}^n p_i \right) = \bigvee_{i=1}^n \neg p_i.$$
+
+    <p>The big $\wedge$ and $\vee$ are analogs of the summation symbol $\sum$ in that we're taking the conjunction or disjunction of the indexed terms, similar to the big $\cup$ or $\cap$ which we defined earlier. Where $n=2$, this is precisely the statement of one of De Morgan's laws.
+
+    <p><em>Proof.</em> We will prove this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 1$. Then $\neg \left( \bigwedge_{i=1}^1 p_i \right) = \neg p_1 = \bigvee_{i=1}^1 \neg p_i$.
+
+    <p><strong>Inductive case.</strong> Let $k \in \mathbb N$ be arbitrary and assume that
+    $$\neg \left( \bigwedge_{i=1}^k p_i \right) = \bigvee_{i=1}^k \neg p_i.$$
+    Now, consider $n = k+1$. We have
+    \begin{align*}
+    \neg \left( \bigwedge_{i=1}^{k+1} p_i \right) &= \neg \left( \bigwedge_{i=1}^{k} p_i \wedge p_{k+1} \right) \\
+    &= \neg \left( \bigwedge_{i=1}^{k} p_i \right) \vee \neg p_{k+1}  &\text{De Morgan's laws} \\
+    &= \bigvee_{i=1}^{k} \neg p_i \vee \neg p_{k+1}  &\text{ind. hyp.} \\
+    &= \bigvee_{i=1}^{k+1} \neg p_i  \\
+    \end{align*}
+    $\tag*{$\Box$}$
+		

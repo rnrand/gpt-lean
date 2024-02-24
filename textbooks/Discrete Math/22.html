@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 22</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 22</h1>
+
+  <h2>Expectations of Random Variables</h2>
+
+  <p>The following definition captures a notion of "weighted average" for 
+  random variables. It is extremely useful in understanding random variables,
+  especially complicated ones where just knowing a formula for their
+  distribution is not directly enlightening.
+
+  <p><strong>Definition 21.1.</strong> The <strong>expectation</strong> (or
+  <strong>expected value</strong> or <strong>mean</strong>) of a random
+  variable $X$, denoted $E(X)$, is
+  $$
+  E(X) = \sum_{x\in \textbf{im}(X)} x \Pr(X=x).
+  $$
+
+  <p><strong>Example.</strong> If $X$ is a fair die roll, then
+  $$
+  E(X) = 1\cdot \frac{1}{6} + 2\cdot \frac{1}{6} +3\cdot \frac{1}{6} +4\cdot
+  \frac{1}{6} +5\cdot \frac{1}{6} + 6\cdot \frac{1}{6} = 3.5.
+  $$
+
+  <p><strong>Example.</strong> If $X$ is the number of spades in a five
+  card poker hand, then
+  $$
+  E(X) = 
+  0\cdot \frac{\binom{39}{5}}{\binom{52}{5}} + 
+  1\cdot \frac{\binom{13}{1}\binom{39}{4}}{\binom{52}{5}} + 
+  2\cdot \frac{\binom{13}{2}\binom{39}{3}}{\binom{52}{5}} + 
+  3\cdot \frac{\binom{13}{3}\binom{39}{2}}{\binom{52}{5}} + 
+  4\cdot \frac{\binom{13}{4}\binom{39}{1}}{\binom{52}{5}} + 
+  5\cdot \frac{\binom{13}{5}}{\binom{52}{5}}.
+  $$
+  That looks awful, but, remarkably, it simplifies down to $5/4$. We
+  will see why soon.
+
+  <p><strong>Theorem 21.2.</strong> If $X$ is a Bernoulli trial, then
+  $E(X)$ is equal to the probability of success.
+  <p><em>Proof.</em> The only values that $X$ takes with non-zero
+  probability are $0$ and $1$, so
+  $$
+  E(X) = 0\cdot\Pr(X=0) + 1\cdot\Pr(X=1) = \Pr(X=1).$$
+    $\tag*{$\Box$}$
+	
+	<p>It turns out that we can define expectation by summing over the image of $X$ or, equivalently, by summing over the sample space.
+
+	<p><strong>Theorem 21.3.</strong> For any random variable $X$, 
+  $$
+  E(X) = \sum_{\omega\in\Omega} X(\omega)\cdot\Pr(\omega).
+  $$
+  <p><strong>Proof. </strong> 
+	Since the event $X=x$ is $\{\omega\in\Omega:X(\omega)=x\}$,
+	\begin{align*}
+	E(X) 
+	& = \sum_{x\in\textbf{im}(X)} x\cdot \Pr(X=x) \\
+	& = \sum_{x\in\textbf{im}(X)} x\cdot \Pr(\{\omega\in\Omega:X(\omega)=x\}) \\
+	& = \sum_{x\in\textbf{im}(X)} x \cdot \sum_{\omega:X(w)=x} \Pr(\omega) \\
+	& = \sum_{x\in\textbf{im}(X)} \sum_{\omega:X(w)=x}x\cdot \Pr(\omega) \\
+	& = \sum_{x\in\textbf{im}(X)} \sum_{\omega:X(w)=x}X(\omega)\cdot \Pr(\omega) \\
+	& = \sum_{\omega\in\Omega}X(\omega)\cdot \Pr(\omega).
+	\end{align*}
+    $\tag*{$\Box$}$
+
+
+		<p>The original formula for expectation and this formula correspond to
+		two different ways you might compute an average. For example, suppose
+		a course has six students, and they score 100, 100, 95, 95, 95, 90 on
+		the exam. The formula in the above theorem says this can be computed
+		as
+		$$
+		100\cdot \frac{1}{6} +
+		100\cdot \frac{1}{6} +
+		95\cdot \frac{1}{6} +
+		95\cdot \frac{1}{6} +
+		95\cdot \frac{1}{6} +
+		90\cdot \frac{1}{6}.
+		$$
+		On the other hand, the original formula for expectation grouped together
+		students with the same scores, which would correspond to
+		$$
+		100\cdot \frac{2}{6} +
+		95\cdot \frac{3}{6} +
+		90\cdot \frac{1}{6}. 
+		$$
+
+
+	
+	<h2>Linearity of Expectation</h2> 
+
+  <p>We saw above that the average number of spades in a five-card hand
+  is $5/4$, but we arrived at it via a laborious calculation.  Here we will
+  illuminate why the calculation simplified that way, and more generally
+  describe a technique for computing expectations that are very difficult if you
+  use the original formula. Indeed, it is the existence of these tricks that
+  makes expectation useful sometimes, since we can frequently compute
+  expectations even for extremely complicated random variables.
+
+	<p>The core trick deals with expectations of random variables that
+	are sums of other random variables. Consider computing the expectation
+	of the sum of two fair dice; This could be written $E(X+Y)$, where
+	$X,Y$ are the die rolls. Using the formula for expectation,
+	we get
+	$$
+  E(X+Y) = \sum_{k=2}^{12} k\cdot \Pr(X+Y=k) = 7.
+	$$
+	<p>This is not so bad, but it is a small case of a more general issue:
+	In order to compute this expectation, we need the distribution of
+	$X+Y$ (i.e., we need to calculate $\Pr(X+Y=k)$), which is often
+	<em>much</em> more complicated that the distributions of $X$ and
+	$Y$.
+
+  <p>The following theorem gives us a way to compute $E(X+Y)$ without computing
+  the distribution of $X+Y$. The property it establishes is known as
+  <em>linearity of expectation</em>.
+
+  <p><strong>Theorem 21.4. (Linearity of Expectation)</strong> For any random variables $X,Y$
+	on the same sample space 
+  $$
+  E(X+Y) = E(X)+E(Y),
+  $$
+	and if $c\in\mathbb{R}$, then
+  $$
+  E(cX) = c\cdot E(X).
+	$$
+
+  <p><strong>Proof.</strong> Using the definition from Theorem 21.3, the proof is very simple:
+	\begin{align*}
+	E(X+Y) 
+	& = \sum_{\omega\in\Omega}(X(\omega)+Y(\omega))\cdot \Pr(\omega) \\
+	& = \sum_{\omega\in\Omega}X(\omega)\cdot \Pr(\omega)
+	 + \sum_{\omega\in\Omega}Y(\omega)\cdot \Pr(\omega) \\
+	 &= E(X)+E(Y).
+	\end{align*}
+	For the second part of the theorem,
+\begin{align*}
+	E(cX) 
+	& = \sum_{\omega\in\Omega}cX(\omega)\cdot \Pr(\omega) \\
+	& = c\sum_{\omega\in\Omega}X(\omega)\cdot \Pr(\omega) \\
+	 &= cE(X).
+	\end{align*}
+
+    $\tag*{$\Box$}$
+
+	<p>The [BH] textbook provides an intuitive explanation for how $E(X+Y)$
+	and $E(X)+E(Y)$ correspond to two different ways of computing averages 
+	of the sum of two lists. Here is a small example:
+
+	<table>
+		<tr> 
+			<th>$X(\omega)$ </th>
+			<th>$Y(\omega)$ </th>
+			<th> $X(\omega) + Y(\omega)$</th>
+		</tr>
+		<tr> 
+			<td>$2$ </td>
+			<td>$5$ </td>
+			<td>$7$ </td>
+		</tr>
+		<tr> 
+			<td>$10$ </td>
+			<td>$20$ </td>
+			<td>$30$ </td>
+		</tr>
+		<tr> 
+			<td>$0$ </td>
+			<td>$-1$ </td>
+			<td>$-1$ </td>
+		</tr>
+    </table>
+
+		<p>If we average $X$ and $Y$ separately, their averages are $4$ and $8$,
+		which sum to $12$. But if we add the lists and then take an average, we
+		also get $12$, agreeing with the linearity of expectation.
+
+		<p>The formula for linearity of expectation extends to more random
+		variables by an easy induction. That is, for any random variables $X_1,\ldots,X_n$,
+		$$
+		E(X_1+\cdots+X_n) = 
+		E(X_1)+\cdots+E(X_n). 
+		$$
+
+
+	<p><strong>Example.</strong> Returning to the case of rolling two dice,
+	We have that $E(X+Y)=7$ because $E(X)=E(Y)=3.5$, as previously calculated.
+	In fact, if we roll $n$ dice, we know the expectation is $3.5n$, for any
+	$n$, despite not computing the complicated distribution of the experiment.
+
+	<p><strong>Theorem 21.5.</strong> If $X$ is drawn from a binomial distribution, where the probability of each Bernoulli trial is $p$ then
+  $E(X)=np$.
+  <p><em>Proof.</em>  Let $X_1,\ldots,X_n$ be i.i.d. random variables
+	with success probability $p$. Then, by linearity of
+  expectation, we have
+	\begin{align*}
+	E(X) & =  E(X_1 + \cdots + X_n) \\
+	& =  E(X_1) + \cdots + E(X_n) \\
+	& =  p + \cdots + p \\
+	& =  np. 
+	\end{align*}
+
+	<p><strong>Example.</strong> Linearity does not require that $X,Y$
+	be independent. For example, we let $X$ count the number of spades
+	in a five card poker hand and $Y$ count the number of Aces,
+	then $X$ and $Y$ are certainly not independent, and $X+Y$ has
+	a somewhat complex distribution. But $E(X+Y)=E(X)+E(Y)$ anyway,
+	and we can just compute the simpler expectations and add them.
+
+	<h2>The Indicator Method</h2> 
+
+	<p>The real magic of linearity is that you can often apply it even
+	when the original random variable is not explicitly the sum of 
+	other random variables. The trick is that you can decompose the
+	random variable yourself, and then compute the simpler expectations
+	and add them.
+
+	<p>A common version of this trick is called the indicator method,
+	where one writes a random variable as a sum of zero/one random
+	variables, called <em>indicators</em>.
+
+	<p><strong>Definition 21.6.</strong> Let $A\subseteq \Omega$ be an
+	event. Then the random variable $I_A$ defined by
+	$$
+	I_A(\omega) =
+	\begin{cases}
+	1 & \omega\in A \\
+	0 & \omega\notin A 
+	\end{cases}
+	$$
+	is called the <strong>indicator random variable for the event $A$</strong>.
+
+	<p>Indicators are simply Bernoulli random variables. Thus the expectation is easy to calculate:
+
+	<p><strong>Theorem 21.7.</strong> If $I_A$ is the indicator random variable for
+	$A$, then $E(I_A)=\Pr(I_A = 1) = \Pr(A)$.
+
+	<p><strong>The Indicator Method</strong> works as follows. To compute
+	$E(X)$, one proceeds:
+	<ol>
+		<li>Find indicator random variables $I_1,\ldots,I_n$ for events $A_1,\ldots,A_n$
+		such that $X = I_1 + \cdots + I_n$.</li>
+
+		<li>Use linearity and Theorem 21.7: 
+			$$
+			E(X) = \sum_{i=1}^n E(I_i) = \sum_{i=1}^n \Pr(A_i).
+			$$
+		</li>
+		<li>Calculate each $\Pr(A_i)$ and add them up; Ideally this are all the same
+			by a symmetry argument.
+	</ol>
+
+	<p><strong>Example.</strong> Let $X$ be the number of spades in a five
+	card poker hand. Our indicators $I_1,\ldots,I_5$ are defined so that $I_j=1$
+	if the $j$-th card is a spade, and $0$ otherwise. (Notice that we're assuming
+	the experiment is ordered now, which we're free to do.) Then
+	$X=I_1+I_2+I_3+I_4+I_5$. We have that $E(I_j) = 1/4$ for all $j$, since this
+	is the probability that a given card is a spade. Therefore,
+	$$
+	E(X) = E(I_1)+E(I_2)+E(I_3)+E(I_4)+E(I_5) = 1/4 + 1/4 + 1/4 + 1/4 + 1/4 = 5/4.
+	$$
+	Notice that the $I_j$ were not independent!
+
+	<p><strong>Example.</strong> Suppose we toss $n$ balls into $b$ bins,
+	with all outcomes equally likely. (This is hashing once again.) Let
+	$X$ be the number of empty bins. Our indicators here correspond
+	to bins, with $I_j$ indicating if the $j$-th bin is empty.
+	We have $E(I_j) = ((b-1)/b)^n = (1-1/b)^n$ by a counting argument or
+	by using that the tosses are independent. Therefore
+	$$
+	E(X) = b(1-1/b)^n.
+	$$
+
+	<p><strong>Example.</strong> Suppose we toss a coin 100 times, and let
+	$X$ be the number of times we get five consecutive tosses $HTHTH$.
+	The random variable $X$ is very complicated, and we won't even try to compute
+	its distribution, but observe that the streaks counted by $X$ may
+	overlap!
+
+	<p>To compute $E(X)$, we create indicators $I_j$ that indicate if
+	the streak $HTHTH$ appears starting at the $j$-th toss.
+	Then
+	$$
+	X = I_1 + \cdots + I_{96}.
+	$$
+	Note that we stop at $96$ because the streak can't possibly start in the last
+	four tosses.
+	We have $E(I_j)=1/2^5$ since this simply the probability that we get a 
+	particular outcome in $5$ tosses. Thus the expectation is $E(X)=96/2^5=3$.
+
+	<h2>Expectation of a Function of a Random Variable</h2> 
+
+  <p>Another class of expectations that requires a trick is those of the form
+  $E(g(X))$. The definition of expectation gives 
+  $$E(g(X)) = \sum_{x \in \textbf{im}(g(X))} x \Pr(g(X)=x)$$
+  and using this formula requires computing the distribution of
+  $g(X)$, which may sometimes be difficult. 
+
+  <p>Fortunately, there's an easier equivalent formula. The [BH] text calls
+  this the "Law of the Unconscious Statistician" (LOTUS) because it's
+  quite common for people to accidentally use this formula. Luckily for them,
+  and in contrast to many plausible-looking guesses in probability, this
+  formula is correct.
+
+  <p><strong>Theorem 21.8. (LOTUS)</strong> If $X$ is a random variable and
+  $g:\mathbb{R}\to\mathbb{R}$ is a function,  then
+  $$
+  E(g(X)) = \sum_{x\in\textbf{im}(X)} g(x)\Pr(X=x).
+  $$
+  <p><em>Proof.</em>  By the alternative formula for expectation
+  given in Theorem 21.3, we have
+  \begin{align*}
+  E(g(X)) & = \sum_{\omega\in\Omega} g(X(\omega))\Pr(\omega) \\
+  & = \sum_{x\in\textbf{im}(X)}\sum_{\omega:X(\omega)=x} g(X(\omega))\Pr(\omega) \\
+  & = \sum_{x\in\textbf{im}(X)}g(x)\sum_{\omega:X(\omega)=x}\Pr(\omega) \\
+  & = \sum_{x\in\textbf{im}(X)}g(x)\Pr(X=x).
+  \end{align*}
+  The second equality is breaking up the sum into groups. The third
+  equality holds because, inside each inner sum, $g(X(\omega))=g(x)$.
+  The last equality holds because the union of the events
+  $\omega$ in the inner sum is exactly the event $X=x$.
+    $\tag*{$\Box$}$
+
+  <p><strong>Example.</strong> It is important to understand the difference
+  between $E(g(X))$ and $g(E(X))$. Consider $D^2$, defined as 
+  $$D(\omega)^2 = D(\omega) \cdot D(\omega)$$
+  where $D$ is our dice roll. Using Theorem 21.8, we have:
+  $$E(D^2) = 1 \cdot \frac{1}{6} + 4 \cdot \frac{1}{6} + 9 \cdot \frac{1}{6} + 16 \cdot \frac{1}{6} + 25 \cdot \frac{1}{6} + 36 \cdot \frac{1}{6} = \frac{91}{6} = 15.1\bar{6}$$
+  
+  
+  <p>On the other hand 
+	  $$E(D)^2 = 3.5^2 = 12.25$$
+	  
+  <p>These are pretty close but, as we'll see in the next class, they won't always be.
+

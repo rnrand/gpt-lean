@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 23</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 23</h1>
+	
+
+	<h2>Variance and Deviation Bounds</h2>
+
+		<p> In the last few lectures we developed the notions of random variables
+		and their expectations. While expectation is a useful piece of
+		information about a random variable, it does not tell the full story.
+		For instance, suppose $X$ is a random variable that takes values $1$ and $-1$ with
+		equality probability, and that $Y$ is another random variable that takes values
+		$100$ and $-100$ with equal probability. Then $E(X)=E(Y)=0$, but the
+		behavior of these random variables is clearly different: $Y$ has
+		bigger "swings", and for many applications the size of the "swings"
+		is as important as the average value. The measure of "swingy-ness"
+		is called <em>variance</em> and is defined in the first half of
+		this lecture.
+
+		<p>A related and important question is understand the probability that a
+		random variable takes on a value that is far from the expected value.
+		Intuitively, this shouldn't happen very often if the variance of a random
+		variable is small.  The question of how near or far values of $X$ can be
+		from the expectation is addressed by <em>deviation bounds</em>, which
+		are covered in the second half of the lecture.
+
+	<h3>Variance</h3>
+
+	<p>The following definition is the most common measure of swingy-ness
+	of a random variable.
+
+		<p><strong>Definition 22.1.</strong> Let $X$ be a random variable  with
+		$E(X)=\mu$. The
+		<strong>variance</strong> of $X$ is defined to be
+		$$V(X) = E((X - \mu)^2).$$
+		The <strong>standard deviation</strong> of $X$ is $\sigma(X) =
+		\sqrt{V(X)}$. Because of this, variance is sometimes denoted by
+		$\sigma^2(X)$.
+
+		<p>Let's break this definition down. First, the square is on the inside
+		of expectation: It's not $(E(X-\mu))^2$. Indeed, that value is not
+		interesting, because by linearity we have
+		$$
+		(E(X-\mu))^2 = (E(X)-\mu)^2 = (\mu - \mu)^2 = 0.
+		$$
+		(There, we used $E(\mu)=\mu$, which is that the expectation of a constant
+		is just the constant.)
+
+		<p>The square is in the definition so that the positive and negative
+		swings do not cancel each other out. By squaring, all of the deviations
+		become positive, and thus accumulate in the total measure of swings.
+		A very natural question is: Why squaring? Why not raising to another
+		larger even power? Or more intuitively, why don't we use the value
+		$$
+		E(|X-\mu|) 
+		$$
+		which also has the effect of accumulating both down and up swings into
+		the total? The best answer at this point is that the definition with the
+		square is way easier to compute, and still close enough to being
+		intuitively useful. A deeper answer is that this definition 		has many
+		other theoretical and practical uses beyond getting intuition for swings.
+
+		<p>The definition of variance is rarely used directly in computations.
+		The following equivalent version is easier to use.
+
+
+    <p><strong>Theorem 22.2.</strong> If $X$ is a random variable
+		then $V(X) = E(X^2) - E(X)^2$.
+
+    <p><em>Proof.</em> Let $E(X)=\mu$. By linearity,
+    \begin{align*}
+		V(X) 
+		&= E((X-\mu)^2) \\    
+		&= E(X^2 - 2\mu X + \mu^2)  \\
+		&= E(X^2) - 2\mu E(X) + E(X)^2  \\
+		&= E(X^2) - 2\mu^2 + \mu^2  \\
+    &= E(X^2) - \mu^2.
+    \end{align*}
+    $\tag*{$\Box$}$
+
+		<p>This formula reduces the job of computing $V(X)$ to computing
+		$E(X^2)$ and $E(X)$.
+
+
+		<p><strong>Example 22.3.</strong> Recall the roll of a fair 6-sided die and
+		that $E(X) = 3.5$. To compute the variance, we need $E(X^2)$. For $i = 1,
+		2, \dots, 6$, $X^2 = i^2$ with probability $\frac 1 6$. Then by LOTUS
+    $$E(X^2) = \sum_{i=1}^6 \frac{i^2}{6} = \frac{91}6.$$
+    Then we can calculate $V(X)$ by
+    $$
+		V(X) = E(X^2) - E(X)^2 
+		= \frac{91}{6} - \left( \frac 7 2 \right)^2 
+		= \frac{35}{12} \approx 2.92.
+		$$
+    From this, we can also get the standard deviation, $\sqrt{V(X)} \approx 1.71$. 
+
+		<p>Now, what if we wanted to consider the roll of more than one die? Recall
+		that the result of multiple die rolls is independent and so their
+		corresponding random variables are independent. We can make use of this
+		property via Bienaymé's formula. Irénée-Jules Bienaymé was a French
+		mathematician at around the same time as Markov and Chebyshev and was
+		friends and collaborators with Chebyshev.
+
+		<p><strong>Theorem 22.4 (Bienaymé's Formula).</strong> If $X$ and $Y$ are
+		independent random variables on the same sample space, then $V(X+Y) = V(X)
+		+ V(Y)$.
+
+    <p><em>Proof.</em> We will make use of the claim that if $X$ and $Y$ are independent, then $E(XY) = E(X)E(Y)$ (which we'll leave as an exercise; use the
+		alternative formula for expectation).
+    \begin{align*}
+    V(X+Y) &= E((X+Y)^2) - E(X+Y)^2 \\
+    &= E(X^2) + 2E(XY) + E(Y^2) - E(X)^2 - 2E(X)E(Y) - E(Y)^2 \\
+    &= E(X^2) - E(X)^2 + E(Y^2) - E(Y)^2 + 2E(XY) - 2E(X)E(Y) \\
+    &= E(X^2) - E(X)^2 + E(Y^2) - E(Y)^2 \\
+    &= V(X) + V(Y).
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 22.5.</strong> Recall that the variance of a single die roll is $V(X) = \frac{35}{12}$. Then the variance of two die rolls is $V(X) + V(X) = \frac{35}{6} \approx 5.833$ and the standard deviation is about $2.42$.
+
+		<p><strong>Example 22.6.</strong> Consider a series of $n$ independent Bernoulli trials with probability of success $p$. What is the variance of the number of successes?
+
+    <p>If we have a series of trials $(a_1, a_2, \dots, a_n)$, then we define the random variable $X_i$ to be 1 if $a_i$ is a success and 0 otherwise. Then we define $X = X_1 + \cdots + X_n$, so that $X$ counts the number of successes in the $n$ trials. Then the variance is simply $V(X) = V(X_1) + \cdots + V(X_n)$. 
+
+    <p>To compute this, we need to compute the variance of a single Bernoulli trial. If $X_i$ is our random variable for the Bernoulli, trial, we have that $X_i$ takes on a value of either 0 or 1. Therefore, we have $X_i^2 = X_i$ and $E(X_i) = 1 \cdot p + 0 \cdot (1-p) = p$. Then 
+    $$V(X_i) = E(X_i^2) - E(X_i)^2 = p - p^2 = p \cdot (1-p).$$
+    
+	Using Bienaymé's Formula, we get that $$V(\sum_{i=1}^n X_i) = n \cdot p(1-p)$$
+
+	<p>Here are some further properties of variance. Proving them is a good
+	exercise.
+
+	<p><strong>Theorem 22.7.</strong> If $X$ is a random variable and
+	$c\in\mathbb{R}$, we have that
+	<ul>
+		<li> $V(X+c) = V(X)$ </li>
+		<li> $V(cX) = c^2V(X)$ </li>
+		<li> $V(X) \geq 0$  </li>
+		<li> $V(X) = 0$ if and only there exist $a\in\mathbb{R}$ such that
+		$\Pr(X=a)=1$.</li>
+	</ul>
+
+
+	<h3>Deviation Bounds</h3>
+
+		<p>The rest of this lecture covers three theorems known as <em>deviation
+			bounds</em>. They each bound the probability that a random variable takes
+		a value far away from its expectation, but which bound is applicable
+		depends on how much information you have about the random variable.
+
+		<p> The first theorem, given next, bounds the probability of getting
+		very large values relative to expectation. It only works for random variables
+		that always take positive values.
+
+		<p><strong>Theorem 22.8 (Markov's Inequality).</strong> If $X$ is random variable
+		that is everywhere positive, then 
+		$$\Pr(X \geq a) \leq \frac{E(X)}{a}.$$
+
+    <p><em>Proof.</em>
+    \begin{align*}
+		E(X) &= \sum_{x \in \mathbb{R}} x \Pr(X=x) \\
+		 &\geq \sum_{ x\geq a} x \Pr(X=x) \\
+		 &\geq \sum_{ x\geq a} a \Pr(X=x) \\
+		 &= a \sum_{ x\geq a} \Pr(X=x) \\
+    &= a \cdot \Pr(X \geq a).
+    \end{align*}
+
+    <p>This gives us $\Pr(X \geq a) \leq \frac{E(X)}{a}$.
+    $$\tag*{$\Box$}$$
+
+		<p>An equivalent version asserts that for all $b\in\mathbb{R}$, $$\Pr(X
+		\geq b E(X)) \leq \frac{1}{b}.$$ To get this, just apply the original
+		version with $a=bE(X)$. This equivalent version is a bit more intuitive,
+		which can be seen as follows.  Consider a population of people, all of whom
+		have non-negative incomes, for which the average income is \$50k. Then we
+		immediately know that at most half the population has an income of \$100k or
+		greater. Why?  Because, in the absolute extreme case, that half of the
+		population will pull up the average to \$50k even if everyone else's income
+		is zero.  Similarly, at most one third of the population can make \$150k or
+		more, and so on. Markov's is using exactly this intuition, where $E(X)$
+		takes the role of the average and $b$ is the multiplicative factor of
+		the above-average cases.
+
+
+    <p>Markov's inequality is named for Andrey Markov, a Russian mathematician from the turn of the 20th century who is the same Markov responsible for things like Markov chains. Interestingly enough, this inequality appeared earlier in work by Pafnuty Chebyshev, who was Markov's doctoral advisor. However, Chebyshev has his own other inequality which we'll get to soon. 
+
+
+    <p>Much like Markov's inequality, the following result will give us a bound on how much a random variable differs from its expected value. Chebyshev's inequality is named for Pafnuty Chebyshev, who we've already mentioned before.
+
+    <p><strong>Theorem 22.9 (Chebyshev's Inequality).</strong> Let $X$ be a random variable. For all $a \gt 0$,
+    $$\Pr(|X - E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+
+    <p><em>Proof.</em> Let $Y = (X - E(X))^2$ be a random variable. Then $E(Y) = V(X)$ by definition. We can apply Markov's inequality, since $Y$ is non-negative, to get
+    $$\Pr(Y \geq a^2) \leq \frac{E(Y)}{a^2}.$$
+    Since $Y = (X-E(X))^2$, consider $(X-E(X))^2 \geq a^2$. We have $(X-E(X))^2 \geq a^2$ if and only if $|X - E(X)| \geq a$. Then, together with $E(Y) = V(X)$, we substitute into the above to get
+    $$\Pr(|X-E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+    $\tag*{$\Box$}$

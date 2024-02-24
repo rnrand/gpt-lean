@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 10</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 10</h1>
+
+	<h3>Multiplicative Inverses Modulo $m$</h3>
+
+    <p>I mentioned earlier that one of the things that this structure allows us to do is, under certain conditions, "divide" things in the sense that there is an operation that we can perform on elements of our structure that reverses multiplication. I say "divide" because the operation that we perform is not really division. It's more accurate to say that we'll be showing that <em>multiplicative inverses</em> exist. These are numbers $a^{-1}$ such that $a \cdot a^{-1} = 1$. 
+
+    <p>First, we need the following notions.
+
+    <p><strong>Definition 8.7.</strong> An integer $p$ greater than 1 is called <strong>prime</strong> if the only positive divisors of $p$ are 1 and $p$. Otherwise, $p$ is called <strong>composite</strong>.
+
+    <p><strong>Definition 8.8.</strong> Two integers $a$ and $b$ are <strong>relatively prime</strong> (or <em>coprime</em>) if $\gcd(a,b) = 1$.
+
+    <p><strong>Example 8.9.</strong> Primes are obviously relatively prime to any number less than them, since they don't have any divisors except 1 and themselves. However, non-prime numbers (called composite numbers) can be relatively prime, even to each other. The numbers 10 and 21 are not prime, since $10 = 2 \cdot 5$ and $21 = 3 \cdot 7$. However, they are relatively prime, since $\operatorname{Div}(10) = \{\pm 1, \pm 2, \pm 5, \pm 10\}$ and $\operatorname{Div}(21) = \{\pm 1, \pm 3, \pm 7, \pm 21\}$.
+
+    <p><strong>Theorem 8.10.</strong> If integers $m \gt 0$ and $n$ are relatively prime, then $n$ has a multiplicative inverse mod $m$. That is, there exists an integer $a$ such that $n \cdot a \equiv_m 1$.
+
+    <p><em>Proof.</em> Per Bézout's identity, there exist integers $a$ and $b$ such that $a \cdot n + b \cdot m = 1$. Then,
+    \begin{align*}
+    [1]_m &= [a \cdot n + b \cdot m]_m \\
+    &= [a]_m \cdot [n]_m + [b]_m \cdot [m]_m \\
+    &= [a]_m \cdot [n]_m + [b]_m \cdot [0]_m \\
+    &= [a]_m \cdot [n]_m 
+    \end{align*}
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Example 8.11.</strong> Consider $\mathbb Z_4$. There are four equivalence classes: $0,1,2,3$. Since 1 and 3 are relatively prime to 4, they have inverses: $1^{-1} = 1$ (this is obvious) and $3^{-1} = 3$, which we get by observing that $3 \cdot 3 \equiv_4 9 \equiv_4 1$. However, 2 has no inverse:
+    \begin{align*}
+    2 \cdot 0 &= 0 \\
+    2 \cdot 1 &= 2 \\
+    2 \cdot 2 &= 4 \equiv_4 0 \\
+    2 \cdot 3 &= 6 \equiv_4 2 
+    \end{align*}
+
+    <p>One might ask whether there is any integer $m$ for which $\mathbb Z_m$ has a multiplicative inverse for all non-zero elements. Our discussion about prime numbers gives us a hint.
+
+    <p><strong>Corollary 8.12.</strong> If $p$ is prime and $p \not\mid a$, then $a$ has a multiplicative inverse mod $p$.
+
+    <p>This is easy to see since every integer $2, \dots, p-1$ aren't divisors of $p$ and therefore share no non-trivial common divisors with $p$.
+
+    <p><strong>Definition 8.13.</strong> When it exists, we denote the multiplicative inverse of $a$ by $a^{-1}$.
+
+    <p>Up until now, we've been working in $\mathbb Z$, where "division" "doesn't work". However, we've proved sufficient conditions to create structures where "division" does work in a sense, in that multiplicative inverses are guaranteed to exist for every nonzero element. This means that we can solve linear equations like 
+    $$6x \equiv_{17} 144$$
+    using our usual algebraic techniques. In fact, assuming we were working with the same modulus, it's not hard to solve a system of equations in the usual way.
+
+<p>By now we've seen the basics of number theory, including the Divison Theorem, Euclid's algorithm, modular arithmetic, and the notions of prime and relatively prime numbers. There's more to see but in order to progress any further, we're going to need another tool in our mathematical toolbox: Induction.</p>
+
+	 <h3>Proof by Induction</h3>
+
+	 <p>Induction is a general technique for proving mathematical statements that
+	 works particularly well
+	 for theorems that have the form $\forall n\in\mathbb{N}, P(n)$ for
+	 some predicate $P$.
+
+		<p><strong>Theorem 9.0.</strong> Let $P(n)$ be a predicate 
+		with domain $n \in \mathbb{N}$. If
+
+    <ol>
+    <li>$P(0)$
+    </ol>
+		and
+    <ol start="2">
+			<li>for all $k \in \mathbb N$, if $P(k)$, then $P(k+1)$
+    </ol>
+    are both true, then the following is true:
+    <ol start="3">
+			<li>for all $n \in \mathbb N$, $P(n)$.
+    </ol>
+    <p>This is called the <strong>principle of mathematical induction</strong>.
+
+		<p>How and when do we make use of this? Mathematical induction is a
+		property of the natural numbers. What this means is that if there is some
+		property that we want to prove about <em>all</em> natural numbers, all we
+		need to do is prove that the property holds for the number 0 and that for
+		any other natural number $k$, if it's true for $k$, then we can show that
+		it's true for the next natural number, $k+1$.
+
+    <p>More formally, to prove that for all $n \in \mathbb N$ that $P(n)$ holds,
+    <ol>
+    <li>first, prove that $P(0)$ holds, then,
+    <li>prove that for $k \in \mathbb N$, if $P(k)$ holds, then $P(k+1)$ also holds.
+    </ol>
+
+    <p>So why does this even work? Basically, what we're really proving is a very large, infinite chain of implications,
+    \begin{align*}
+    P(0)&, \\
+    P(0) &\rightarrow P(1), \\
+    P(1) &\rightarrow P(2), \\
+    P(2) &\rightarrow P(3), \\
+    & \vdots
+    \end{align*}
+    The usual analogy for this is a chain of dominoes: we set up our argument so that any one domino is guaranteed to knock over the next domino ($P(k) \rightarrow P(k+1)$ for any $k$). Once we've set this up, all we need to do is knock over the first domino (showing $P(0)$) to set off the chain reaction.
+
+    <p>This leads us to what a proof by induction actually <em>looks</em> like.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you want to prove and what you'll be performing induction on. Most often, $P$ is
+			just from the theorem you're proving. Sometimes a proof will artfully
+			choose a different $P$.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> Let $k$ be an arbitrary natural number and state the <em>inductive hypothesis</em> $P(k)$ and the statement $P(k+1)$ to be proven. Then, using the assumption $P(k)$, prove $P(k+1)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+<h2>The Riddle of the Sharks</h2>
+
+Here's a riddle.
+
+<blockquote>There is an injured shark thrashing about in the water. Nearby there are $n$ sharks. Each would like to eat the injured shark but would become injured in the process and potential victims of the remaining sharks. Every shark is perfectly logical and values its life more than eating. What will happen?
+</blockquote>
+
+<p>Feel free to give this puzzle some thought. Assume there is always a closest shark that could, if it chose to, eat the injured shark.
+
+<p>A good way to think about such puzzles (and math problems broadly!) is to consider small numbers. Let's do that.
+<ul>
+    <li>If there is $1$ healthy shark, it can eat the injured shark with no risk to itself.</li>
+    <li>If there are $2$ healthy sharks, neither will attack the injured shark because it will be doomed to die in turn.</li>
+    <li>If there are $3$ healthy sharks, the closest one will eat the injured shark because it knows that the two remaining sharks will be in a stalemate.</li>
+    <li>If there are $4$ healthy sharks, none will attack because they'll be eaten in turn.</li>
+</ul>
+
+<p>There's an emerging pattern here, so let's state our theorem.
+
+<p><strong>Theorem 9.3</strong>. If $n$ is odd, the closest shark will eat the injured shark, otherwise nothing will happen.
+<ul>
+    <li>Base case: $n=0$. $n$ is even and nothing can happen since there are no healthy sharks.</li>
+    <li>Inductive hypothesis: If $k$ is odd, the closest shark will eat the injured shark, otherwise nothing will happen.</li>
+    <li>Now let's consider the $k+1$ case.</li>
+    <li>If $k+1$ is odd then $k$ is even. Therefore, if there are $k$ sharks, our hypothesis says nothing will happen. This means that when I have $k+1$ sharks, the closest shark may feast, because it won't be eaten in turn.</li>
+    <li>If $k+1$ is even then $k$ is odd, and our hypothesis says the closest shark will eat the injured shark. Then in the $k+1$ case, if any shark eats the injured shark, we will find ourself in the $k$ shark case, and by our hypothesis the shark that feasted will die. Hence (by our assumption of rationality), no shark will attack the injured shark.</li>
+	<li>Qed.</li>
+</ul>
+
+<p>Note that we started with the $0$ case which was trivial. That doesn't matter, $0$ remains the smallest number. In this case it might feel tempting to also prove the $n=1$ case, which is fine as long as we prove the $0$ case as well. In the future we will see some proofs where it's acceptable to start with some $n>0$, because the claim starts with "if $n$ is greater than $5$ then..." But even in those cases, we can start with zero (we might just have to consider in our inductive hypothesis whether $k$ is $5$).
+
+<p>If you enjoy these kinds of problems, try the <a href="https://xkcd.com/blue_eyes.html">Blue Eyes</a> logic puzzle. (If you have brown eyes, I hope you don't find yourself on an island with 99 blue eyed people and a green eyed guru.)
+
+<h2>The Peano Axioms</h2>
+
+<p> We can more easily justify induction if we define the natural numbers themselves <em>inductively</em>, like you might define a datatype in Haskell, Racket, or ML.
+
+<!-- <p> In lecture 4, we defined the natural numbers as follows:
+    \begin{align*}
+    \mathbb{N} =& \emptyset & \text{(corresponding to $0$)} \\
+	\text{or } & n \cup \{n\} & \text{(corresponding to $n+1$)}
+    \end{align*} -->
+
+<p> In the late 1800s, Giuseppe Peano presented the following definition of the natural numbers that relied on only two symbols:
+    \begin{align*}
+    \mathbb{N} =~& 0 & \\
+	\text{or } & S~n & \text{where $n$ is a number}
+    \end{align*}
+	
+<p>$S$ is just a symbol here, standing for successor. In this system, we would write $1$ as $S~0$ and $5$ as $S~(S~(S~(S~(S~0))))))$. Essentially, this is just counting with your fingers.	(Compare this to our prior definition of numbers is terms of sets, back in lecture 4.)
+	
+<p>There's a nice correspondence here with how you would define a list in most functional programming languages. Here's Haskell:
+
+<pre>
+<code>
+data List a = Nil 
+	    | Cons a (List a)
+</code>
+</pre>
+
+<!-- <pre>
+<code>
+Definition list =
+  []
+| a :: (l : list)
+</code>
+</pre> -->
+
+<p>Since $0$ and $S~n$ together define all the numbers, it should make sense that if a proposition $P$ is true about $0$ and adding an $S$ preserves $P$'s truth, then $P$ is always true. Formally:
+
+<p><strong>Definition 9.1. Peano's Axiom of Induction</strong>: For any proposition $P$ about a natural number if:
+<ul>
+<li>$P~0$ and</li>
+<li>$\forall n, P~n \to P~(S~n)$ then</li>
+<li>$\forall n, P~n$</li>
+</ul>
+
+<p>Let's prove something in Peano arithmetic. To begin with, here's Peano's definition of $+$.
+<ul>
+    <li>$\forall n, 0+n = n$.</li>
+    <li>$\forall n\, m, S \, n + m = S \, (n+m)$. (Note that $S$ binds more tightly than $+$).</li>
+</ul>
+
+<p>Note that the definition doesn't say that $n + 0 = n$. So let's prove it ourselves - by induction!
+
+<p><strong>Theorem 9.3. $\forall n, n+0 = n$</strong>
+<ul>
+    <li>Proof: By induction on $n$.</li>
+    <li>Base case: $n = 0$. By Peano's first addition rule $0 + 0 = 0$ so we're done with this case.</li>
+    <li>Inductive case: Suppose $k+0 = k$. We want to prove that $S~k + 0 = S~k$.</li>
+	<li>By Peano's second addition rule $S~k + 0 = S~(k+0)$ and by our assumption $k+0 = k$, so $S~(k+0) = S~k$. Hence $(S~k+0) = S~k$.</li>
+	<li>Therefore, $\forall n, n+0 = n$
+</ul>
+
+Here are the remaining Peano axioms, we'll refer back to them later:
+
+<h4>Axioms for S</h4>
+<ul>
+<li>$\forall x, S\, x \not= 0$.</li>
+<li>$\forall x\,y,\,S\,x = S\,y \to x = y$ (injectivity of $S$)
+</ul>
+
+<h4>The definition of $\times$</h4>
+<ul>
+    <li>$\forall n, 0\times n = 0$.</li>
+    <li>$\forall n\, m, S \, n \times m = m + n \times m$.</li>
+</ul>
+
+<h4>The definition of $\leq$</h4>
+
+<ul>
+<li>$\forall n\,m,\, n \leq m \iff \exists p,\, n+p = m$.</li>
+</ul>
+
+<p>Using these axioms, we can prove all of the desired properties of $+$, $\times$, and $\leq$, including commutativity, associativity and the transitivity of $\leq$. These make great (strongly recommended) exercises for practicing induction.<p>
+	
+</body>

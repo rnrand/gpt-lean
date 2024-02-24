@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 1</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 1</h1>
+
+    <h2>Logic</h2>
+    <blockquote>
+    <p>Everybody who has worked in formal logic will confirm that it is one of the technically most refractory parts of mathematics. The reason for this is that it deals with rigid, all-or-none concepts, and has very little contact with the continuous concept of the real or of the complex number, that is, with mathematical analysis. Yet analysis is the technically most successful and best-elaborated part of mathematics. Thus formal logic is, by the nature of its approach, cut off from the best cultivated portions of mathematics, and forced onto the most difficult part of the mathematical terrain, into combinatorics.
+
+    <footer>&mdash;<cite>John Von Neumann, The General and Logical Theory of Automata</cite> (1948)</footer>
+    </blockquote>
+    
+		This course begins with <em>logic</em>. For our purposes, logic is a sort
+		of model for "truth" analogous to how equations can model the flights of
+		objects in physics. Practically speaking, a brief encounter with logic will
+		give you a foundation for parsing, understanding, and finally proving
+		mathematical statements.
+
+    <h3>Propositions</h3>
+
+		<p>We will begin with <em>propositional logic</em> and expand from there
+		later on.  The basic element of propositional logic is the
+		<em>proposition</em>. Propositions simply model statements that can either
+		be true or false.</p>
+
+		<p><strong>Definition 1.1.</strong> A <strong>proposition</strong> is a
+		statement that can be true or false.</p>
+
+		<p><strong>Example.</strong> The following sentences are propositions:
+		<em>
+		<ul>
+			<li> Chicago is the capital of Illinois. </li>
+			<li> Springfield is the capital of Illinois.</li>
+			<li> Chicago or Springfield is the capital of Illinois.</li>
+			<li> Paul Alivisatos is the president of UChicago and Ka Yee C. Lee
+				is the provost of UChicago.</li>
+			<li> Milkshakes at the Reynolds Club cost $1 on Wednesdays.</li>
+			<li> If Chicago is the capital of Illinois, then milkshakes
+				are free.</li>
+		</ul>
+		</em>
+
+		The following are not propositions:
+		<em>
+		<ul>
+			<li>Chicago.</li>
+			<li>Is it going to snow on Halloween again?</li>
+			<li>Please get a milkshake for me.</li>
+		</ul>
+		</em>
+		
+		The upshot is that we'll be very permissive about what counts as a
+		proposition. As long as we can reasonably interpret a statement as
+		an assertion about something that can be true or false, it's a proposition.
+		&#x220E;
+		</p>
+
+		<p> If propositional logic stopped there, it wouldn't be very interesting.
+		But we can already notice that simply modeling statements as true and false
+		suggests some intuitive relationships. For instance, we don't expect that
+		the first two examples can both be true (since Illinois only has one
+		capital), and the third example is clearly related somehow to the first
+		two.  </p>
+
+		<p>To begin unraveling these relationships and refining our model for
+		truth, we can classify propositions into two broad types.</p>
+
+		<p><strong>Definition 1.2.</strong> An <strong>atomic</strong> proposition
+		is one that cannot be broken down into smaller propositions. A
+		<strong>compound</strong> proposition is one that can.</p>
+
+		<p><strong>Example.</strong> In the first example, arguably the following
+		are atomic propositions:
+		<ul><em>
+			<li> Chicago is the capital of Illinois. </li>
+			<li> Springfield is the capital of Illinois.</li>
+			<li> Milkshakes at the Reynolds Club cost $1 on Wednesdays.</li>
+			</em>
+		</ul>
+		while these are compound propositions:
+		<ul>
+			<em>
+			<li> Chicago or Springfield is the capital of Illinois.</li>
+			<li> Paul Alivisatos is the president of UChicago and Ka Yee C. Lee
+				is the provost of UChicago.</li>
+			</em>
+		</ul>
+		But this depends on our goals in applying logic. Generally speaking, if you
+		notice logical words connecting different assertions, then we'll usually
+			want to break down the proposition further. So, for example, the
+			assertion that <em>Paul Alivisatos is the president of UChicago and Ka
+				Yee C. Lee is the provost of UChicago</em> can be broken down into two
+			propositions:
+		<ul>
+			<li> <em>Paul Alivisatos is the president of UChicago</em> </li>
+			<li> <em>Ka Yee C. Lee is the provost of UChicago.</em></li>
+		</ul>
+		The proposition
+			<em> Chicago or Springfield is the capital of Illinois.</em>
+			can possibly be broken down into
+			<ul>
+				<li><em> Chicago is the capital of Illinois.</em></li>
+				<li><em> Springfield is the capital of Illinois.</em></li>
+			</ul>
+			which are connected by "or".	
+			
+			Finally, the proposition <em> If Chicago is the capital of Illinois, then
+				milkshakes are free</em> appears to be a compound proposition, but in
+			a funny way. We'll come back to it later.  &#x220E;</p>
+		
+    
+		<p>In propositional logic, we represent propositions symbolically by
+		<em>formulas</em>. Formulas are made up of propositional variables,
+		parentheses, and connectives. Propositional variables, usually lowercase
+		roman letters like $p,q,r,\dots$, represent atomic propositions and
+		connectives allow us to build compound propositions by joining one or more
+		propositions together. Parentheses are used to denote the ordering that we
+		should interpret the connectives in. Hypothetically, we would be able to
+		express every proposition that shows up in this course symbolically, but we
+		won't go that far. 
+
+    <p>There are four basic logical connectives, called <em>Boolean connectives</em>, after George Boole who defined them in 1854. We will define and consider each one.
+
+    <p><strong>Definition 1.3.</strong> $\neg P$ is called <strong>negation</strong> and is pronounced "not $P$". $\neg P$ is true if and only if $P$ is false.
+    
+    <p>For instance, $\neg q$ is the proposition <em>I cannot take two weeks off</em>. Note that negation is a <em>unary</em> connective, in that it only applies to one formula, while all the other connectives are <em>binary</em>. Observe that because of this, we tend to express atomic propositions positively.
+
+    <p>The unary connective $\neg$ is defined for a propositional $P$ by the following <em>truth table</em>:</p>
+    <table>
+        <tr> <th>$P$ </th><th>$\neg P$</th></tr>
+        <tr> <td>$T$ </td><td>$F$</td></tr>
+        <tr> <td>$F$ </td><td>$T$</td></tr>
+    </table>
+
+    <p><strong>Definition 1.4.</strong> $P \wedge Q$ is called <strong>conjunction</strong>, and is pronounced "$P$ and $Q$". $P \wedge Q$ is true whenever $P$ and $Q$ are true.
+    
+    <p>This connective expresses the idea that both $P$ and $Q$ are true. For instance, $Q \wedge R$ is the proposition <em>I can take two weeks off and I can fly to Tokyo</em>.
+
+    <p>The binary connective $\wedge$ is defined for propositional formulas $P$ and $Q$ by
+    <table>
+        <tr> <th>$P$ <th>$Q$ <th>$P \wedge Q$ 
+        <tr> <td>$T$ <td>$T$ <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td>$F$ 
+        <tr> <td>$F$ <td>$T$ <td>$F$ 
+        <tr> <td>$F$ <td>$F$ <td>$F$ 
+    </table>
+
+
+    <p><strong>Definition 1.5.</strong> $P \vee Q$ is called <strong>disjunction</strong> and is pronounced "$P$ or $Q$". $P \vee Q$ is true if and only if $P$ is true or $Q$ is true or both.
+    
+    <p>For example, $Q \vee R$ is the proposition <em>I can take two weeks off or I can fly to Tokyo</em>. One tricky thing to note with English is that many times we use "or" to mean "exclusive or". For instance, when you are asked whether you prefer beef or chicken, the expectation is that you may only choose one and not both. (In many cases, like <em>it's my way or the highway</em>, it's implicit that "my way" is not the highway.) This logical connective $\vee$ allows for both $P$ and $Q$ to be true, which corresponds to something like "and/or" in English.
+
+    <p> "Or" is defined for propositional formulas $P$ and $Q$ by
+    <table>
+        <tr> <th>$P$ <th>$Q$ <th>$P \vee Q$ 
+        <tr> <td>$T$ <td>$T$ <td>$T$
+        <tr> <td>$T$ <td>$F$ <td>$T$
+        <tr> <td>$F$ <td>$T$ <td>$T$
+        <tr> <td>$F$ <td>$F$ <td>$F$ 
+    </table>
+
+    <p><strong>Definition 1.6.</strong> $P \rightarrow Q$ is called <strong>implication</strong> and is pronounced "if $P$, then $Q$" or "P implies Q". $P \rightarrow Q$ is true when $Q$ is true or $P$ is false.
+    
+    <p>For example, $P \rightarrow R$ would be the proposition <em>If flights to Tokyo are under \$900, then I can fly to Tokyo</em>. The direction in which you read this connective is very important. For instance, it may be the case that flights to Tokyo may not be under \$900 but I may still be able to fly. Here, $P$ is called the <em>hypothesis</em> and $q$ is called the <em>conclusion</em>.
+
+    <p>Implication is defined for propositional formulas $P$ and $Q$ by
+    <table>
+        <tr> <th>$P$ <th>$Q$ <th>$P \rightarrow Q$
+        <tr> <td>$T$ <td>$T$ <td>$T$ 
+        <tr> <td>$T$ <td>$F$ <td>$F$
+        <tr> <td>$F$ <td>$T$ <td>$T$
+        <tr> <td>$F$ <td>$F$ <td>$T$
+    </table>
+
+    <p>Implication is probably less familiar than conjunction or disjunction but it's particularly important since it's heavily used in expressing mathematical statements. Again, unlike conjunction and disjunction, implication is not commutative, which means that $P \rightarrow Q$ and $Q \rightarrow P$ are not logically equivalent.
+
+    <p>One way to think about implications is as a claim, as we do in mathematics. Is the claim true? This depends on whether the hypothesis is true. If the hypothesis isn't true, then the claim can be considered <em>vacuously</em> true. This is sort of like when you begin a claim about all positive numbers that are less than 0: you can say anything about these numbers because they don't exist!
+
+    <p>However, if the hypothesis is true, then the truth of our claim depends on whether the conclusion is also true. If it is, then all is right with the world. But if our hypothesis is true while our promised conclusion is false, then we have to conclude that we didn't know what we were talking about and that our claim was false after all.
+		
+	<p>It's important to note that while "implication" or "if A then B" as commonly used in English implies some causal or logical connection between A and B, no such connection is required in our setting. For example, <em>If one plus one is two then Neptune is a planet</em> is true simply on the basis on the conclusion being true. 
+
+	<p> Finally, we use the symbol $P \leftrightarrow Q$, pronounced "P if and only if Q" ("P iff Q" for short), as shorthand for $(P \to Q) \wedge (Q \to P)$. This will be true whenever $P$ and $Q$ are both true or both false.
+
+	<h3>Truth Tables</h3>
+	
+	<p>Implication leads us naturally to the notion of proof. Two things I might wish to prove are that some statement is always true (a <em>tautology</em>) or always false (a <em>contradiction</em>). One straightforward approach is to use <em>truth tables</em>, which extend the tables we used above.
+		
+	<p>Consider the statement $A \to (B \to A)$. We claim that this statement is always true (feel free to take a moment to think about why). To show this, we'll consider every possible truth value for $A$ and $B$:
+	    <table>
+	        <tr> <th>$A$<th>$B$<th>$B \to A$<th>$A \to (B \to A)$
+	        <tr> <td>$T$ <td>$T$ <td>$T$<td>$T$ 
+	        <tr> <td>$T$ <td>$F$ <td>$T$<td>$T$
+	        <tr> <td>$F$ <td>$T$ <td>$F$<td>$T$
+	        <tr> <td>$F$ <td>$F$ <td>$T$<td>$T$
+	    </table>
+	<p>Note that we introduced an intermediate column for $B \to A$ that we were then able to reference when constructing the final column. Since the final column was always true, $A \to (B \to A)$ is a tautology.
+		
+	<p>For a more complex example, let's try to show $(A \wedge B) \to C \leftrightarrow A \to (B \to C)$. Note that $\leftrightarrow$ is deemed to bind loosely, so we're showing the equivalence of $(A \wedge B) \to C$ and $A \to (B \to C)$.	
+    <table>
+        <tr> <th>$A$<th>$B$<th>$C$<th>$A \wedge B$<th>$(A \wedge B) \to C$<th>$B \to C$<th>$A \to (B \to C)$<th>$(A \wedge B) \to C \leftrightarrow A \to (B \to C)$
+        <tr> <td>$T$<td>$T$<td>$T$<td>$T$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$T$<td>$T$<td>$F$<td>$T$         <td>$F$                 <td>$F$      <td>$F$      <td>$T$
+        <tr> <td>$T$<td>$F$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$T$<td>$F$<td>$F$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$T$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$T$<td>$F$<td>$F$         <td>$T$                 <td>$F$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$F$<td>$T$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+        <tr> <td>$F$<td>$F$<td>$F$<td>$F$         <td>$T$                 <td>$T$      <td>$T$      <td>$T$
+    </table>
+	
+	 <p>Note that we've elided the columns for $((A \wedge B) \to C) \to (A \to (B \to C))$ and $(A \to (B \to C)) \to ((A \wedge B) \to C)$, both due to space constraints and because we can easily just compare the values in the 5th and 7th columns to determine the value of the 8th.
+	
+	<p> As we can see, truth tables can get very large: if you have $n$ different propositional variables, you're looking at a truth table of size $2^n$. This is bad. In the next lecture, we will introduce <em>natural deduction</em>, a system for proving the correctness of statements in propositional logic (and more powerful logics as well).  

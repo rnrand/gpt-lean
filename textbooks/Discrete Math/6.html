@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 6</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 6</h1>
+
+    <h2>Relations</h2>
+
+    <p><strong>Definition 5.0.</strong> A <strong>multiset</strong> (or bag) is an unordered collection that can have multiple of the same element.
+		
+	<p>Multisets are sometimes written with square brackets [a,b,c], though more frequently with the same curly braces as sets. We'll try to be explicit about when we're using multisets. The $\subseteq$, $\cap$ and $\cup$ operations lift cleanly to multisets in the way you might expect: 
+		<ul>
+		  <li>$[a] \subseteq [a,a]$</li>
+		  <li>$[a,a,b] \cup [a,b,c] = [a,a,b,c]$</li>
+		  <li>$[a,a,b] \cap [a,b,c] = [a,b]$</li>
+		</ul>
+We can also define addition ($+$) such that $[a,a,b] + [a,b,c] = [a,a,a,b,b,c]$.
+
+    <p><strong>Definition 5.1.</strong> An <strong>$n$-tuple</strong> $(a_1, a_2, \dots, a_n)$ is an ordered collection that has $a_1$ as its first element, $a_2$ as its second element, $\dots$, and $a_n$ as its $n$th element. An <em>ordered pair</em> is a 2-tuple.
+
+    <p>Observe that since tuples are ordered, we have $(a_1, \dots, a_n) = (b_1, \dots, b_n)$ if and only if $a_i = b_i$ for $i = 1, \dots, n$.
+
+    <p>As a side note, we claimed in the last class that everything in mathematics is just some kind of set, so how would we define tuples using sets? To keep things simple, we'll consider the definition of the pair first. We can define $(x,y)$ to be the set $\{\{x\}, \{x,y\}\}$. In this way, we can distinguish $x$ and $y$ and we have a way to determine the order in which they appear. This definition is due to Kuratowski in 1921. We can then generalize this definition for arity $n \gt 2$.
+
+    <p><strong>Definition 5.2.</strong> The <strong>cartesian product</strong> of two sets $A$ and $B$ is
+    $$A \times B = \{(a,b) \mid a \in A, b \in B\}.$$
+
+    <p>We can generalize this to products of $n$ sets.
+
+    <p><strong>Definition 5.3.</strong> The <strong>cartesian product</strong> of $n$ sets $A_1, A_2, \dots, A_n$, denoted $A_1 \times A_2 \times \cdots \times A_n$ is defined
+    $$A_1 \times A_2 \times \cdots \times A_n = \{(a_1, a_2, \dots, a_n) \mid a_i \in A_i, i = 1, 2, \dots, n\}.$$
+
+
+    <!-- <p>You may have learned various definitions of what is or isn't a function. Typically, we think of functions in a very calculus kind of way, where we assign a value $x$ to some other value based on some expression like $x^2$. Then, we come across more complicated functions, that are defined piecewise, or maybe weird functions like the Heaviside function or the parity function. Here, we'll make use of the set theory concepts we've just defined to work towards a general definition for functions. -->
+
+	<p>We now can use the Cartesian product to define relations.
+
+    <p><strong>Definition 5.4.</strong> A <strong>relation</strong> $R$ with <em>domain</em> $X$ and <em>co-domain</em> $Y$  is a subset of $X \times Y$. 
+
+    <p>We can see from the definition that a relation really is just a subset of the cartesian product of some sets. In other words, it's a set of tuples. This also resembles the set-theoretic definition of predicates and it's not entirely a coincidence that we think of $k$-ary predicates as relations.
+
+	<p>A few properties of relations will appear throughout this course. These tend to relate to relations where the domain and range are the same.
+		
+    <p><strong>Definition 5.5.</strong> A relation $R \subseteq A \times A$ is <strong>reflexive</strong> if $\forall a \in A, R(a,a)$. In contrast, we say that a relation is <strong>irreflexive</strong> if $\forall a \in A, \neg R(a,a)$.
+
+	<p>The equality ($=$) and subset $\subseteq$ relations are reflexive. $<$ is irreflexive.
+
+    <p><strong>Definition 5.6.</strong> A relation $R \subseteq A \times A$ is <strong>symmetric</strong> if $\forall a, b \in A, R(a,b) \to R(b,a)$. A relation is <strong>asymmetric</strong> if $\forall a,b \in A, R(a,b) \to \neg R(b,a)$. Finally, a relation is <strong>antisymmetric</strong> if $\forall a,b \in A, R(a,b) \wedge R(b,a) \to a = b$.
+
+	<p>Equality ($=$) is symmetric, strict subset ($\subset$) is asymmetric and $\subseteq$ is antisymmetric – but so is subset (vacuously)!
+
+    <p><strong>Definition 5.7.</strong> A relation $R \subseteq A \times A$ is <strong>transitive</strong> if $\forall a, b, c \in A, R(a,b) \wedge R(b,c) \to R(a,c)$.
+		
+	<p>Equality, subset and strict subset are all transitive, but containment ($\in$) certainly isn't! Still we could imagine wanting a transitive "is an element of" operation.
+		
+    <p><strong>Definition 5.8.</strong> A reflexive, symmetric, transitive relation is called an <strong>equivalence relation</strong>.
+		
+	We've actually seen two of these in this course: equality ($=$) and bidirectional implication ($\Leftrightarrow$). We'll see more.		
+
+    <p><strong>Definition 5.9.</strong> A relation $R \subseteq A \times B$ is <strong>total</strong> if $\forall a \in A, \exists b \in B, R(a,b)$. A relation $R$ is <strong>single-valued</strong> if $\forall a \in A, \forall b_1, b_2 \in B, R(a, b_1) \wedge R(a,b_2) \rightarrow b_1 = b_2$.
+
+    <p>These properties lead us right to a definition for functions.
+
+	<h2>Functions</h2>
+
+    <p><strong>Definition 5.10.</strong> A <strong>function</strong> $f : A \to B$ is a total, single-valued relation with domain $A$ and co-domain $B$. The set $B$ is also called the <em>range</em> of $f$.
+
+    <p>Again, based on the definition, a function is really just a relation that satisfy the properties we just defined, totality and single-valued-ness. And if we go further, a function is just a set, like everything else in mathematics. The restrictions on the domain and co-domain of the function tracks with our intuitive understanding of functions that we may have learned earlier. For instance, totality guarantees that a function gives us something for <em>every</em> value we throw at it, while single-valuedness guarantees that our function will only give us one possible output for every input that we give it.
+
+    <p>We also have different kinds of functions that are important and worth distinguishing.
+
+    <p><strong>Definition 5.11.</strong> A function $f:A \to B$ is <strong>injective</strong> (also called <em>one-to-one</em>, though this can be ambiguous) if $$\forall x, y \in A, f(x) = f(y) \rightarrow x = y.$$
+
+    <p><strong>Example 5.12.</strong> The successor function $f:\mathbb N \to \mathbb N$ defined by $f(x) = x+1$ is one-to-one. On the other hand, the function $g:\mathbb N \to \mathbb N$ defined by $g(x) = \left\lfloor \frac x 2 \right\rfloor$ is not injective, since for any even natural number $m$, we have $g(m) = g(m+1)$ but $m \neq m+1$.
+
+    <p><strong>Definition 5.13.</strong> The <strong>image</strong> of a function $f : A \to B$ is the set $\operatorname{im} f = \{f(x) \mid x \in A\}$.
+
+    <p>Clearly, $\operatorname{im} f \subseteq \operatorname{rng} f$. However, it is not always the case that $\operatorname{im} f = \operatorname{rng} f$. If it is, we get another special kind of function.
+
+    <p><strong>Definition 5.14.</strong> A function $f:A \to B$ is <strong>surjective</strong> (or <em>onto</em>) if $\forall y \in B, \exists x \in A, f(x) = y$.
+
+    <p><strong>Example 5.15.</strong> The function $f:\mathbb N \to \mathbb N$ defined by $f(x) = x^2$ is not surjective (for instance, there is no natural number $n$ such that $n^2 = 2$). On the other hand, the function $g(x) = \left\lfloor \frac x 2 \right\rfloor$ from the above example <em>is</em> surjective.
+
+    <p><strong>Definition 5.16.</strong> A function $f:A \to B$ is a <strong>bijection</strong> (or <em>one-to-one correspondence</em>) if $f$ is one-to-one and onto.
+
+    <p>A correspondence between two sets $A$ and $B$ uniquely pairs each element of $A$ with an element in $B$. It's easy to see, then, that we can form a bijection between any two sets of finite size. For instance, given the sets $\{71,42,0,100\}$ and ${B, E, R, T}$, we can form the bijection f = {(71,B),(42,E),(0,R),(100,T)} (or any of several other bijections). This gives us a way of saying that two infinite sets have the same cardinality: They have the same cardinality if there is a bijection between them! For instance:
+		$$|\mathbb{N}| = |\{x \in \mathbb{N}| \exists y \in \mathbb{N}, x = 2y \}|$$
+		
+	<p>We see that the even numbers are the same size as the natural numbers, despite being a subset of them! It turns out that the integers $\mathbb{Z}$ and even rational numbers $\mathbb{Q}$ are the same size, which we call $\aleph_0$. $|\mathbb{R}|$, however, <a href="https://en.wikipedia.org/wiki/Cardinality_of_the_continuum">is larger</a>.
+		
+	<p><strong>Definition 5.17.</strong>It should be clear from the above that bijections are bidirectional, in the sense that for any bijection $f$ from $A$ to $B$ we can construct another bijection $f^{-1} = \{(b,a) | (a,b) \in f\}$ from $B$ to $A$. We call this function the <strong>inverse</strong> and it has the property that $\forall x \in A, f^{-1}(f(x)) = x$ and $\forall y \in B, f(f^{-1}(y)) = y$. We may note that $(f^{-1})^{-1} = f$. 
+
+	<p>Note that a function <em>must</em> be a bijection in order to have an inverse. If a function $f \subseteq A \times B$ is not injective, then there are distinct $x_1$ and $x_2$ such that $f(x_1) = f(x_2)$. The relation produced by flipping this function would therefore not be single-valued. Similarly, if $f$ is not surjective, the inverse relation wouldn't be total. Either way, we wouldn't get a function. (There are notions of "left-inverses" for injective functions and "right-inverses" for surjective ones, but they don't particularly concern us.) 
+
+	<p><strong>Definition 5.18.</strong>If you have functions $f:A \to B$ and $g: B \to C$, then <strong>composition</strong> of the two functions, written $g \circ f$ is $\{(a,c) | (a,b) \in f \wedge (b,c) \in g\}$.
+		
+	<p>Using this notation, we may restate the property of inverses as $f^{-1} \circ f = I_A$ and $f \circ f^{-1} = I_B$, where $I_A$ and $I_B$ are the identity functions on $A$ and $B$.

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 14</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 14</h1>
+
+    <h2>Combinatorics</h2>
+
+    <p>Combinatorics is the study of counting objects and their arrangements. It forms the basis of probability theory.
+
+    <p><strong>Example 12.1.</strong> Suppose that you've been invited to an elaborate dinner party like for a wedding or something. Assuming you have no further dietary restrictions, you are presented with a choice of four starters, three mains, and three desserts. How many different three-course meals can you construct? If we first choose one of the four starters, then for each choice, we have another three choices of mains, and for each of those choices, we have a choice of three desserts. So this gives us $4 \times 3 \times 3 = 36$ different ways to construct our desired meal.
+
+    <p>We can think of each course as a set: $S$, $M$, $D$, and so what we're really doing is asking for the number of tuples that we can get out of these sets, where the first element of the tuple is a starter, the second is a main, and the third is a dessert. In other words, we want to know $|S \times M \times D|$. This gives us a general formula for the size of a Cartesian product.
+
+    <p><strong>Theorem 12.2 (Product Rule).</strong> For finite sets $A_1, A_2, \dots, A_n$, $$|A_1 \times A_2 \times \cdots \times A_n| = |A_1| \cdot |A_2| \cdots |A_n|.$$
+
+    <p>Informally, the product rule describes the number of things you get when you're given several sets of things to choose from and you can pick one from each.
+
+    <p><strong>Example 12.3.</strong> Let $\Sigma$ be an alphabet of size $k$, that is, a set of $k$ distinct characters. How many strings over $\Sigma$ of length $\ell$ are there? Here, we can think of strings in the C sense, as an array of characters, or a tuple. This means that an $\ell$-length string is an $\ell$-tuple belonging to the set $\Sigma \times \Sigma \times \cdots \times \Sigma = \Sigma^\ell$. Applying the product rule, we get that there are $k^\ell$ $\ell$-length strings over $\Sigma$. 
+
+    <p><strong>Example 12.4.</strong> Suppose that I have a set $A = \{x_1, x_2, \dots, x_n\}$ with $n$ objects in it. How many subsets of $A$ are there? From our previous discussions, we know that a set of $n$ objects has exactly $2^n$ subsets. Let's consider the following approach. For each subset $S \subseteq A$, let $w_S$ be a string over the binary alphabet $\{0,1\}$. Then we define $w_S$ by $w_S = a_1 a_2 \cdots w_n$, where for $1 \leq i \leq n$,
+    \begin{equation*}
+    a_i = \begin{cases} 0 & \text{if $x_i \not \in S$,} \\ 1 &\text{if $x_i \in S$.} \end{cases}
+    \end{equation*}
+    For instance, $w_\emptyset = 00 \cdots 0 = 0^n$, while $w_A = 11\cdots 1 = 1^n$. How many strings of the form $w_S$ are there? Our prior discussion about the number of strings makes this easy: over the binary alphabet, there are exactly $2^n$ strings of length $n$. The string $w_S$ is sometimes called the <em>characteristic string</em> of $S$.
+
+    <p><strong>Example 12.5.</strong> Suppose that, as an alternative to its extremely sophisticated fingerprint or face recognition algorithm, your smartphone also allows access via a <em>six-digit passcode</em>. How many different possible passwords are there? Well, we consider the set of digits $\{0,1,2,3,4,5,6,7,8,9\}$, which is of size 10. Then applying the product rule, we get $10^6 = 1,000,000$, which is uncomfortably small.
+
+    <p><strong>Example 12.6.</strong> Now consider the University of Chicago's <a href="https://uchicago.service-now.com/it?id=kb_article&kb=KB00015275">CNetID password policy</a>:
+    <blockquote>
+    <p>A <em>standard password</em> with a length&nbsp;of 12-18&nbsp;characters can be used and must contain characters from three of the following categories:
+    <ul>
+    <li>Uppercase letters
+    <li>Lowercase letters
+    <li>Numbers (1, 2, 3, etc)
+    <li>Symbols, including ! @ # $ % &amp; * ( ) - + = _ | \ [ ] { } &lt; &gt; , . : ; /
+    </ul>
+    </blockquote>
+    <p>Here, we have four distinct categories of symbols, 
+    <ul>
+    <li>$U$ = {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+    <li>$L$ = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
+    <li>$N$ = {0,1,2,3,4,5,6,7,8,9\}$
+    <li>$S$ = {!,@,\#,\%,\&,*,(,),-,+,=,_,|,\,[,],{,},<,>,,,.,:,;,/}
+    </ul>
+    <p>In other words, we want to make strings over the alphabet $U \cup L \cup N \cup S$. Then how many symbols do we have to make our password? What is $|U \cup L \cup N \cup S|$? Luckily, our sets are disjoint, so we can immediately apply a lemma about the size of unions of disjoint sets back from our discussion about set theory: 
+    <blockquote>
+    <p><strong>Lemma 3.10.</strong> If $A$ and $B$ are disjoint sets, then $|A \cup B| = |A| + |B|$.
+    </blockquote>    
+    <p>This gives us $26+26+10+26 = 88$ symbols with which we can make passwords.
+
+    <p>We can state this lemma more generally.
+
+    <p><strong>Theorem 12.7 (Sum Rule).</strong> For finite disjoint sets $A_1, A_2, \dots, A_n$, 
+    $$|A_1 \cup A_2 \cup \cdots \cup A_n| = |A_1| + |A_2| + \cdots + |A_n|.$$
+
+    <p>Informally, the sum rule describes a situation where you're given <em>disjoint</em> sets of things to choose from, but you may only make one choice in total.
+
+
+    <p><strong>Example 12.8.</strong> Let's start small and consider only passwords of length 12. Taking our discussion above, we know that we can make 
+    $$88^{12} = 215,671,155,821,681,003,462,656$$ 
+    possible passwords of length 12. This is about $2.1567 \times 10^{23}$, or somewhere around a third of a mole's worth of particles. However, this doesn't take into account any of the restrictions on what kinds of symbols must be included. 
+
+    <p>We need to consider the number of length 12 passwords that consist of symbols from only one or two categories. In other words, these are strings over the following:
+    $$U,L,N,S,U \cup L, U \cup N, U \cup S, L \cup N, L \cup S, N \cup S.$$
+    However, we have to be careful, because these sets are not disjoint!  For instance, $U \subseteq (U \cup L)$ and so $U^{12} \subseteq (U \cup L)^{12}$. Or, even more troublesome, we have $(U \cup L)^{12} \cap (U \cup S)^{12} = U^{12}$.
+
+    <p>This leads us to the following theorem about the sizes of unions that are not disjoint which we saw earlier.
+
+    <blockquote>
+    <p><strong>Theorem 3.8 (Inclusion-Exclusion).</strong> For all finite sets $A$ and $B$, $$|A \cup B| = |A| + |B| - |A \cap B|.$$
+    </blockquote>    
+
+    <p><strong>Example 12.9.</strong> Let's systematically go through our set of forbidden passwords. We can ignore those that come from a single category, since they are included in the union of passwords with symbols from two categories. Consider passwords from the sets $(U \cup L)^{12}$ and $(U \cup N)^{12}$. The passwords from $U^{12}$ appear in both sets, so if simply added their sizes, we would be double counting this quantity. Thus,
+    \begin{align*}
+    |(U \cup L)^{12} \cup (U \cup N)^{12}| &= |(U \cup L)^{12}| + |(U \cup N)^{12}| - |(U \cup L)^{12} \cap (U \cup N)^{12}| \\
+    &= |(U \cup L)^{12}| + |(U \cup N)^{12}| - |U^{12}| \\
+    &= 52^{12} + 36^{12} - 26^{12} \\
+    &= 395,519,958,867,910,127,616
+    \end{align*}
+    Now, we can take this set and consider its union with $(U \cup S)^{12}$ and observe that again, we have an intersection of $U^{12}$, so we get
+    \begin{align*}
+    & 395,519,958,867,910,127,616 + |(U \cup S)^{12}| - |U^{12}| \\
+    =& 395,519,958,867,910,127,616 + 52^{12} - 26^{12} \\
+    =& 786,301,536,397,498,638,336
+    \end{align*}
+    Now, things get a bit trickier if we want to add the passwords from $(L \cup N)^{12}$. The intersection of our new set with our set that we're building is $L^{12} \cup N^{12}$. 
+    \begin{align*}
+    & 786,301,536,397,498,638,336 + |(L \cup N)^{12}| - |L^{12} \cup N^{12}| \\
+    =& 786,301,536,397,498,638,336 + 36^{12} - (26^{12} + 10^{12}) \\
+    =& 790,944,487,779,158,573,056
+    \end{align*}
+    Luckily, things don't get much more complicated than this. If we skip to the end, after adding our final two sets of passwords, we'll see that we have a total of 1,186,273,587,733,745,336,320 forbidden passwords. To get the number of valid passwords of length 12, we simply subtract this number from our total to get
+    $$215,671,155,821,681,003,462,656 - 1,186,273,587,733,745,336,320 = 214,484,882,233,947,258,126,336$$
+    which is still on the order of $2.14 \times 10^{23}$. Of course, remember that these are the <em>shortest</em> allowable passwords. The total number of allowed passwords is much larger; one can simply perform the same calculations on passwords of lengths 13 through 18 and sum up the results.
+
+    <h2>The Pigeonhole Principle</h2>
+    <p>On the second floor of Crerar, you'll find the grad student mailboxes. These mail slots are also called <em>pigeonholes</em>. This came from earlier usage, when people really did keep birds in large arrangements of small compartments. The pigeonhole principle was first stated by Dirichlet in the 1800s and the story goes that it was named as such because Dirichlet's father was a postmaster. However, Dirichlet's naming and statement was in French and German and is rendered as pigeonhole in English. We don't really call these things pigeonholes anymore, and it is probably just as well that we think of birds and holes since it illustrates the basic idea quite nicely: if you have more birds than holes, then one of those holes is going to contain more than one bird.
+
+    <p><strong>Theorem 12.10 (Pigeonhole Principle).</strong> Let $A_1, A_2, \dots, A_k$ be disjoint sets such that $\left| \bigcup_{i=1}^k A_i \right| \gt k$. Then there exists a set $A_i$ such that $|A_i| \geq 2$.
+
+    <p><em>Proof.</em> Suppose we have $\left| \bigcup_{i=1}^k A_i \right| \gt k$. Let us assume that $|A_i| \leq 1$ for all $1 \leq i \leq k$. Then by the sum rule, we have
+    $$\left| \bigcup_{i=1}^k A_i \right| = \sum_{i=1}^k |A_i| \leq \sum_{i=1}^k 1 = k,$$
+    which contradicts our initial hypothesis that $\left| \bigcup_{i=1}^k A_i \right| \gt k$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 12.11 (Handshake Problem).</strong> Suppose there are $n$ candidates running for office at a debate and after the debate, the candidates all try to shake hands. Then there will be at least two people who shake with the same number of people. To see this, we first note that each person can shake anywhere 0 and $n-1$ hands, which gives us $n$ possibilities, and so we consider the set $A_i$ of people who shook $i$ hands, with $0 \leq i \leq n-1$. However, observe that it can't be the case that someone shook no hands<em>and</em> someone else shook everyone's hand, so at least one of $A_0$ or $A_{n-1}$ must be empty. This leaves $n-1$ possibilities for $n$ people, so our result follows.
+
+    <p>The pigeonhole principle also has some nice consequences for characterizing functions.
+
+    <p><strong>Lemma 12.12.</strong> Let $A$ and $B$ be finite sets with $|A| \gt |B|$ and let $f:A \to B$ be a function. Then $f$ is not injective.
+
+    <p><em>Proof.</em> Let $B = \{b_1, b_2, \dots, b_n\}$. Consider the set $A_i = \{a \mid f(a) = b_i \}$ for $1 \leq i \leq n$. Then there are $n$ sets $A_i$. By the pigeonhole principle, since there are more elements of $A$ than there are sets, there must be one set $A_i$ such that $|A_i| \geq 2$. Therefore, $f$ is not injective.
+    $\tag*{$\Box$}$
+	
+	<p>If we combine this with the simple proof that $|A| \lt |B|$ implies that $f:A \to B$ is not surjective (there aren't enough elements to cover $B$), we get that there is a bijection between $A$ and $B$ only if they are the same size. As we saw earlier, this is actually the <em>definition</em> of equal cardinality between sets of infinite size.

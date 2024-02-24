@@ -1,0 +1,463 @@
+Chapter 4
+Number Theory
+We’ve now covered most of the basic techniques for writing proofs. So we’re
+going to start applying them to speciﬁc topics in mathematics, starting with
+number theory.
+Number theory is a branch of mathematics concerned with the behavior
+of integers. It has very important applications in cryptography and in the
+design of randomized algorithms. Randomization has become an increasingly
+important technique for creating very fast algorithms for storing and retriev-
+ing objects (e.g. hash tables), testing whether two objects are the same (e.g.
+MP3’s), and the like. Much of the underlying theory depends on facts about
+which integers evenly divide one another and which integers are prime.
+4.1
+Factors and multiples
+You’ve undoubtedly seen some of the basic ideas (e.g. divisibility) somewhat
+informally in earlier math classes. However, you may not be fully clear on
+what happens with special cases, e.g. zero, negative numbers. We also need
+clear formal deﬁnitions in order to write formal proofs. So, let’s start with
+Deﬁnition: Suppose that a and b are integers. Then a divides b
+if b = an for some integer n. a is called a factor or divisor of b. b
+is called a multiple of a.
+39
+
+CHAPTER 4. NUMBER THEORY
+40
+The shorthand for a divides b is a | b. Be careful about the order. The
+divisor is on the left and the multiple is on the right.
+Some examples:
+• 7 | 77
+• 77 ̸ | 7
+• 7 | 7 because 7 = 7 · 1
+• 7 | 0 because 0 = 7 · 0, zero is divisible by any integer.
+• 0 ̸ | 7 because 0 · n will always give you zero, never 7. Zero is a factor
+of only one number: zero.
+• (−3) | 12 because 12 = 3 · −4
+• 3 | (−12) because −12 = 3 · −4
+An integer p is even exactly when 2 | p. The fact that zero is even is just
+a special case of the fact that zero is divisible by any integer.
+4.2
+Direct proof with divisibility
+We can prove basic facts about divisibility in much the same way we proved
+basic facts about even and odd.
+Claim 20 For any integers a,b,and c, if a | b and a | c then a | (b + c).
+Proof: Let a,b,and c and suppose that a | b and a | c.
+Since a | b, there is an integer k such that b = ak (deﬁnition of
+divides). Similarly, since a | c, there is an integer j such that
+c = aj.
+Adding these two equations, we ﬁnd that (b + c) =
+ak + aj = a(k + j).
+Since k and j are integers, so is k + j.
+Therefore, by the deﬁnition of divides, a | (b + c). □
+
+CHAPTER 4. NUMBER THEORY
+41
+When we expanded the deﬁnition of divides for the second time, we used
+a fresh variable name. If we had re-used k, then we would have wrongly
+forced b and c to be equal.
+The following two claims can be proved in a similar way:
+Claim 21 For any integers a,b,and c, if a | b and b | c then a | c. (Transi-
+tivity of divides.)
+Claim 22 For any integers a,b, and c, if a | b, then a | bc.
+You’ve probably seen “transitivity” before in the context of inequalities.
+E.g. if a < b and b < c, then a < c. We’ll get back to the general notion of
+transitivity later in the term.
+4.3
+Stay in the Set
+Students are sometimes tempted to rephrase the deﬁnition of a | b as “ b
+a is an
+integer.” This is not a good idea because it introduces a non-integer rational
+number into a problem that only needs to involve integers. Stepping outside
+the set of interest in this way is occasionally useful, but more often it leads
+to inelegant and/or buggy solutions. This happens for three reasons:
+• The purely integer proofs are typically simpler.
+• When constructing math from the ground up, the integers are typically
+constructed ﬁrst and the rationals built from them. So using rationals
+to prove facts about integers can lead to circular proofs.
+• On computers, integer operations yield exact answers but ﬂoating point
+operations are only approximate. So implementing an integer calcula-
+tion using real numbers often introduces errors.
+
+CHAPTER 4. NUMBER THEORY
+42
+4.4
+Prime numbers
+We’re all familiar with prime numbers from high school. Firming up the
+details:
+Deﬁnition: an integer q ≥ 2 is prime if the only positive factors
+of q are q and 1. An integer q ≥ 2 is composite if it is not prime.
+For example, among the integers no bigger than 20, the primes are 2,
+3, 5, 7, 11, 13, 17, and 19. Numbers smaller than 2 are neither prime nor
+composite.
+A key fact about prime numbers is
+Fundanmental Theorem of Arithmetic: Every integer ≥ 2 can be
+written as the product of one or more prime factors. Except for
+the order in which you write the factors, this prime factorization
+is unique.
+The word “unique” here means that there is only one way to factor each
+integer.
+For example, 260 = 2 · 2 · 5 · 13 and 180 = 2 · 2 · 3 · 3 · 5.
+We won’t prove this theorem right now, because it requires a proof tech-
+nique called “induction,” which we haven’t seen yet.
+There are quite fast algorithms for testing whether a large integer is prime.
+However, even once you know a number is composite, algorithms for factoring
+the number are all fairly slow. The diﬃculty of factoring large composite
+numbers is the basis for a number of well-known cryptographic algorithms
+(e.g. the RSA algorithm).
+4.5
+GCD and LCM
+If c divides both a and b, then c is called a common divisor of a and b. The
+largest such number is the greatest common divisor of a and b. Shorthand
+for this is gcd(a, b).
+
+CHAPTER 4. NUMBER THEORY
+43
+You can ﬁnd the GCD of two numbers by inspecting their prime factor-
+izations and extracting the shared factors. For example, 140 = 22 · 5 · 7 and
+650 = 2 · 52 · 13. So gcd(140, 6500) is 2 · 5 = 10.
+Similarly, a common multiple of a and b is a number c such that a|c and
+b|c. The least common multiple (lcm) is the smallest positive number for
+which this is true. The lcm can be computed using the formula:
+lcm(a, b) =
+ab
+gcd(a, b)
+For example, lcm(140, 650) = 140·650
+10
+= 9100.
+If two integers a and b share no common factors, then gcd(a, b) = 1. Such
+a pair of integers are called relatively prime.
+If k is a non-zero integer, then k divides zero. the largest common divisor
+of k and zero is k. So gcd(k, 0) = gcd(0, k) = k. However, gcd(0, 0) isn’t
+deﬁned. All integers are common divisors of 0 and 0, so there is no greatest
+one.
+4.6
+The division algorithm
+The obvious way to compute the gcd of two integers is to factor both into
+primes and extract the shared factors. This is easy for small integers. How-
+ever, it quickly becomes very diﬃcult for larger integers, both for humans
+and computers. Fortunately, there’s a fast method, called the Euclidean al-
+gorithm. Before presenting this algorithm, we need some background about
+integer division.
+In general, when we divide one integer by another, we get a quotient and
+a remainder:
+Theorem 1 (Division Algorithm) The Division Algorithm: For any in-
+tegers a and b, where b is positive, there are unique integers q (the quotient)
+and r (the remainder) such that a = bq + r and 0 ≤ r < b.
+For example, if 13 is divided by 4, the quotient is 3 and the remainder is
+
+CHAPTER 4. NUMBER THEORY
+44
+1. Notice that the remainder is required to be non-negative. So -10 divided
+by 7 has the remainder 4, because (−10) = 7 · (−2) + 4. This is the standard
+convention in mathematics. The word “unique” in this theorem simply means
+that only one pair of number q and r satisfy the pair of equations.
+Now, notice the following non-obvious fact about the gcd:
+Claim 23 For any integers a, b, q and r, where b is positive, if a = bq + r,
+then gcd(a, b) = gcd(b, r).
+Proof: Suppose that n is some integer which divides both a and
+b. Then n divides bq and so n divides a − bq. (E.g. use various
+lemmas about divides from last week.) But a − bq is just r. So n
+divides r.
+By an almost identical line of reasoning, if n divides both b and
+r, then n divides a.
+So, the set of common divisors of a and b is exactly the same as
+the set of common divisors of b and r. But gcd(a, b) and gcd(b, r)
+are just the largest numbers in these two sets, so if the sets contain
+the same things, the two gcd’s must be equal.
+If r is the remainder when a is divided by b, then a = bq + r, for some
+integer q. So we can immediately conclude that:
+Corollary: Suppose that a and b are integers and b is positive.
+Let r be the remainder when a is divided by b. Then gcd(a, b) =
+gcd(b, r).
+The term “corollary” means that this fact is a really easy consequence of
+the preceding claim.
+4.7
+Euclidean algorithm
+We can now give a fast algorithm for computing gcd, which dates back to Eu-
+clid. Suppose that remainder(a, b) returns the remainder when a is divided
+by b. Then we can compute the gcd as follows:
+
+CHAPTER 4. NUMBER THEORY
+45
+gcd(a,b: positive integers)
+x := a
+y := b
+while (y > 0)
+begin
+r := remainder(x,y)
+x := y
+y := r
+end
+return x
+Let’s trace this algorithm on inputs a = 105 and b = 252. Traces should
+summarize the values of the most important variables.
+x
+y
+r = remainder(x, y)
+105
+252
+105
+252
+105
+42
+105
+42
+21
+42
+21
+0
+21
+0
+Since x is smaller than y, the ﬁrst iteration of the loop swaps x and y.
+After that, each iteration reduces the sizes of a and b, because a mod b is
+smaller than b. In the last iteration, y has gone to zero, so we output the
+value of x which is 21.
+To verify that this algorithm is correct, we need to convince ourselves of
+two things. First, it must halt, because each iteration reduces the magnitude
+of y. Second, by our corollary above, the value of gcd(x, y) does not change
+from iteration to iteration. Moreover, gcd(x, 0) is x, for any non-zero integer
+x. So the ﬁnal output will be the gcd of the two inputs a and b.
+This is a genuinely very nice algorithm. Not only is it fast, but it involves
+very simple calculations that can be done by hand (without a calculator).
+It’s much easier than factoring both numbers into primes, especially as the
+individual prime factors get larger. Most of us can’t quickly see whether a
+large number is divisible by, say, 17.
+
+CHAPTER 4. NUMBER THEORY
+46
+4.8
+Pseudocode
+Notice that this algorithm is written in pseudocode. Pseudocode is an ab-
+stracted type of programming language, used to highlight the important
+structure of an algorithm and communicate between researchers who may
+not use the same programming language. It borrows many control constructs
+(e.g. the while loop) from imperative languages such as C. But details re-
+quired only for a mechanical compiler (e.g. type declarations for all variables)
+are omitted and equations or words are used to hide details that are easy to
+ﬁgure out.
+If you have taken a programming course, pseudocode is typically easy to
+read. Many small details are not standardized, e.g. is the test for equality
+written = or ==? However, it’s usually easy for a human (though not a
+computer) to ﬁgure out what the author must have intended.
+A common question is how much detail to use. Try to use about the same
+amount as in the examples shown in the notes. And think about how easily
+your pseudocode could be read by a classmate. Actual C or Java code is
+almost never acceptable pseudocode, because it is way too detailed.
+4.9
+A recursive version of gcd
+We can also write gcd as a recursive algorithm
+procedure gcd(a,b: positive integers)
+r := remainder(a,b)
+if (r = 0) return b
+else return gcd(b,r)
+This code is very simple, because this algorithm has a natural recursive
+structure. Our corollary allows us to express the gcd of two numbers in terms
+of the gcd of a smaller pair of numbers. That is to say, it allows us to reduce
+a larger version of the task to a smaller version of the same task.
+
+CHAPTER 4. NUMBER THEORY
+47
+4.10
+Congruence mod k
+Many applications of number theory, particularly in computer science, use
+modular arithmetic. In modular arithmetic, there are only a ﬁnite set of
+numbers and addition “wraps around” from the highest number to the lowest
+one. This is true, for example, for the 12 hours on a standard US clock: 3
+hours after 11 o’clock is 2 o’clock, not 14 o’clock.
+The formal mathematical deﬁnitions of modular arithmetic are based on
+the notion of congruence. Speciﬁcally, two integers are “congruent mod k”
+if they diﬀer by a multiple of k. Formally:
+Deﬁnition: If k is any positive integer, two integers a and b are
+congruent mod k (written a ≡ b (mod k)) if k | (a − b).
+Notice that k | (a − b) if and only if k | (b − a). So it doesn’t matter which
+number is subtracted from the other.
+For example:
+• 17 ≡ 5 (mod 12) (Familiar to those of us who’ve had to convert be-
+tween US 12-hour clocks and European/military 24-hour clocks.)
+• 3 ≡ 10 (mod 7)
+• 3 ≡ 38 (mod 7) (Since 38 − 3 = 35.)
+• 38 ≡ 3 (mod 7)
+• −3 ≡ 4 (mod 7) (Since (−3) + 7 = 4.)
+• −3 ̸≡ 3 (mod 7)
+• −3 ≡ 3 (mod 6)
+• −29 ≡ −13 (mod 8) (Since (−13) − (−29) = 16.)
+Congruence mod k is a relaxation of our normal rules for equality of
+numbers, in which we agree that certain pairs of numbers will be considered
+interchangeable.
+
+CHAPTER 4. NUMBER THEORY
+48
+4.11
+Proofs with congruence mod k
+Let’s try using our deﬁnition to prove a simple fact about modular arithmetic:
+Claim 24 For any integers a, b, c, d, and k, k positive, if a ≡ b (mod k)
+and c ≡ d (mod k), then a + c ≡ b + d (mod k).
+Proof: Let a, b, c, d, and k be integers with k positive. Suppose
+that a ≡ b (mod k) and c ≡ d (mod k).
+Since a ≡ b (mod k), k | (a − b), by the deﬁnition of congruence
+mod k. Similarly, c ≡ d (mod k), k | (c − d).
+Since k | (a − b) and k | (c − d), we know by a lemma about
+divides (above) that k | (a − b) + (c − d). So k | (a + c) − (b + d)
+But then the deﬁnition of congruence mod k tells us that a+ c ≡
+b + d (mod k). □
+This proof can easily be modiﬁed to show that
+Claim 25 For any integers a, b, c, d, and k, k positive, if a ≡ b (mod k)
+and c ≡ d (mod k), then ac ≡ bd (mod k).
+So standard arithmetic operations interact well with our relaxed notion
+of equality.
+4.12
+Equivalence classes
+The true power of modular conguence comes when we gather up a group of
+conguent integers and treat them all as a unit. Such a group is known as a
+congruence class or an equivalence class. Speciﬁcally, suppose that we
+ﬁx a particular value for k. Then, if x is an integer, the equivalence class of x
+(written [x]) is the set of all integers congruent to x mod k. Or, equivalently,
+the set of integers that have remainder x when divided by k.
+For example, suppose that we ﬁx k to be 7. Then
+
+CHAPTER 4. NUMBER THEORY
+49
+[3] = {3, 10, −4, 17, −11, . . .}
+[1] = {1, 8, −6, 15, −13, . . .}
+[0] = {0, 7, −7, 14, −14, . . .}
+Notice that [−4], and [10] are exactly the same set as [3]. That is [−4] =
+[10] = [3]. So we have one object (the set) with many diﬀerent names (one
+per integer in it). This is like a student apartment shared by Fred, Emily,
+Ali, and Michelle. The superﬁcially diﬀerent phrases “Emily’s apartment”
+and “Ali’s apartment” actually refer to one and the same apartment.
+Having many names for the same object can become confusing, so people
+tend to choose a special preferred name for each object. For the k equiv-
+alence classes of integers mod k, mathematicians tend to prefer the names
+[0], [1], . . . , [k − 1]. Other names (e.g. [30] when k = 7) tend to occur only as
+intermediate results in calculations.
+Because standard arithmetic operations interact well with modular con-
+gruence, we can set up a system of arithmetic on these equivalence classes.
+Speciﬁcally, we deﬁne addition and multiplication on equivalence classes by:
+[x] + [y] = [x + y]
+[x] ∗ [y] = [x ∗ y]
+So, (still setting k = 7) we can do computations such as
+[4] + [10] = [4 + 10] = [14] = [0]
+[−4] ∗ [10] = [−4 ∗ 10] = [−40] = [2]
+This new set of numbers ([0], [1], . . . , [k − 1]), with these modular rules of
+arithmetic and equality, is known as the “integers mod k” or Zk for short.
+For example, the addition and multiplication tables for Z4 are:
++4
+[0]
+[1]
+[2]
+[3]
+[0]
+[0]
+[1]
+[2]
+[3]
+[1]
+[1]
+[2]
+[3]
+[0]
+[2]
+[2]
+[3]
+[0]
+[1]
+[3]
+[3]
+[0]
+[1]
+[2]
+
+CHAPTER 4. NUMBER THEORY
+50
+×4
+[0]
+[1]
+[2]
+[3]
+[0]
+[0]
+[0]
+[0]
+[0]
+[1]
+[0]
+[1]
+[2]
+[3]
+[2]
+[0]
+[2]
+[0]
+[2]
+[3]
+[0]
+[3]
+[2]
+[1]
+People making extensive use of modular arithmetic frequently drop the
+square brackets. We’re keeping the brackets for the moment to help you un-
+derstand more clearly how the modular integers are created from the normal
+integers.
+4.13
+Wider perspective on equivalence
+Modular arithmetic is often useful in describing periodic phenomena. For
+example, hours of the day form a circular space that is Z12. However, the
+tradition in time-keeping is to prefer the names [1], [2], . . . , [12] rather than
+the [0], [2], . . . , [11] traditional in math.
+Low-precision integer storage on computers frequently uses modular arith-
+metic.
+For example, values in digitized pictures are often stored as 8-bit
+unsigned numbers. These numbers range from 0 to 255, i.e. the structure is
+Z256. In Z256, if you add [17] to [242], the result will be [3].
+Equivalence classes of a more general type are used to construct rational
+numbers. That is, rational numbers are basically fractions, except that two
+fractions x
+y and p
+q are considered equivalent if xq = py. So, for example, the
+set [ 2
+3] would contain values such as 2
+3,
+6
+9, and −4
+−6. Most people prefer to
+name a rational number using a fraction in lowest terms.
+Further aﬁeld, notice that musicians have more than one name for each
+note. There are seven note names, each of which can be sharped or ﬂatted.
+However, there are only 12 diﬀerent notes in a standard Western scale: many
+of these 21 names actually refer to the same note.1 For example, A# is the
+same note as Bb. So, using more mathematical notation than the musicians
+would ﬁnd comfortable, we could say that [A#] contains both A# and Bb.
+1More precisely, this is true on instruments like pianos. More subtle note distinctions
+are possible on some other instruments.
+
+CHAPTER 4. NUMBER THEORY
+51
+4.14
+Variation in Terminology
+In these notes, a divides b is deﬁned to be true if b = an for some integer
+n. There is some variation among authors as to what happens when a is
+zero. Clearly, a non-zero number can’t be a multiple of zero. But is zero
+a multiple of itself?
+According to our deﬁnition, it is, but some authors
+explicitly exclude this special case. Fortunately, this is a special case that
+one rarely sees in practice. The greatest common divisor is also known as
+the highest common factor (HCF).
+In the shorthand notation a ≡ b (mod k), the notation (mod k) is log-
+ically a modiﬁer on our notion of equality (≡). In retrospect, it might have
+made more sense to write something like a ≡k b. However, a ≡ b (mod k)
+has become the standard notation and we have to live with it.
+There are many variant notations for the quotient and remainder cre-
+ated by integer division, particularly if you include the functions built in
+to most programming languages. Popular names for the remainder include
+mod, modulo, rem, remainder, and %. The behavior on negative inputs dif-
+fers from language to language and, in some cases, from implementation to
+implementation.2 This lack of standardization often results in hard-to-ﬁnd
+program bugs.
+Some authors use Z/nZ instead of Zn as the shorthand name for the inte-
+gers mod n. The notation Zn may then refer to a set which is structurally the
+same as the integers mod n, but in which multiplication and exponentiation
+are used as the basic operations, rather than addition and multiplication.
+The equivalence class of n is sometimes written n.
+2The “modulo operation” entry on wikipedia has a nice table of what happens in
+diﬀerent languages.
+

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 25</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 25</h1>
+
+	 <h1>Proof Techniques and Strategies</h1>
+
+	 <p>Since we've covered the core material of this course and don't have time 
+	to get into bonus material like Graph Theory (which is hard to cover in much depth anyhow)
+	or Recurrence Relations (which I don't enjoy at all), we'll use this lecture to review some
+	of the key proof techniques that have appeared in this course, as well as some applications
+	that we didn't have a chance to see.
+	
+	<h2>Syntax-Guided Proofs</h2>
+	
+	<p>What I'll call <em>syntax-guided proofs</em> are those that follow directly from the syntax
+	of a generally small group of axioms. Our early proofs in natural deduction are a good 
+	example of syntax guided proofs.
+	
+	<p>Consider the simple proof that from $P \to (P \to (P \to Q))$ and $P$, we can derive $Q$. There only one elimination rule for arrows, so we might as well use it:
+		
+	\begin{prooftree}
+	\AxiomC{$P \to (P \to (P \to Q))$}
+	\AxiomC{$P$}
+	\RightLabel{$\to$-E}
+	\BinaryInfC{$P \to (P \to Q)$}
+	\AxiomC{$P$}
+	\RightLabel{$\to$-E}
+	\BinaryInfC{$P \to Q$}
+	\AxiomC{$P$}
+	\RightLabel{$\to$-E}
+	\BinaryInfC{$Q$}
+	\end{prooftree}
+		
+	<p>This is an example of <em>forward reasoning</em>: We started with what we had and repeatedly applied rules to get where 
+	we wanted. But sometimes we also want to do <em>backward reasoning</em>: Start with the goal and work your way backwards to
+	the premises. Consider the following proof of the law of contraposition: $P \to Q \to (\neg Q \to \neg P)$
+	
+	\begin{prooftree}
+	\AxiomC{}
+	\RightLabel{$2$}
+	\UnaryInfC{$P$}	
+	\AxiomC{}
+	\RightLabel{$3$}
+	\UnaryInfC{$P \to Q$}
+	\BinaryInfC{$Q$}
+	\AxiomC{}
+	\RightLabel{$1$}
+	\UnaryInfC{$\neg Q$}
+	\RightLabel{$\to$-E}
+	\BinaryInfC{$\bot$}
+	\RightLabel{$\to$-I-$1$}
+	\UnaryInfC{$\neg P$}
+	\RightLabel{$\to$-I-$2$}
+	\UnaryInfC{$\neg Q \to \neg P$}
+	\RightLabel{$\to$-I-$3$}
+	\UnaryInfC{$P \to Q \to (\neg Q \to \neg P)$}
+	\end{prooftree}
+	
+	<p>The top is a bit confusing: It's not clear where our assumptions came from. On the other hand, starting from the bottom, we simply repeatedly applied the only rule that was available to us: arrow introduction. Once we got to the $\bot$ in the middle, we had a bundle of useful hypotheses prepared and a clear goal.
+		
+	<p>These are three generally useful strategies: If there is only one applicable rule, us it. Also, if it's not clear how to get from the premises to the goal, try starting from the goal and working your way back to the premises. Finally, in neither of these alone works, try working in both directions, seeing how much progress forward and backward you can make, and then trying to link the two.
+		
+		
+	<h2>Proof by Contraposition</h2>
+		
+	<p>The rule we just saw is more valuable than I often give it credit for. In fact, $P \to Q \Leftrightarrow (\neg Q \to \neg P)$. This means if we can't prove that $P \to Q$, it may be worth proving $\neg Q \to \neg P$ instead. Here's a nice example  from the Rosen textbook:
+		
+	<p><strong>Example. </strong>We want to prove that for any natural number $n$, if $3n+2$ is odd then $n$ is odd. It's a bit hard to get anything useful out of $3n+2$ being odd, so let's instead assume $n$ is not odd, i.e. $n$ is even. Well then, $3n$ is even (if $2 \mid n$ then $2 \mid 3n$) so $3n+2$ is even (if $2 \mid a$ and $2 \mid b$ then $2 \mid 3n$). And with that, we're done: We proved that the negation of the conclusion implies the negation of the premise, so the premise implies the conclusion.
+		
+	<h2>Proof by Contradiction</h2>
+
+	 <p>A proof by contradiction follows a simple template: When we want to prove
+	 a statement $p$, we start by assuming that $p$ is in fact <em>false</em>,
+	 i.e. we assume the opposite of what we want to prove.  We then use this
+	 assumption to reach a logical contradiction (in the sense of propositional
+	 logic). From $\neg \neg P$, we can then derive $P$.
+	 
+	 Consider the famous proof that the square root of $2$ is irrational.
+	 
+ 		<p><strong>Theorem.</strong> Any square root of $2$
+ 		is irrational. More precisely, for all $a,b\in\mathbb{Z}$ with $b\neq 0$,
+ 		$(a/b)^2 \neq 2$.
+
+ 	 <p>Suppose for the purpose of contradiction that there exists 
+ 	 a fraction $\frac{a}{b}$ in reduced form (GCD$(a,b)$=1) such that $\left(\frac{a}{b}\right)^2 = 2$. 
+	 That is $a^2 = 2b^2$. 
+
+ 	 <p>Since $a^2=2b^2$, we have that $2|a^2$. Since $2$ is prime, we have
+ 	 that $2|a$ by our earlier work in number theory, so there exists
+ 	 $k\in\mathbb{Z}$ such that $a=2k$.
+
+ 	 <p>Next we have that $2b^2 = a^2 = (2k)^2 = 4k^2$. Thus $b^2 = 2k^2$. We can
+ 	 repeat the argument from the previous paragraph to show that $2|b$ as well,
+ 	 so there is $\ell\in\mathbb{Z}$ such that $b=2\ell$.
+
+ 	 <p>However, this contradicts the assumption that $GCD(a,b) = 1$. Therefore there are no such integers $a$ and $b$.
+     $$\tag*{$\Box$}$$
+	 
+	 <p>Here's another gorgeous proof by contradiction: The size of the real numbers is not countable.
+	 
+	 <p><strong>Theorem (Cantor's diagonal argument).</strong> The real number interval $(0,1)$ is larger than the set of the natural numbers.
+		 
+	 <p><strong>Proof.</strong> Assume there is a bijection $f$ from the natural numbers to the interval $(0,1)$. Every number in the interval can be expressed as an infinite decimal sequence, so we can express the function in the form:
+		 
+		 \begin{align*}
+		 0 \to & 0. a_{01} a_{02} a_{03} a_{04} a_{05} a_{06} \dots \\
+		 1 \to & 0. a_{11} a_{12} a_{13} a_{14} a_{15} a_{16} \dots \\
+		 2 \to & 0. a_{21} a_{22} a_{23} a_{24} a_{25} a_{26} \dots \\
+		 3 \to & 0. a_{31} a_{32} a_{33} a_{34} a_{35} a_{36} \dots \\
+		 4 \to & 0. a_{41} a_{42} a_{43} a_{44} a_{45} a_{46} \dots \\
+	     \vdots
+		 \end{align*} 
+		 
+	<p>Now let's define the value $r$, such that for each value $i$ after the decimal
+		
+		$$r_{i} = \begin{cases}
+			       5 \text{ if } a_{ii} = 4 \\
+			       4 \text{ otherwise }
+				\end{cases}$$
+
+	<p>Note that none of the natural numbers can map to $r$, because the $r_i$ digit has been specifically chosen to disagree with $a_{ii}$. Hence, $r \notin \textbf{im}(f)$, contradicting our assumption that $f$ is a bijection.
+
+	 <h2>The Well-Ordering Principle</h2>
+
+	 <p>Throughout this course, we made heavy use of the <strong>well-ordering principle</strong>, 
+ 	which is the following statement:
+
+	 <p><strong>Theorem (Well-Ordering Principle)</strong> Any non-empty
+	 subset of $\mathbb{N}$ contains a smallest element.
+
+	 <p> The intuition is that if such a set is non-empty, then it contains a positive
+	 number $x$. If $x$ is the smallest element, then we're done. Otherwise, we
+	 can "walk back" towards zero, and eventually we'll run out of elements. 
+	 (We could prove this by induction on the size of the set.)
+
+	 <p>We used this principle in some key proofs like Bezout's identity. That proof began with
+		"Consider the set $S = \{ax + by \mid x,y \in \mathbb Z\}$. Note that it contains strictly positive (greater than zero) numbers, for instance $a^2+b^2$. Let $c = as + bt$ be the smallest strictly positive member of $S$." 
+		
+	<p>Having shown that a strictly positive subset of $S$ exists, we were able to take its smallest element and show that this element is both a divisor of $a$ and $b$ and the greatest common divisor of $a$ and $b$.
+
+	<h2>Proof by Induction</h2>
+
+	<p>We introduced two notions of induction in this course. The first, weak induction, works as follows:
+
+		<p> Let $P(n)$ be a predicate 
+		with domain $n \in \mathbb N$. If
+
+    <ol>
+    <li>$P(0)$
+    </ol>
+		and
+    <ol start="2">
+			<li>for all $k \in \mathbb N$, if $P(k)$, then $P(k+1)$
+    </ol>
+    are both true, then the following is true:
+    <ol start="3">
+			<li>for all $n \in \mathbb N$, $P(n)$.
+    </ol>
+
+	In general, we structured proofs by induction as follows:
+	
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you want to prove and what you'll be performing induction on. Most often, $P$ is
+			just from the theorem you're proving. Sometimes a proof will artfully
+			choose a different $P$.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> Let $k$ be an arbitrary natural number and state the <em>inductive hypothesis</em> $P(k)$ and the statement $P(k+1)$ to be proven. Then, using the assumption $P(k)$, prove $P(k+1)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+	Weak induction was usually enough for our purposes. We used it to prove things like bounds on the factorial function and a range of number-theoretic results, as well as results from Peano arithmetic. However, it failed us when we tried to prove the Fundamental Theorem of Arithmetic, where the $k+1$ case doesn't follow directly from the $k$ case. There we had to introduce <em>strong induction</em>:
+	
+    <p>Let $P(n)$ be a statement that depends on $n \in \mathbb N$. If
+    <ol>
+    <li>$P(0)$, and
+    <li>for all $n \in \mathbb N$, if $P(k)$ for all $k \lt n$, then $P(n)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $P(n)$ holds.
+    </ol>
+	
+	<p>In the homework, we proved that the two notions of induction were equivalent, but in general, we can use strong induction whenever we can use weak induction, but the reverse isn't true.
+	
+	<p>Here's a cool example of induction that we didn't have a chance to cover in class:
+		
+	<p>A <em>triomino</em> is a tile consisting of three unit squares in the shape of an L.
+
+    <p><img src="triomino.png" alt="A single triomino" width="80px" max-width="800px" class="center">
+
+		<p><strong>Theorem.</strong> For all $n \in \mathbb N$, all $2^n \times 2^n$ grid of squares with one square removed can be covered by triominoes.
+
+    <p><em>Proof.</em> We will show this by induction on $n$.
+
+    <p><strong>Base case.</strong> Let $n = 0$. Then our board is $1 \times 1$, which is our "removed" square and so our tiling consists of 0 triominoes.
+
+    <p>For the purposes of proof, this is perfectly fine. However, some people may not be convinced by this. Let's look at $n = 1$. Then our board is $2 \times 2$. We can remove any square and rotate a single triomino to tile what's left.
+
+    <p><img src="triomino3.png" alt="A simple tiling" width="80px" max-width="800px" class="center">
+
+		<p><strong>Inductive case.</strong> Assume that for $k \in \mathbb N$, the $2^k \times 2^k$ with one square removed can be tiled by triominoes. Now, consider an arbitrary grid of size $2^{k+1} \times 2^{k+1}$ with one square removed.
+
+    <p>We split the grid into four $2^k \times 2^k$ grids. The square that is removed from our grid falls into one of these four subgrids. By our inductive hypothesis, each of these four grids can be tiled with triominoes with one square removed. So we have a tiling for the subgrid with our designated square removed and three other subgrids. 
+
+    <p><img src="triomino-final-3.png" alt="Our inductive case" width="200px" max-width="800px" class="center">
+
+    <p>Our inductive hypothesis also implies we can tile the remaining three grids when their interior corners are removed:
+
+    <p><img src="triomino-final-1.png" alt="Just one last step" width="200px" max-width="800px" class="center">
+		
+  <p>This leaves a spot for our last triomino, allowing us to tile the recomposed $2^{k+1} \times 2^{k+1}$ grid with only our designated tile missing.
+    $\tag*{$\Box$}$ 
+
+	
+	<p>One thing that we haven't emphasized in this class is that induction can be applied to anything that is inductively defined, not just number. For instance, consider the following definition of a binary tree:
+		
+	<p><strong>Example.</strong> A binary tree is either
+    <ol>
+    <li>A <em>leaf</em> containing some natural number $n$.
+    <li>A <em>node</em> containing two trees called <em>subtrees</em>.
+    </ol>
+	The value of a tree is the sum of the values in its leaves.
+	We want to prove that any tree in which the two subtrees of any node have the same value has the value $2^k m$, where $k$ is an natural number and $m$ is the value of some leaf. (Note that the tree doesn't have to be balanced. Some subtrees can be taller than others.)
+	
+    <p><em>Proof.</em> We will show this by induction on the tree.
+	<p>Base Case: A leaf. Every leaf's value is simply the number $m$ it contains, which is equal to $2^0 m$.
+
+	<p>Inductive Case: Consider a node $n$. Assume for both of its subtrees $n_1$ and $n_2$, if their subtrees have the same value then they have the value $2^k m$ for some leaf value $m$. 
+		
+	<p>Now assume all of $n$'s subtrees have the same value. Then the value of $n_1 = 2^k m$ for some $k$ and leaf value $m$. Since $n$'s subtrees have the same value, $n_2 = 2^k m$ as well. Then the value of $n = 2^k m + 2^k m = 2^{k+1} m$. 
+    $\tag*{$\Box$}$ 
+
+		<hr>
+		Now let's see what can go wrong with induction.
+		Consider the following false statement.
+
+    <p><strong>"Theorem".</strong> All horses are the same color. 
+
+		<p>This is obviously false, so the following proof must be wrong. Try
+		to spot the error.
+
+		<p><em>Proof.</em> We will that for all sets $H$ of horses, the horses in
+		$H$ are all the same color. We do this by induction on $n = |H|$, the
+		number of horses under consideration.
+
+		<p><strong>Base case.</strong> If $|H|=1$, then there is only one horse.  A
+		single horse is the same color as itself, so we are done. 
+
+    <p><strong>Inductive case.</strong> Assume that any set of $n$ horses
+		is the same color. Let $H$ be a set of $n+1$ horses, and consider 
+		two distinct horses in $H$. By the inductive assumption,
+		if we remove either horse, then the remaining $n$ horses will be the
+		same color. Thus, the first horse is the same color as the other horses,
+		and similarly so is the second horse. Therefore all horses are the same
+		color, completing the inductive proof.
+    $\tag*{$\Box$}$
+
+		<p>Can you spot the error?
+		
+		<h2>Counting Proofs</h2>
+		
+		<p>The last technique we covered was the <em>counting proof</em>. If we can show that two sides of equality are counting precisely the same thing, then those two terms must be identical. One neat example was Pascal's identity:
+			
+		<p><strong>Pascal's Identity.</strong> For all natural numbers $n \gt k \gt 0$,
+		$$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}.$$
+
+		    <p><em>Proof.</em>Let $A$ be a set of $n \geq 2$ elements. We want to count the number of subsets of $A$ of size $k$, which is $\binom{n}{k}$. Choose an element $a \in A$ and a subset $B \subseteq A$ of size $k$. Then either $a \in B$ or $a \not \in B$; these two cases are disjoint. If $a \in B$, then $B$ contains $k-1$ elements in $A \setminus \{a\}$ and there are $\binom{n-1}{k-1}$ such sets. On the other hand, if $a \not \in B$, then $B$ contains $k$ elements in $A \setminus \{a\}$ and there are $\binom{n-1}{k}$ such sets. Together, this gives us $\binom{n-1}{k-1} + \binom{n-1}{k}$ subsets of $A$ of size $k$.  
+		    $\tag*{$\Box$}$
+			
+		<p>That about covers it. These proof techniques should prove useful in Analysis of Algorithms and throughout your (hopefully extensive) mathematical studies. 

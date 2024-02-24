@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 9</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 9</h1>
+
+    <h2>Modular arithmetic</h2>
+    <p>Now, we'll define a system of arithmetic on integers based around remainders. Many times, we want to do a certain style of "clock arithmetic", where 1:00 is equivalent to 13:00 (which in turn is equal to 25:00, if you've been up too late working on problem sets). Modular arithmetic formalizes these notions. One of the things we'll see is that in certain cases, working in these structures gives us a notion of "division" that is well-defined. The system of modular arithmetic was first developed by Gauss.
+
+    <p><strong>Definition 8.1.</strong> Let $m$ be a positive integer. For integers $a$ and $b$, we say that $a$ is <strong>congruent</strong> to $b$ <strong>modulo</strong> $m$, written $a = b \pmod m$ or $a \equiv_m b$, if $m \mid (a-b)$. 
+		
+	<p>We need to be careful to distinguish the notion of equivalence $a \pmod m$ versus the function $a \mathop{\mathbf{mod}} m$. However, there is a tight connection between the two:
+
+    <p><strong>Theorem 8.2.</strong> $a \equiv_m b$ if and only if $a \mathop{\mathbf{mod}} m = b \mathop{\mathbf{mod}} m$.
+
+    <p><em>Proof.</em> 
+    <ol>
+    <li>Using the Division theorem, let $a = q_1m + r_1$ and $b = q_2m + r_2$.
+    <li>Hence $a - b = (q_1 - q_2)m + (r_1 - r_2)$.
+    <li>If $m \mid (a-b)$ then given that $m$ divides $(q_1 - q_2)m$, we can derive that $m$ must also divide $r_1 - r_2$. 
+	<li>Since $-m \lt r_1 - r_2 \lt m$, we have $r_1 - r_2 = 0$, therefore $r_1 = r_2$.
+    <li>In the other direction, if $r_1 = r_2$ then $a - b = (q_1 - q_2)m$. So $m \mid (a-b)$.
+    </ol>
+    $$\tag*{$\Box$}$$
+
+
+    <p>We want to show that $\equiv_m$ is actually an equivalence relation. Recall that an equivalence relation must be <em>reflexive</em>, <em>symmetric</em>, and <em>transitive</em>.
+
+    <p><strong>Theorem 8.3.</strong> For $m \gt 0$, $\equiv_m$ is an equivalence relation.
+
+    <p><em>Proof.</em> 
+    <ol>
+    <li>To see that $\equiv_m$ is reflexive, observe that $m \mid (a-a)$ for all integers $a$. 
+    <li>To see that $\equiv_m$ is symmetric, if $a \equiv_m b$, then $m \mid (a - b)$. This means there is an integer $n$ such that $a - b = mn$. Then we get $b - a = m\cdot (-n)$ and we have $m \mid (b-a)$.
+    <li>To see that $\equiv_m$ is transitive, consider integers $a,b,c$ such that $a \equiv_m b$ and $b \equiv_m c$. We have $m \mid (a-b)$ and $m \mid (b-c)$, which gives us $m \mid (a-b) + (b-c)$ and therefore, $m \mid (a-c)$ and $a \equiv_m c$.
+    </ol>
+    $$\tag*{$\Box$}$$
+	
+	<p>Alternatively, we could have simply appealed to Theorem 8.2 (which uses $\leftrightarrow$, another equivalence relation) and then used the fact that $=$ is an equivalence relation!
+
+		<h3>Equivalence Classes and the Integers Modulo $m$</h3>
+
+		<p>Using the notion of an equivalence relation, we can divide $\mathbb Z$
+		into sets that contain equivalent members. For instance, if we choose $m =
+		2$, then all even numbers $e$ are equivalent to each other ($e \equiv_m 0$)
+		and all odd numbers $o$ are equivalent to each other ($o \equiv_m 1$).
+		These sets are called <em>equivalence classes</em>.
+
+		<p>We're going to formalize what it means to "work modulo $m$" for some
+		positive integer $m$. Intuitively, we want a rigorous way of modeling
+		situations where we only care about numbers modulo another number. For
+		example, if we're using time, we might care about questions like: If it is
+		10 o'clock now, what time will it be in 5 hours?
+
+		<p>Our plan is define <em>equivalence classes</em> of integers, and then
+		do the arithmetic with them directly. This is pretty abstract, but also
+		arguably beautiful. This technique also generalizes vastly, which you'll
+		see if you opt to study more math, in particular abstract algebra.
+
+		<p><strong>Definition 8.4.</strong> For all $m \gt 0$ and $a \in \mathbb
+		Z$, we define the <strong>equivalence class of $a$ modulo $m$</strong> to
+		be the set $$[a]_m = \{b \in \mathbb Z \mid b \equiv_m a\}.$$
+
+		<p>Typically, we refer to equivalence classes by the "obvious" name, which
+		is the member of the class that is between 0 and $m-1$. This is called the
+		<em>canonical representative</em> of the class. Of course, we should keep
+		in mind that $[0] = [m] = [2m] = [-m]$ and such. But in addition to this,
+		sometimes the $[]_m$ gets dropped for convenience's sake and we have to
+		determine from context whether "2" means $2 \in \mathbb Z$ or $[2]_m$.
+		Usually, this becomes clear with the usage of $\pmod m$ and we will try to
+		make that explicit, but outside of this course, that's not always
+		guaranteed.
+
+		<p><strong>Definition 8.6.</strong>  Let $m$ be a positive integers.  The
+		<strong>integers modulo $m$</strong> is the set $$\mathbb{Z}_m = \{ [a]_m \
+		\mid\ a\in\mathbb{Z}\}.$$
+
+		<p>Note that $\mathbb{Z}_m$ is a set of sets of integers. That is,
+		$\mathbb{Z}_m \subseteq P(\mathbb{Z})$.
+		
+    <p>Our plan is to define a type of "addition" and "multiplication"
+		that operate on the equivalence classes in $\mathbb{Z}_m$. Regular
+		addition and multiplication won't do: Those operate on integers, not
+		sets. To set this up, we'll use the following theorem.
+
+    <p><strong>Theorem 8.5.</strong> Let $m$ be a positive integer. For
+		all $a_1,a_2,b_1,b_2\in\mathbb{Z}$, if $[a_1]_m = [a_2]_m$ and
+		$[b_1]_m = [b_2]_m$, then
+		$$
+		[a_1+b_1]_m = [a_2 + b_2]_m
+		$$
+		and
+		$$
+		[a_1b_1]_m = [a_2b_2]_m.
+		$$
+    
+
+		<p>Before the proof, here is an example showing why this is useful.
+		Let $m=5,a_1=66, b_1=104$, and suppose we want $[a_1+b_1]_5$ and
+		$[a_1b_1]_5$. We can multiply these out directly, getting $[170]_5$ and
+		$[6864]_5$ respectively. Another way is to pick $a_2=1$ and $b_2=4$, which
+		satisfy $[a_1]_5 = [a_2]_5$ and $[b_1]_5 = [b_2]_5$. Then
+		$$
+		[66+104]_5 = [1 + 4]_5 = [5]_5 = [0]_5
+		$$
+		and
+		$$
+		[66\cdot 104]_5 = [1 \cdot 4]_5 = [4]_5. 
+		$$
+
+		<p>The point is that we avoid working with the larger numbers $66$ and
+		$104$, and immediately "mod them down" to $1$ and $4$, simplifying the
+		computation. Working by hand, this is a nice trick, but it is very
+		important for computers doing modular arithmetic with large integers, since
+		it allows them to control how large the numbers get by "modding down".
+		
+
+		<p><em>Proof.</em>  Let $m$ be a positive integer, and assume
+		$a_1,a_2,b_1,b_2$ satisfy the condition in the theorem. Since
+		$[a_1]_m=[a_2]_m$, we have $a_1 \equiv_m a_2$, i.e. $m|(a_1-a_2)$.
+		Similarly, $m|(b_1-b_2)$. Thus $m$ divides the sum of these numbers, i.e.
+		$m|((a_1-a_2)+(b_1-b_2))$. But $(a_1-a_2)+(b_1-b_2)=(a_1+b_1)-(a_2+b_2)$,
+		so we actually know that $m|((a_1+b_1)-(a_2+b_2))$, i.e.  $(a_1+b_1)
+		\equiv_m (a_2+b_2)$. By the definition of equivalence classes, this shows
+		$[a_1+b_1]_m = [a_2 + b_2]_m$.
+		
+
+		<p>For the claim about multiplication, it suffices to show that $a_1b_1
+		\equiv_m a_2b_2$, i.e. $m|(a_1 b_1 - a_2 b_2)$.  Since $m \mid (a_1 - a_2)$
+		and $m \mid (b_1 - b_2)$ there exist integers $k$ and $\ell$ such that $km
+		= a_1 - a_2$ and $\ell m = b_1 - b_2$. Then, 
+    \begin{align*}
+    a_1 b_1 - a_2 b_2 &= (a_2 + km) (b_2 + \ell m) - a_2 b_2 \\
+    &= a_2 b_2 + a_2 \ell m + b_2 k m + k \ell m^2 - a_2 b_2 \\
+    &= m(a_2 \ell + b_2 k + k \ell m)
+    \end{align*}
+		and therefore, $m \mid (a_1 b_1 - a_2 b_2)$ and $a_1 b_1 \equiv_m a_2 b_2$.
+		(Above, the first equality simply used that $a_1=a_2+km$ and $b_1=b_2+\ell
+		m$, a somewhat tricky step to find!)
+    $$\tag*{$\Box$}$$
+
+		<p>We can use this to define addition and multiplication of equivalence
+		classes, as promised. Let $C_1,C_2\in \mathbb{Z}_m$. We define an
+		operation $+_m$ by
+		$$
+		C_1 +_m C_2 = C_3,
+		$$
+		where $C_3 \in \mathbb{Z}_m$ is the equivalence class defined by first
+		choosing <em>any</em> $a \in C_1$, <em>any</em> $b\in C_2$, and
+		defining $C_3 = [a+b]_m$. Beautifully, the previous theorem
+		says that no matter how we pick $a$ and $b$, we'll get the same $C_3$!
+		Thus we can express the definition of $+_m$ as
+		$$
+		[a]_m +_m [b]_m = [a+b]_m,
+		$$
+		and <em>this is a rigorous definition</em>.
+
+		<p>We can repeat all of this with multiplication; We get an operation
+		$\cdot_m$ defined as
+		$$
+		[a]_m \cdot_m [b]_m = [ab]_m,
+		$$
+		with the same promises as above.
+
+    <p>Now, we can define our structure.
+    
+    <p><strong>Definition 8.6.</strong> Let $\mathbb Z_m = \{[0]_m, [1]_m, \dots, [m-1]_m\}$. The <strong>integers mod $m$</strong> is the set $\mathbb Z_m$, together with the binary operations $+$ and $\cdot$. The integers mod $m$ are denoted by $\mathbb Z/\equiv_m$ or simply as $\mathbb Z_m$.
+
+    <p>Up to now, we have been working implicitly in the structure $\mathbb Z$, the integers. As I've briefly alluded to before, we're not only talking about the domain $\mathbb Z$ but also how we interpret operations like $+$ and $\cdot$. The integers mod $m$, $\mathbb Z_m$, is another structure, whose basic elements are the equivalence classes with respect to $\equiv_m$.
+
+    <p>These kinds of structures&mdash;a set together with binary operations $+$ and $\cdot$ and identities for both operations&mdash; are called <em>rings</em>. 
+
+    <p>The notation $\mathbb Z/\equiv_m$ gives us a hint at what's happening. We took $\mathbb Z$ and partitioned it into equivalence classes by the relation $\equiv_m$. This idea of taking an algebraic structure and constructing another structure based on an equivalence relation is something that comes up a lot in algebra and is called a <em>quotient</em> structure, where quotient in the algebraic context just means equivalence class.
+

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 16</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 16</h1>
+	
+	<p>Let's briefly recap the definition of an $r$-permutation from last class.
+	
+    <p><strong>Definition 15.1.</strong> An <strong>$r$-permutation</strong> is a permutation of $r$ elements taken from a set of $n$ elements.
+
+    <p><strong>Theorem 15.2.</strong> If $P(n,r)$ denotes the number of $r$-permutations of an $n$-element set, then
+    $$P(n,r) = n \cdot (n-1) \cdot \cdots \cdot (n-r+1).$$
+
+    <p>We can think of this as an application of the product rule, where our first choice is from a set $S$ of size $n$, then we have a choice from $S \setminus \{a_1\}$ of size $n-1$, then a choice from $S \setminus \{a_1,a_2\}$ of size $n-2$ and so on.
+
+    <p><strong>Corollary 15.3.</strong> If $n$ is positive and $0 \leq r \leq n$, then
+    $$P(n,r) = \frac{n!}{(n-r)!}.$$
+
+    <p><em>Proof.</em> Note that the total number of ways to order a set of $n$ elements is $n!$. From above, we have $P(n,r)$ ways to order $r$ out of $n$ elements. We are then left with $n-r$ elements to order, which we can do $(n-r)!$ ways. This gives us
+    \begin{align*}
+    n! &= P(n,r) \cdot (n-r)! \\
+    P(n,r) &= \frac{n!}{(n-r)!}
+    \end{align*}
+    $\tag*{$\Box$}$
+
+<!--
+    <p><strong>Example 15.4.</strong> Many TV shows are serials, in that there's a prescribed way to watch them, which is generally chronologically. However, once in a while, someone decides to get clever and propose that they've found the one true order in which you're really supposed to watch the show. How many possible different such "watch orders" are there for a 14-episode show? For the first episode, we can choose from any of the episodes. Once we make that choice, we have 13 episodes left to choose from for the second spot, then 12 for the third, and so on. What we get in the end is
+    $$14 \cdot 13 \cdot 12 \cdots 2 \cdot 1 = 14!.$$
+-->
+
+    <p><strong>Example 15.4.</strong> Suppose you are an old-timey travelling salesperson, going around selling knives or encyclopedia sets or what-not. You have a list of $n$ cities you need to hit up and obviously you would like to minimize the cost of travelling to these cities. The problem you have to solve is: what is the minimal cost route that allows you to visit all of these cities once, including your trip back? 
+    
+    <p>We can try to solve this problem by checking each possible route. How many routes are there? This is the same as asking in which order we would like to travel to each city and how many total choices we have. So for $n$ cities, this is just $n!$. This doesn't seem so bad if you've only got four cities to go to, since $4! = 24$. However, if you're a bit more ambitious and want to go to 8 cities, then you're looking at $8! = 40320$ different routes to think about. This is not something you'd want to do by hand, but easily handled by a computer. Double the number of cities again, though, and we get $16! = 20922789888000$, which Wolfram|Alpha tells me is about the number of red blood cells in the human body or about 70 times the number of stars in our galaxy. This number clearly grows very quickly&mdash;on the order of $\sqrt{2\pi n} \left( \frac n e \right)^n$, by Stirling's approximation.
+
+    <p>This problem is the <em>Travelling Salesman Problem</em>, one of the most famous problems for which we do not have an efficient algorithm for solving. The problem dates back as far as the 1800s although it wasn't formally stated in its current form until around the 1930s. One point of interest is that I said <em>cost</em> and not necessarily <em>distance</em>. If we assume that the costs are distances, then we impose a condition on our cost function: that the distances satisfy the triangle inequality, $d(x,y) \leq d(x,z) + d(z,y)$. This assumption makes the problem slightly (but not significantly) easier. However, not all cost functions necessarily behave that way and we have a very relevant example of one: flight prices.
+
+    <p><strong>Example 15.5.</strong> A <em>single-occurrence word</em> is a word in which each symbol appears at most once. Let $\Sigma = \{1,2,3,4,5,6,7,8,9\}$. How many single-occurrence words of length 6 are there that contain the substring $315$? First we have to find where $315$ goes in the string: Our options are the characters 1-3, 2-4, 3-5 or 4-6 (the end) for $4$ possible locations. Then there are three spots left in which we can place three of the six remaining symbols. This is just $P(6,3)$. Therefore, we have $4 \cdot P(6,3) = 4 \cdot \frac{6!}{3!} = 4 \cdot 6 \cdot 5 \cdot 4 = 480$ words in total.
+
+    <h2>Combinations</h2>
+    <p>Now, suppose that order is not so important and we are only concerned about the <em>selection</em> of $r$ objects from a set of $n$ objects.
+
+    <p><strong>Definition 15.6.</strong> An <strong>$r$-combination</strong> of a set $A$ with $n$ elements is a subset of $r$ elements from $A$. The number of $r$-combinations of a set with $n$ elements is denoted $C(n,r)$ or $\binom n r$. This is read "$n$ choose $r$".
+
+    <p>What you'll find is that everyone introduces the notation for combinations as some variant of $C(n,r)$, because $C$ is a nice mnemonic for "choose" or "combination" but then this is almost immediately dropped for the $\binom n r$ notation. The $\binom n r$ are called <em>binomial coefficients</em> for reasons that we'll get to next class (see, I said we'd drop $C(n,r)$ almost immediately).
+
+    <p>So when considering the number of $r$-combinations, we are basically counting the number of subsets of size $r$. Recall that sets are unordered so this differs from permutations in that all we care about is whether an element gets chosen at all.
+
+    <p><strong>Example 15.7.</strong> Thinking back to a three element set $A = \{1,2,3\}$, we observe that unlike permutations, there is only one 3-combination: $A$ itself. Then how many 2-combinations are there? Let's enumerate all of the subsets of $A$ of size 2:
+    $$\begin{matrix} \{1,2\} & \{1,3\} & \{2,3\} \end{matrix}$$
+    Remember that since sets are not ordered, $\{1,2\}$ and $\{2,1\}$ are the same set.
+
+    <p>So how many of these things are there?
+
+    <p><strong>Theorem 15.8.</strong> If $n \gt 0$ and $0 \leq r \leq n$, then
+    $$C(n,r) = \frac{n!}{r!(n-r)!}.$$
+
+    <p><em>Proof.</em> We can make use of the number of $r$-permutations of a set. We know that the number of $r$-permutations of a set of size $n$ is simply the number of permutations of a subset of size $r$. So we can do the following: first, choose a subset of size $r$, and then compute the number of permutations of this subset. This gives us
+    $$P(n,r) = C(n,r) \cdot P(r,r).$$
+    Then doing some algebra, we get
+    $$C(n,r) = \frac{P(n,r)}{P(r,r)} = \frac{n!}{r!(n-r)!}.$$
+    $\tag*{$\Box$}$
+
+	<p>An easier way to think about this is that there are $r!$ ways of turning a set into an ordered list. So if there are $P(n,r)$ ways of drawing a list of size $r$ from a set of size $n$ there must be $\frac{P(n,r)}{r!}$ ways of drawing the a list of the same size.
+
+    <p><strong>Example 15.9.</strong> Let's go back to our presidential rankings from last class. Now suppose that instead of wanting to rank the $5$ greatest US presidents, I just want to know who the top $5$ presidents were so I can carve them into the side of a mountain somewhere. Now supposing my top five were Washington, Jefferson, Lincoln, Wilson and Herbert Hoover, I don't care where Hoover appears, so I can divide by $5$ and then divide by $4$ and so forth. So instead of having to consider $P(45,5) = \frac{45!}{40!}$ permutations I only need to consider $\frac{45!}{40!5!}$ (or $C(45,5)$) options! That reduces the number of possibilities by a factor of $120$... so I should still probably find some historians before I start blowing up mountains.
+
+    <p>It might have occurred to you that choosing the top five presidents is exactly the same as choosing the worst 40 presidents. (This becomes even more clear if I ask you to pick out the $44$ best presidents.) It's easy to prove that the numbers work out:
+
+    <p><strong>Theorem 15.10.</strong> For all $n \gt 0$ and $0 \leq r \leq n$, $C(n,r) = C(n,n-r)$.
+
+    <p><em>Proof.</em> We have
+    $$C(n,n-r) = \frac{n!}{(n-r)! (n - (n-r))!} = \frac{n!}{(n-r)! \cdot r!} = C(n,r).$$
+    $\tag*{$\Box$}$
+
+	<p>In our case, $C(45,5) = \frac{45!}{40!5!} = \frac{45!}{5!40} = C(45,40)$. 
+
+    <p><strong>Example 15.11.</strong> We say a word over a binary alphabet, say $\{0,1\}$, is <em>balanced</em> if it contains exactly as many $0$s as it does $1$s. How many balanced words of length $n$ are there? First of all, if $n$ is odd, then there are no balanced words of length $n$. So $n$ has to be even. At first, we might approach this like previous string problems, where we place things sequentially. However, we know exactly how many $0$s and $1$s we need in our word: we want exactly $\frac n 2$ of each.
+
+    <p>If we have $n$ spaces to fill, we first think about how to place our $0$s. We need to choose $\frac n 2$ of these spaces to fill. After we choose these spaces, we know the rest of the word must be filled with the $1$s. This gives us $C\left(n,\frac n 2\right) = \frac{n!}{\frac n 2! \left(n - \frac n 2\right)!} = \frac{n!}{\left(\frac n 2 !\right)^2}$ balanced words.
+
+    <p>We can apply the same idea if we happen to be working in a larger alphabet. Suppose that we're working in a <em>ternary</em> alphabet $\{0,1,2\}$. Then a balanced word over this alphabet is one that has the same number of 0s, 1s, and 2s. Again, we would make sure that $3 \mid n$ but then our problem is solved in the following way:
+
+    <p>First, we choose $\frac n 3$ spots for our 0s. However, we're left with $\frac 2 3 n$ spots for the 1s and 2s. We then choose half of these spots for the 1s and everything left over goes to the 2s. This gives us a total of
+    $$C\left(n, \frac n 3\right) \cdot C\left(\frac{2n}3, \frac n 3\right) = \frac{n!}{\frac n 3! \cdot \left(n - \frac n 3\right)!} \cdot \frac{\frac{2n}3!}{\frac n 3! \cdot \left(\frac{2n}3 - \frac n 3\right)!} = \frac{n!}{\frac n 3! \cdot \frac{2n}3!} \cdot \frac{\frac{2n}3!}{\frac n 3! \cdot \frac n 3!} = \frac{n!}{\left(\frac n 3!\right)^3}.$$
+
+    <p>One common question that comes up is when to count permutations and when to count combinations. It is very easy to turn a problem of one kind into a problem of the other, just like in our presidents example. The key to look for is whether what you're counting has an element of ordering or arrangement or distinguishability.
+
+    <p><strong>Example 15.12.</strong> Suppose that there are 13 students thinking of choosing three out of them to run for Executive Slate. How many slates can they form? Here, they will have to decide who's running as President, VP Administration, and VP Student Affairs, so there can be two different slates with the same people in them. Here, we would use permutations, and the number of slates would be $P(13,3) = 13 \cdot 12 \cdot 11 = 1716$.
+
+    <p>Now, suppose that there are 13 students from the same class running to be class representatives on the College Council. Since each class gets 4 representatives, how many different sets of represenatatives are there? Here, we would use combinations, because there is all of the positions are basically the same. In total, there would be 
+    $$C(13,4) = \binom{13}{4} = \frac{13!}{4!9!} = \frac{13 \cdot 12 \cdot 11 \cdot 10}{1 \cdot 2 \cdot 3 \cdot 4} = 715$$
+    possible ways to elect four representatives.
+

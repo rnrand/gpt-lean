@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 4</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 4</h1>
+
+<h1>Predicate Calculus</h1>
+	
+<p>The existence of quantifiers provides a compelling justification for an inference system like natural deduction. Whereas previously we could use truth tables to check an arbitrary formula in propositional logic, predicate logic quantifies over potentially infinite sets, rendering this approach impossible. 
+
+<p>Instead, we can simply augment our deduction system for propositional logic with rules for $\forall$ and $\exists$. Let's start with the universal quantifier:
+
+\begin{prooftree}
+\AxiomC{$P(a)$}
+\RightLabel{$\forall$-I$\qquad$}
+\UnaryInfC{$\forall x, P(x)$}
+\AxiomC{$\forall x, P(x)$}
+\RightLabel{$\forall$-E$\qquad$}
+\UnaryInfC{$P(a)$}
+\end{prooftree}
+
+<p><strong>Proviso:</strong> In the introduction rule, $a$ must be <em>arbitrary</em>. It cannot have a specific reference or appear among the (non-discharged) assumptions. For instance, if we have $D(s) =$ "Spot is a dog" or $E(6) =$ "six is even", you obviously cannot conclude that every animal is a dog or that every number is even. Here's an example of a valid use of $\forall$-I:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$D(a)$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$D(a)\to D(a)$}
+\RightLabel{$\forall$-I}
+\UnaryInfC{$\forall x, D(x) \to D(x)$}
+\end{prooftree}
+<p>The variable "a" was created to refer to an arbitrarily chosen animal, assumed to be a dog. We were able to discharge that assumption in showing that $D(a)$ implies $D(a)$. At that point we could do universal introduction and conclude that every dog is a dog.
+	
+<p>By contrast, I can assign the outcome of forall elimination to any unbound variable. "Unbound" means that it isn't the subject of a $\forall x$ or $\exists x$: Those variables don't refer to individual entities. So I can't use $\forall x,\exists y, L(x,y)$ to conclude that $\forall y, L(y,y)$. If $L$ means "less than", the former statement is true while the latter is false. (A simple way to avoid this problem is to reserve x, y and z for bound variables.) However, the following derivation is valid:
+\begin{prooftree}
+\AxiomC{$\forall x, \forall y, P(x,y)$}
+\RightLabel{$\forall$-E}
+\UnaryInfC{$\forall y, P(a,y)$}
+\RightLabel{$\forall$-E}
+\UnaryInfC{$P(a,a)$}
+\RightLabel{$\forall$-I}
+\UnaryInfC{$\forall x, P(x,x)$}
+\end{prooftree}
+This is a valid derivation and if I take $P(x,y)$ to mean "x and y can be plotted on the Cartesian plane", my (narrower) conclusion is that "any pair (x,x) can be plotted on the Cartesian plane". (Note, however, that this can't be done by simply eliminating the first x into a y – that y was not available to us.)
+
+<p>Here are the rules for "exists":
+
+<!-- \begin{prooftree}
+\AxiomC{$P(e)$}
+\RightLabel{$\exists$-I$\qquad$}
+\UnaryInfC{$\exists x, P(x)$}
+\AxiomC{$\exists x, P(x)$}
+\AxiomC{}
+\RightLabel{$n$}
+\UnaryInfC{$P(a)$}
+\UnaryInfC{$\vdots$}
+\UnaryInfC{$Q$}
+\RightLabel{$\exists$-E-$n$}
+\BinaryInfC{$Q$}
+\end{prooftree} -->
+	
+\begin{prooftree}
+\AxiomC{$P(e)$}
+\RightLabel{$\exists$-I$\qquad$}
+\UnaryInfC{$\exists x, P(x)$}
+\AxiomC{$\exists x, P(x)$}
+\AxiomC{$P(a) \to Q$}
+\RightLabel{$\exists$-E-$n$}
+\BinaryInfC{$Q$}
+\end{prooftree}
+
+Here, the introduction case is trivial. If we can show that $P(e)$ for some $e$, then there exists an $e$ for which $P$ holds. Here's a very simple proof that if $P$ holds of <em>every</em> element in our domain, it holds for <em>some</em> element in the domain.
+
+\begin{prooftree}
+\AxiomC{$\forall x, P(x)$}
+\RightLabel{$\forall$-E}
+\UnaryInfC{$P(p)$}
+\RightLabel{$\exists$-I}
+\UnaryInfC{$\exists x,P(x)$}
+\end{prooftree}
+
+<p>Note that this proof implicitly relies on our assumption that the domain of discourse is non-empty. (<em>All</em> dragons are dentists but that doesn't mean that there are <em>any</em> dragon dentists, so our domain better not be dragons.)
+
+<p>The rule for existential elimination is harder. As in the forall introduction rule, we introduce an arbitrary $a$, and if we can prove that $P(a)$ implies $B$ (some proposition that <em>doesn't</em> mention $a$), we can conclude that $B$ is true. Once again, all assumptions referencing $a$ must be discharged.
+
+Let's prove that there is nothing that is both a dog and not a dog (recalling that $\neg P$ is notation for $P \to \bot$).
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$\exists x, D(x) \wedge \neg D(x)$}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$D(a) \wedge \neg D(a)$}
+\LeftLabel{$\wedge$-E-L}
+\UnaryInfC{$D(a)$}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$D(a) \wedge \neg D(a)$}
+\RightLabel{$\wedge$-E-R}
+\UnaryInfC{$\neg D(a)$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$D(a) \wedge \neg D(a) \to \bot$}
+\RightLabel{$\exists$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$\neg \exists x, D(x) \wedge \neg D(x)$}
+\end{prooftree}
+
+<!-- <p>Note that we applied both the left and right elimination rules to the assumption $D(a) \wedge \neg D(a)$. That's okay, we are just implicitly duplicating our assumption, as in prior lectures. For convenience in formatting proofs, we will often use arrows or dotted lines to move our statements to their appropriate location. -->
+
+<p>The natural deduction system we are using in our proofs is not unique. A variety of equivalent systems exist. Some of these, like the sequent calculus, take a similar form to natural deduction, though each step of a sequent calculus derivation has the form $P_1,\dots,P_n \vdash Q$, where $P_i$s are premises. Others may take the form of a numbered list as in this application of Modus Ponens:
+	<ol>
+	  <li>$P$ &emsp; &emsp; (A)</li>
+	  <li>$P \to Q$ (A)</li>
+	  <li>$Q$ &emsp; &emsp; (MP 1,2)</li>
+	</ol>
+<p>A final presentation of interest is the of the <a href="https://incredible.pm/">Incredible Proof Machine</a>, which takes a graphical approach to connecting propositions and introduces and eliminates connectives via boxes. Conveniently, its underlying deductive system is almost identical to ours, and I encourage you to play around with it to build familiarity with logical deductions. Ultimately, presentation matters less than the rules themselves, which in turn matter less than a systems soundness and completeness for predicate logic.
+
+<p>Speaking of completeness, Gödel's completeness theorem proved that the Hilbert-Ackermann proof system (which is equivalent to the systems described above) can prove any tautology in a finite number of steps. But just because Gödel showed that there's a proof out there for every "true" formula doesn't mean that we necessarily have a way of finding it. This is the question (or <em>Entscheidungsproblem</em>) that Hilbert asked in 1928: is there a way to "algorithmically" figure out whether a first-order sentence is true or not (although he wouldn't have used quite the same terminology)? If the answer is yes, this process would basically give us a proof of the validity of that sentence. But Alonzo Church and Alan Turing both proved that the answer was no, using distinct but mathematically equivalent definitions of algorithms. Church's approach was called the lambda calculus and heavily influenced functional programming languages, Turing's definition was called the Turing machine, essentially a mathematical description of a computer.
+
+    <p>You might wonder why predicate logic is called first-order logic and whether that means there is a second-order logic. First-order logic is an extension of propositional logic which does not allow for any quantification. First-order logic adds quantification over elements of the domain. Second-order logic extends first-order logic by adding quantification over predicates. And of course, you can guess that mathematicians have continued in this pattern since.

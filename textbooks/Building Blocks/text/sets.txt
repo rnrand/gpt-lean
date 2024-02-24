@@ -1,0 +1,469 @@
+Chapter 5
+Sets
+So far, we’ve been assuming only a basic understanding of sets. It’s time to
+discuss sets systematically, including a useful range of constructions, opera-
+tions, notation, and special cases. We’ll also see how to compute the sizes of
+sets and prove claims involving sets.
+5.1
+Sets
+Sets are an extremely general concept, deﬁned as follows:
+Deﬁnition: A set is an unordered collection of objects.
+For example, the natural numbers are a set. So are the integers between
+3 and 7 (inclusive). So are all the planets in this solar system or all the
+programs written by students in CS 225 in the last three years. The objects
+in a set can be anything you want.
+The items in the set are called its elements or members. We’ve already
+seen the notation for this: x ∈ A means that x is a member of the set A.
+There’s three basic ways to deﬁne a set:
+• describe its contents in mathematical English, e.g. “the integers be-
+tween 3 and 7, inclusive.”
+52
+
+CHAPTER 5. SETS
+53
+• list all its members, e.g. {3, 4, 5, 6, 7}
+• use so-called set builder notation, e.g. {x ∈ Z | 3 ≤ x ≤ 7}
+Set builder notation has two parts separated with a vertical bar or a
+colon. The ﬁrst part names a variable (in this case x) that ranges over all
+objects in the set. The second part gives one or more constraints that these
+objects must satisfy, e.g. 3 ≤ x ≤ 7. The type of the variable (integer in
+our example) can be speciﬁed either before or after the vertical bar. The
+separator (| or :) is often read “such that.”
+Here’s an example of a set containing an inﬁnite number of objects
+• “multiples of 7”
+• {. . . − 14, −7, 0, 7, 14, 21, 28, . . .}
+• {x ∈ Z | x is a multiple of 7}
+We couldn’t list all the elements, so we had to use “. . .”. This is only a
+good idea if the pattern will be clear to your reader. If you aren’t sure, use
+one of the other methods.
+If we wanted to use shorthand for “multiple of”, it might be confusing to
+have | used for two diﬀerent purposes. So it would probably be best to use
+the colon variant of set builder notation:
+{x ∈ Z : 7 | x}
+The notation can be used on sets containing non-numerical objects. For
+example, suppose that A = {dog, cat, tree}. Then the set {αs : α ∈ A}
+contains the strings dogs, cats, and trees.
+5.2
+Things to be careful about
+A set is an unordered collection. So {1, 2, 3} and {2, 3, 1} are two names for
+the same set. Each element occurs only once in a set. Or, alternatively, it
+doesn’t matter how many times you write it. So {1, 2, 3} and {1, 2, 3, 2} also
+name the same set.
+
+CHAPTER 5. SETS
+54
+We’ve seen ordered pairs and triples of numbers, such as (3, 4) and (4, 5, 2).
+The general term for an ordered sequence of k numbers is a k-tuple.1 Tuples
+are very diﬀerent from sets, in that the order of values in a tuple matters
+and duplicate elements don’t magically collapse.
+So (1, 2, 2, 3) ̸= (1, 2, 3)
+and (1, 2, 2, 3) ̸= (2, 2, 1, 3). Therefore, make sure to enclose the elements
+of a set in curly brackets and carefully distinguish curly brackets (set) from
+parentheses (ordered pair).
+A more subtle feature of tuples is that a tuple must contain at least two
+elements. In formal mathematics, a 1-dimensional value x is just written as
+x, not as (x). And there’s no such thing in mathematics as a 0-tuple. So a
+tuple is simply a way of grouping two or more values into a single object.
+By contrast, a set is like a cardboard box, into which you can put objects.
+A kitty is diﬀerent from a box containing a kitty. Similarly, a set containing
+a single object is diﬀerent from the object by itself. For example, {57} is not
+the same as 57. A set can also contain nothing at all, like an empty box.
+The set containing nothing is called the empty set or the null set, and has
+the shorthand symbol ∅.2
+The empty set may seem like a pain in the neck. However, computer
+science applications are full of empty lists, strings of zero length, and the
+like. It’s the kind of special case that all of you (even the non-theoreticians)
+will spend your life having to watch out for.
+Both sets and tuples can contain objects of more than one type, e.g.
+(cat, Fluﬀy, 1983) or {a, b, 3, 7}.
+A set can also contain complex objects,
+e.g. {(a, b), (1, 2, 3), 6} is a set containing three objects: an ordered pair, an
+ordered triple, and a single number.
+5.3
+Cardinality, inclusion
+If A is a ﬁnite set (a set containing only a ﬁnite number of objects), then |A|
+is the number of (diﬀerent) objects in A. This is also called the cardinality
+1There are latinate terms for longer sequences of numbers, e.g. quadruple, but they
+aren’t used much.
+2Don’t write the emptyset as {}. Like a spelling mistake, this will make readers think
+less of your mathematical skills.
+
+CHAPTER 5. SETS
+55
+of A. For example, |{a, b, 3}| = 3. And |{a, b, a, 3}| is also 3, because we
+count a group of identical objects only once. The notation of cardinality also
+extends to sets with inﬁnitely many members (“inﬁnite sets”) such as the
+integers, but we won’t get into the details of that right now.
+Notice that the notation |A| might mean set cardinality or it might be the
+more familiar absolute value. To tell which, ﬁgure out what type of object
+A is. If it’s a set, the author meant cardinality. If it’s a number, the author
+meant absolute value.
+If A and B are sets, then A is a subset of B (written A ⊆ B) if every
+element of A is also in B. Or, if you want it formally: ∀x, x ∈ A → x ∈ B.
+For example, Q ⊆ R, because every member of the rationals is also a member
+of the reals.
+The notion of subset allows the two sets to be equal. So A ⊆ A is true for
+any set A. So ⊆ is like ≤. If you want to force the two sets to be diﬀerent (i.e.
+like <), you must say that A is a proper subset of B, written A ⊂ B. You’ll
+occasionally see reversed versions of these symbols to indicate the opposite
+relation, e.g. B ⊇ A means the same as A ⊆ B.
+5.4
+Vacuous truth
+If we have a set A, an interesting question is whether the empty set should
+be considered a subset of A. To answer this, let’s ﬁrst back up and look at
+one subtlety of mathematical logic.
+Consider the following claim:
+Claim 26 For all natural numbers n, if 14 + n < 10, then n wood elves will
+attack Siebel Center tomorrow.
+I claim this is true, a fact which most students ﬁnd counter-intuitive. In fact,
+it wouldn’t be true if n was declared to be an integer.
+Notice that this statement has the form ∀n, P(n) → Q(n), where P(n) is
+the predicate 14+n < 10. Because n is declared to be a natural number, n is
+never negative, so n + 14 will always be at least 14. So P(n) is always false.
+
+CHAPTER 5. SETS
+56
+Therefore, our conventions about the truth values for conditional statements
+imply that P(n) → Q(n) is true. This argument works for any choice of n.
+So ∀n, P(n) → Q(n) is true.
+Because even mathematicians ﬁnd such statements a bit wierd, they typ-
+ically say that such a claim is vacuously true, to emphasize to the reader
+that it is only true because of this strange convention about the meaning of
+conditionals. Vacuously true statements typically occur when you are trying
+to apply a deﬁnition or theorem to a special case involving an abnormally
+small or simple object, such as the empty set or zero or a graph with no
+arrows at all.
+In particular, this means that the empty set is a subset of any set A. For
+∅ to be a subset of A, the deﬁnition of “subset” requires that for every object
+x, if x is an element of the empty set, then x is an element of A. But this
+if/then statement is considered true because its hypothesis is always false.
+5.5
+Set operations
+Given two sets A and B, the intersection of A and B (A ∩ B) is the set
+containing all objects that are in both A and B. In set builder notation:
+A ∩ B = {S | S ∈ A and S ∈ B}
+Let’s set up some sample sets:
+• M = {egg, bread, milk}
+• P = {milk, egg, ﬂour}
+Then M ∩ P is {milk, egg}.
+If the intersection of two sets A and B is the empty set, i.e. the two sets
+have no elements in common, then A and B are said to be disjoint.
+The union of sets A and B (A ∪ B) is the set containing all objects that
+are in one (or both) of A and B. So M ∪ P is {milk, egg, bread, ﬂour}.
+
+CHAPTER 5. SETS
+57
+The set diﬀerence of A and B (A − B) contains all the objects that are
+in A but not in B. In this case,
+M − P = {bread}
+The complement of a set A (A) contains all objects that aren’t in A. For
+this to make sense, you need to deﬁne your “universal set” (often written
+U). U contains all the objects of the sort(s) you are discussing. For example,
+in some discussions, U might be all real numbers. In other discussions, U
+might contain all complex numbers. We cannot deﬁne a single, all-purpose
+universal set containing everything you might imagine putting in a set, be-
+cause constructing a set that extensive leads to logical paradoxes. So your
+deﬁnition of U must be speciﬁc to your situation and, therefore, you and
+your reader need to come to an understanding about what’s in it.
+So, if our universe U is all integers, and A contains all the multiples of
+3, then A is all the integers whose remainder mod 3 is either 1 or 2. Q
+would be the irrational numbers if our universe is all real numbers. If we had
+been working with complex numbers, it might be the set of all irrational real
+numbers plus all the numbers with an imaginary component.
+If A and B are two sets, their Cartesian product (A × B) contains all
+ordered pairs (x, y) where x is in A and y is in B. That is
+A × B = {(x, y) | x ∈ A and y ∈ B}
+For example, if A = {a, b} and B = {1, 2}, then
+A × B = {(a, 1), (a, 2), (b, 1), (b, 2)}
+B × A = {(1, a), (2, a), (1, b), (2, b)}
+Notice that these two sets aren’t equal: order matters for Cartesian prod-
+ucts.
+We can generalize this deﬁnition to create the Cartesian product of three
+or more sets. So, for example, if C = {p, q}, then
+
+CHAPTER 5. SETS
+58
+A×B×C == {(a, 1, p), (a, 1, q), (a, 2, p), (a, 2, q), (b, 1, p), (b, 1, q), (b, 2, p), (b, 2, q)}
+5.6
+Set identities
+It’s easy to ﬁnd (e.g. on the net), long lists of identities showing when two
+sequences of set operations yield the same output set. For example:
+DeMorgan’s Law: A ∪ B = A ∩ B
+I won’t go through these in detail because they are largely identical to
+the identities you saw for logical operations, if you make the following corre-
+spondences:
+• ∪ is like ∨
+• ∩ is like ∧
+• A is like ¬P
+• ∅ (the empty set) is like F
+• U (the universal set) is like T
+The two systems aren’t exactly the same. E.g. set theory doesn’t use a
+close analog of the → operator. But they are very similar.
+5.7
+Size of set union
+Many applications require that we calculate3 the size of the set created by
+applying set operations. These sets are often sets of options for some task.
+3Or sometimes just estimate.
+
+CHAPTER 5. SETS
+59
+If two sets A and B don’t intersect, then the size of their union is just
+the sum of their sizes. That is: |A ∪ B| = |A| + |B|. For example, suppose
+that it’s late evening and you want to watch a movie. You have 37 movies
+on cable, 57 DVD’s on the shelf, and 12 movies stored in I-tunes. If these
+three sets of movies don’t intersect, you have a total of 37 + 57 + 12 = 106
+movies.
+If your input sets do overlap, then adding up their sizes will double-count
+some of the objects. So, to get the right number for the union, we need to
+correct for the double-counting. For our movie example, suppose that the
+only overlap is that 2 movies are on I-tunes and also on DVD. Then you
+would have (37 + 57 + 12) − 2 = 104 movies to choose from.
+The formal name for this correction is the “Inclusion-Exclusion Princi-
+ple”. Formally, suppose you have two sets A and B. Then
+Inclusion-Exclusion Principle: |A ∪ B| = |A| + |B| − |A ∩ B|
+We can use this basic 2-set formula to derive the corresponding formula
+for three sets A, B, and C:
+|A ∪ B ∪ C|
+=
+|A| + |B ∪ C| − |A ∩ (B ∪ C)|
+=
+|A| + |B| + |C| − |B ∩ C| − |A ∩ (B ∪ C)|
+=
+|A| + |B| + |C| − |B ∩ C| − |(A ∩ B) ∪ (A ∩ C)|
+=
+|A| + |B| + |C| − |B ∩ C| − (|A ∩ B| + |A ∩ C| − |(A ∩ B) ∩ (A ∩ C)|)
+=
+|A| + |B| + |C| − |B ∩ C| − |A ∩ B| − |A ∩ C| + |A ∩ B ∩ C|
+In addition to the inclusion-exclusion principle, this derivation uses the
+distributive law (third step) and the fact that intersection is commutative
+and associative (last step).
+5.8
+Product rule
+Now, suppose that we form the Cartesian product of two sets A and B, where
+|A| = n and |B| = q. To form an element (x, y) in the product, we have n
+
+CHAPTER 5. SETS
+60
+choices for x and q choices for y. So we have nq ways to create an element
+of the product. So |A × B| = nq.
+In general:
+The product rule: if you have p choices for one part of a task,
+then q choices for a second part, and your options for the second
+part don’t depend on what you chose for the ﬁrst part, then you
+have pq options for the whole task.
+This rule generalizes in the obvious way to sequences of several choices:
+you multiply the number of options for each choice. For example, suppose
+that T-shirts come in 4 colors, 5 sizes, 2 sleeve lengths, and 3 styles of
+neckline, there are 4 · 5 · 2 · 3 = 120 total types of shirts.
+We could represent a speciﬁc T-shirt type as a 4-tuple (c, s, l, n): c is its
+color, s is its size, l is its sleeve length, and n is its neckline. E.g. one T-shirt
+type is (red, small, long, vee) The set of all possible T-shirt types would then
+be a 4-way Cartesian product of the set of all colors, the set of all sizes, the
+set of all sleeve lengths, and the set of all necklines.
+5.9
+Combining these basic rules
+These two basic counting rules can be combined to solve more complex practi-
+cal counting problems. For example, suppose we have a set S which contains
+all 5-digit decimal numbers that start with 2 one’s or end in 2 zeros, where
+we don’t allow leading zeros. How large is S, i.e. how many numbers have
+this form?
+Let T be the set of 5-digit numbers starting in 2 one’s. We know the ﬁrst
+two digits and we have three independent choices (10 options each) for the
+last three. So there are 1000 numbers in T.
+Let R be the set of 5-digit numbers ending in 2 zeros. We have 9 options
+for the ﬁrst digit, since it can’t be zero. We have 10 options each for the
+second and third digits, and the last two are ﬁxed. So we have 900 numbers
+in R.
+
+CHAPTER 5. SETS
+61
+What’s the size of T ∩ R? Numbers in this set start with 2 one’s and
+end with 2 zeros, so the only choice is the middle digit. So it contains 10
+numbers. So
+|S| = |T| + |R| − |T ∩ R| = 1000 + 900 − 10 = 1890
+5.10
+Proving facts about set inclusion
+So far in school, most of your proofs or derivations have involved reason-
+ing about equality. Inequalities (e.g. involving numbers) have been much
+less common. With sets, the situation is reversed. Proofs typically involve
+reasoning about subset relations, even when proving two sets to be equal.
+Proofs that rely primarily on a chain of set equalities do occur, but they are
+much less common. Even when both approaches are possible, the approach
+based on subset relations is often easier to write and debug.
+As a ﬁrst example of a typical set proof, let’s suppose that we the following
+two sets and we’d like to prove that A ⊆ B
+A = {λ(2, 3) + (1 − λ)(7, 4) | λ ∈ [0, 1]}
+B = {(x, y) | x, y ∈ R, x ≥ 0, and y ≥ 0}
+When presented with a claim like this, you should ﬁrst take a minute to
+verify that the claim really is true. Set B is the upper right quadrant of the
+plane. To understand the deﬁnition of set A, remember how to multiply a
+real number by a vector: a(x, y) = (ax, ay). This deﬁnition generates all
+points of the form λ(2, 3) + (1 − λ)(7, 4) where λ is a real number between 0
+and 1. Try putting some sample values of λ into this equation and plotting
+them in 2D: what geometrical object is this?4 Make sure you believe that
+this object does live in the upper right quadrant.
+Now, remember our deﬁnition of ⊆: a set A is a subset of a set B if and
+only if, for any object x, x ∈ A implies that x ∈ B. So, to prove our claim,
+we need to pick a random object x from A and show that it lives in B. So a
+starting sketch of our proof might look like:
+4Hint: use a pencil and paper. Your plot doesn’t need to be neat to see the pattern.
+
+CHAPTER 5. SETS
+62
+Proof: Let sets A and B be deﬁned as above. Let x be an element
+of A.
+[missing details]
+So x is an element of B.
+Since x was arbitrarily chosen, we’ve shown that any element of
+A is also an element of B. So A is a subset of B.
+We can now use the deﬁnition of A to extend forward from the hypotheses
+into the missing part. In particular, the deﬁnition of A implies that x is a
+2D point, so it’s probably helpful to give names to the two coordinates:
+Proof: Let sets A and B be deﬁned as above. Let x be an element
+of A. Then x = µ(2, 3) + (1 − µ)(7, 4) for some µ ∈ [0, 1]. So
+x = (p, q) where p = 2µ + 7(1 − µ) and q = 3µ + 4(1 − µ)
+[missing details]
+So x is an element of B.
+Since x was arbitrarily chosen, we’ve shown that any element of
+A is also an element of B. So A is a subset of B.
+Notice that the variable λ in the deﬁnition of A is local to the deﬁnition
+of A. So when we use this deﬁnition to spell out the properties of our element
+x, we need to introduce a new variable. I’ve used a fresh variable name µ to
+emphasize that this is a new variable.
+At this point, it’s worth looking at the end part of the proof. If x = (p, q)
+and we’re trying to show that x is in B, then this translates into showing
+that p and q are both non-negative. So we can expand the end of the proof
+backwards, narrowing the missing part even further:
+Proof: Let sets A and B be deﬁned as above. Let x be an element
+of A. Then x = µ(2, 3) + (1 − µ)(7, 4) for some µ ∈ [0, 1]. So
+x = (p, q) where p = 2µ + 7(1 − µ) and q = 3µ + 4(1 − µ)
+[missing details]
+So p ≥ 0 and q ≥ 0. This means that x = (p, q) is an element of
+B.
+
+CHAPTER 5. SETS
+63
+Since x was arbitrarily chosen, we’ve shown that any element of
+A is also an element of B. So A is a subset of B.
+Now we have a straightforward algebra problem: get from the complex
+equations deﬁning p and q to the fact that both are non-negative. Working
+out the details of that algebra gives us the ﬁnal proof:
+Proof: Let sets A and B be deﬁned as above. Let x be an element
+of A. Then x = µ(2, 3) + (1 − µ)(7, 4) for some µ ∈ [0, 1]. So
+x = (p, q) where p = 2µ + 7(1 − µ) and q = 3µ + 4(1 − µ)
+Simplifying these equations, we get that p = 2µ+7−7µ = 7−5µ
+and q = 3µ+4−4µ = 4−µ Since µ is in the interval [0, 1], µ ≤ 1.
+So 7 − 5µ and 4 − µ are both ≥ 0.
+So p ≥ 0 and q ≥ 0. This means that x = (p, q) is an element of
+B.
+Since x was arbitrarily chosen, we’ve shown that any element of
+A is also an element of B. So A is a subset of B.
+The last paragraph in this proof is actually is optional. When you ﬁrst
+start, it’s a useful recap because you might be a bit fuzzy about what you
+needed to prove. Experienced folks often omit it, depending on the reader
+to understand the basic outline of a subset inclusion proof. But you will still
+see it occasionally at the end of a very long (e.g. multi-page) proof, where
+the reader might have been so buried in the details that they’ve lost track of
+the overall goals of the proof.
+5.11
+An abstract example
+Now, let’s try to do a similar proof, but for a claim involving generic sets
+rather than speciﬁc sets.
+Claim 27 For any sets A, B, and C, if A ⊆ B and B ⊆ C, then A ⊆ C.
+
+CHAPTER 5. SETS
+64
+This property is called “transitivity,” just like similar properties for (say)
+≤ on the real numbers. Both ⊆ and ≤ are examples of a general type of
+object called a partial order, for which transitivity is a key deﬁning property.
+Let’s start our proof by gathering up all the given information in the
+hypothesis of the claim:
+Proof: Let A, B, and C be sets and suppose that A ⊆ B and
+B ⊆ C.
+Our ultimate goal is to show that A ⊆ C. This is an if/then statement:
+for any x, if x ∈ A, then x ∈ C. So we need to pick a representative x
+and assume the hypothesis is true, then show the conclusion. So our proof
+continues:
+Let x be an element of A. Since A ⊆ B and x ∈ A, then x ∈ B
+(deﬁnition of subset). Similarly, since x ∈ B and B ⊆ C, x ∈ C.
+So for any x, if x ∈ A, then x ∈ C. So A ⊆ C (deﬁnition of
+subset again). □
+5.12
+An example with products
+Here’s another claim, involving Cartesian products:
+Claim 28 For any sets A, B, and C, if A × B ⊆ A × C and A ̸= ∅, then
+B ⊆ C.
+Notice that this claim fails if A = ∅. For example, ∅×{1, 2, 3} is a subset
+of ∅ × {a, b}, because both of these sets are empty. However {1, 2, 3} is not
+a subset of {a, b}.
+This is like dividing both sides of an algebraic equation by a non-zero
+number: if xy ≤ xz and x ̸= 0 then y ≤ z. This doesn’t work we allow x
+to be zero. Set operations don’t always work exactly like operations on real
+numbers, but the parallelism is strong enough to suggest special cases that
+ought to be investigated.
+
+CHAPTER 5. SETS
+65
+A general property of proofs is that the proof should use all the informa-
+tion in the hypothesis of the claim. If that’s not the case, either the proof
+has a bug (e.g. on a homework assignment) or the claim could be revised to
+make it more interesting (e.g. when doing a research problem, or a buggy
+homework problem). Either way, there’s an important issue to deal with.
+So, in this case, we need to make sure that our proof does use the fact that
+A ̸= ∅.
+Here’s a draft proof:
+Proof draft: Suppose that A, B, and C are sets and suppose that
+A × B ⊆ A × C and A ̸= ∅. We need to show that B ⊆ C.
+So let’s choose some x ∈ B. . . .
+The main fact we’ve been given is that A × B ⊆ A × C. To use it, we
+need an element of A × B. Right now, we only have an element of B. We
+need to ﬁnd an element of A to pair it with. To do this, we reach blindly
+into A, pull out some random element, and give it a name. But we have to
+be careful here: what if A doesn’t contain any elements? So we have to use
+the assumption that A ̸= ∅.
+Proof: Suppose that A, B, and C are sets and suppose that
+A × B ⊆ A × C and A ̸= ∅. We need to show that B ⊆ C.
+So let’s choose some x ∈ B. Since A ̸= ∅, we can choose an
+element t from A.
+Then (t, x) ∈ A × B by the deﬁnition of
+Cartesian product.
+Since (t, x) ∈ A × B and A × B ⊆ A × C, we must have that
+(t, x) ∈ A × C (by the deﬁnition of subset). But then (again by
+the deﬁnition of Cartesian product) x ∈ C.
+So we’ve shown that if x ∈ B, then x ∈ C. So B ⊆ C, which is
+what we needed to show.
+5.13
+A proof using sets and contrapositive
+Here’s a claim about sets that’s less than obvious:
+
+CHAPTER 5. SETS
+66
+Claim 29 For any sets A and B, if (A − B) ∪ (B − A) = A ∪ B then
+A ∩ B = ∅.
+Notice that the conclusion A ∩ B = ∅ claims that something does not
+exist (i.e. an object that’s in both A and B). So this is a good place to apply
+proof by contrapositive.
+Proof: Let’s prove the contrapositive. That is, we’ll prove that if
+A ∩ B ̸= ∅, then (A − B) ∪ (B − A) ̸= A ∪ B.
+So, let A and B be sets and suppose that A ∩ B ̸= ∅. Since
+A ∩ B ̸= ∅, we can choose an element from A ∩ B. Let’s call it x.
+Since x is in A ∩ B, x is in both A and B. So x is in A ∪ B.
+However, since x is in B, x is not in A−B. Similarly, since x is in
+A, x is not in B −A. So x is not a member of (A−B) ∪(B −A).
+This means that (A − B) ∪ (B − A) and A ∪ B cannot be equal,
+because x is in the second set but not in the ﬁrst. □.
+5.14
+Variation in notation
+In mathematical writing, it is quite rare to create tuples that contain other
+tuples.
+In principle, tuples containing tuples are formally diﬀerent from
+longer tuples. E.g. ((a, b), c) is formally a diﬀerent object from (a, b, c), and
+(a, (b, c)) is diﬀerent from both. However, most mathematical writers treat
+this diﬀerence as a petty nuisance and view the two objects as interchange-
+able.
+Linked lists used in computer science behave very diﬀerently from math-
+ematical tuples. The linked list ((a, b), c) is completely diﬀerent from the list
+(a, b, c) and a linked list can contain a single element or no elements. It is a
+bad idea to confuse linked lists and mathatical tuples, even though they are
+written with the same notation.
+
