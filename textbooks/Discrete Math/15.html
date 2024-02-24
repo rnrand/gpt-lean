@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 15</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 15</h1>
+
+    <p><strong>Example 14.2.</strong> Suppose I'm a charlatan and I claim that I have a perfect lossless compression algorithm that I'd like to scam some sweet VC funding for. Recall that all data is really just a binary string. So, what I'm essentially claiming is that for every string $x \in \{0,1\}^*$, I can compress it into some other string $x'$ that's shorter <em>and</em> I can decompress it to recover $x$. Let's consider all the binary strings of length $n$. From our previous discussions, we know there are exactly $2^n$ such binary strings. How many strings of length $\lt n$ are there? There are $2^0 + 2^1 + \cdots 2^{n-1} = 2^n - 1$ such strings. But $2^n-1 \lt 2^n$, so there is at least one string of length $\lt n$ that corresponds to two strings of length $n$ after compression.
+
+    <p>We can make the pigeonhole principle even more general.
+
+    <p><strong>Theorem 14.3.</strong> Let $A_1, A_2, \dots, A_k$ be disjoint sets such that $\left| \bigcup_{i=1}^k A_i \right| = n$. Then there exists a set $A_i$ such that $|A_i| \geq \left\lceil \frac n k \right\rceil$.
+
+    <p><em>Proof.</em> Suppose that $\left| \bigcup_{i=1}^k A_i \right| = n$. Let us assume that $|A_i| \lt \left\lceil \frac n k \right\rceil$ for all $1 \leq i \leq k$. Then we have
+    $$\left| \bigcup_{i=1}^k A_i \right| = \sum_{i=1}^k |A_i| \lt \sum_{i=1}^k \frac n k = k \cdot \frac n k = n.$$
+    Here, we make use of the fact that if $|a_i| \lt \left\lceil \frac n k \right\rceil$, then $|a_i| \lt \frac n k$. Otherwise, since $|a_i|$ is an integer, we would contradict the definition of the ceiling function. In the end, the above argument shows that we contradict our initial hypothesis that $\left| \bigcup_{i=1}^k A_i \right| = n$.
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 14.4.</strong> Suppose you have large numbers of three colours of socks in a drawer and you're pulling socks out without looking. How many socks do you need to pull out before you're guaranteed to have a pair of the same colour? The answer is four: if we view each colour as a set, all we need is at least one more sock than there are sets. 
+    <p>Now, suppose you are a crab. Crabs have two claws and eight legs so they obviously need eight socks (this is different from octopuses, who have eight limbs, but it is not immediately clear if these should be considered arms or legs). How many socks do you need to pull out before you're guaranteed eight socks of the same colour? The pigeonhole principle says we need $n$ with $\left\lceil \frac n 3 \right\rceil = 8$, which suggests that $n \gt 21$. Approaching it from another perspective, in the worst case, our crab ends up with 7 socks of each colour, so it has 21 socks in total.
+    <p>We can, of course, ask the same question of spiders, caterpillars, centipedes, and so on.
+
+    <p><strong>Theorem 14.5.</strong> Let $a_1, a_2, \dots, a_{n+1}$ be integers where each $a_i \leq 2n$. Then there exist $j \neq k$ such that $a_j \mid a_k$.
+
+    <p><em>Proof.</em> For each $a_i$, we have $a_i = 2^{b_i} \cdot m_i$, where $m_i$ is odd by prime factorization. Since $a_i \leq 2n$ and there are only $n$ odd numbers less than $2n$, there are two numbers $m_j$ and $m_k$ such that $m_j = m_k$. Without loss of generality, assume $b_j \gt b_k$ and therefore, we have $a_k \mid a_j$.
+    $\tag*{$\Box$}$
+
+<!--
+    <p><strong>Theorem 14.6.</strong> Every sequence of $n^2+1$ distinct numbers must have a strictly monotonic subsequence of length at least $n+1$.
+
+    <p>By monotonic, we mean that the subsequence is either strictly increasing or strictly decreasing. 
+
+    <p><em>Proof.</em> Let $a_1, a_2, \dots, a_k$ be our sequence, with $k = n^2+1$. Then for each term $a_j$, we associate a pair $(i_j, d_j)$, where $i_j$ is the length of the longest strictly increasing subsequence that begins with $a_j$ and $d_j$ is the length of the longest strictly decreasing subsequence that begins with $a_j$. 
+
+    <p>Suppose that there are no strictly monotonic subsequences of length greater than $n$. Then every $i_j$ and $d_j$ is at most $n$. In other words, $(i_j,d_j) \in \{1,\dots,n\} \times \{1,\dots,n\}$ and so there are $n^2$ possible different pairs. Since $k = n^2+1$, by the pigeonhole principle, there are at least two pairs that are the same.
+
+    <p>Let $a_s$ and $a_t$ be such that $s \neq t$ with $(i_s,d_s) = (i_t,d_t)$. Since $s \neq t$ and the terms of the sequence are distinct, we have either $a_s \lt a_t$ or $a_s \gt a_t$. Suppose $a_s \lt a_t$. Then we have a strictly increasing subsequence of length $i_t$ beginning with $a_t$. However, we can construct a strictly increasing subsequence of length $i_t + 1$ which begins with $a_s$ by appending $a_s$ to the beginning of the subsequence beginning with $a_t$. Then this gives us $i_s = i_t + 1 \neq i_t$, contradicting our assumption. A similar argument follows for $a_s \gt a_t$ and $d_s = d_t$.
+    $\tag*{$\Box$}$
+-->
+
+    <p>The following is a result from <em>Ramsey Theory</em>. Ramsey Theory is concerned with combinatorial questions that concern how large certain structures have to be before they are guaranteed to have some property. Ramsey was a British mathematician from the early 20th century who passed away very young, at the age of 26 in 1930. 
+
+    <p><strong>Example 14.6.</strong> Given any group of six people at a party, either three are mutual friends or three are mutual strangers. Consider Alice. Either Alice does or does not know each of the five others, which must mean that she knows at least three of the others or she doesn't know at least three of the others. We'll consider the case where she knows three other people, since the case where she doesn't know three other people is similar. So she knows Bob, Charlie, and Eve. We can consider two possbilities.
+    <ul>
+    <li>Two of Bob, Charlie, and Eve know each other. If this is the case, then we have our three mutual friends.
+    <li>None of Bob, Charlie, and Eve know each other. In this case, we have our three mutual strangers.
+    </ul>
+
+    <p>All of this can be stated more formally using graphs and cliques and colourings, but the party setting allows us to defer defining all of these things until we actually get to graph theory. But note that this argument hinges on the fact that there are at least five other people connected to Alice in order for us to apply the Pigeonhole principle. If we had fewer (i.e. if we took groups of five or less), we wouldn't be able to guarantee either mutual friend/stranger triplet.
+
+    <p>We denote by $R(m,n)$ the <em>Ramsey number</em>, which is the minimum number of guests we need to be at our party such that at least $m$ people all know each other or at least $n$ people don't know each other.
+
+    <p><strong>Theorem 14.7.</strong> $R(3,3) \leq 6$.
+
+    <h2>Permutations</h2>
+
+    <p><strong>Definition 14.8.</strong> A <strong>permutation</strong> of a set $A$ is an ordered list of the elements of $A$. (It is possible to see this as a bijection from $A \to A$ but this generally won't be convenient for our purposes.)
+
+    <p><strong>Example 14.9.</strong> Consider a set $A = \{1,2,3\}$. One possible permutation is $(1,2,3)$, another is $(3,1,2)$.
+
+    <p>A natural question is how many such permutations must exist. 
+    For something of this size, we can easily enumerate all of the possibilities:
+    \begin{matrix}
+    (1,2,3) & (1,3,2) & (2,1,3) & (2,3,1) & (3,1,2) & (3,2,1)
+    \end{matrix}
+    This suggests that we can apply some of the counting rules we've already seen.
+
+    <p><strong>Theorem 14.10.</strong> If $A$ is a set containing $n$ elements, then the number of permutations of $A$ is $n!$.
+
+    <p>Why? Because we have $n$ ways of choosing the first element, then $n-1$ ways of choosing the second element (because an element has been removed from the set), $n-2$ ways of choosing the third, and so forth.
+
+    <p><strong>Example 14.11.</strong> How many different ways are there to rank the presidents of the United States? There were $45$ presidents (Grover Cleveland is annoyingly considered the 22nd and 24th president), so I have 45 different choices for first place. I then have $44$ options for number 2, $43$ for number three, and so forth, until I'm left left with one choice for last. This gives me a total of $45!$ possibilities, which is an astronomical number. On the other hand, if I only want to rate the top $5$ presidents, I get $45 \cdot 44 \cdot 43 \cdot 42 \cdot 41$ which is less than a billion. 
+		
+	    <p><strong>Definition 15.1.</strong> An <strong>$r$-permutation</strong> is a permutation of $r$ elements taken from a set of $n$ elements.
+
+	    <p><strong>Theorem 15.2.</strong> If $P(n,r)$ denotes the number of $r$-permutations of an $n$-element set, then
+	    $$P(n,r) = n \cdot (n-1) \cdot \cdots \cdot (n-r+1).$$
+
+	    <p>We can think of this as an application of the product rule, where our first choice is from a set $S$ of size $n$, then we have a choice from $S \setminus \{a_1\}$ of size $n-1$, then a choice from $S \setminus \{a_1,a_2\}$ of size $n-2$ and so on.
+
+	    <p><strong>Corollary 15.3.</strong> If $n$ is positive and $0 \leq r \leq n$, then
+	    $$P(n,r) = \frac{n!}{(n-r)!}.$$
+
+	    <p><em>Proof.</em> Note that the total number of ways to order a set of $n$ elements is $n!$. From above, we have $P(n,r)$ ways to order $r$ out of $n$ elements. We are then left with $n-r$ elements to order, which we can do $(n-r)!$ ways. This gives us
+	    \begin{align*}
+	    n! &= P(n,r) \cdot (n-r)! \\
+	    P(n,r) &= \frac{n!}{(n-r)!}
+	    \end{align*}
+	    $\tag*{$\Box$}$
+		
+		

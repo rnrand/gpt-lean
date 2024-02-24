@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 21</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 21</h1>
+
+    <h3>Random variables and Bernoulli trials</h3>
+	
+    <p>In the previous lecture, we defined variables like $F_4$, $S_6$ and $T_7$ 
+	to refer to the events that the first roll of a die was $4$, the second was 
+	$6$ and the total was $7$. This is a pretty awkward way of expressing a group
+	of similar events. In fact, it should be reminiscent of how, in propositional
+	logic, we would need to say "A = Alice has a dog", "B = Bob has a dog" etc. 
+	
+	<p>Just like predicate logic allows us to make general logical statements like
+	"$D(x)$ = $x$ has a dog", the language of <em>random variables</em> allows us to
+	make more general statements about events. 
+		
+    <p><strong>Definition 20.1.</strong> A <strong>random variable</strong> on a sample
+      space $\Omega$ is a function $X : \Omega \to \mathbb R$. 
+
+	<p><strong>Example 20.2</strong> We can define our "first die", "second die", and "total"
+	random variables as 
+	\begin{align*}
+	D_1((x,y)) &= x \\
+	D_2((x,y)) &= y \\
+	T((x,y)) &= x + y
+	\end{align*}
+	
+    <p>Note that the image of these functions is rather small: Either $1,\dots,6$ or
+	$2,\dots,12$ This is fine. A lot of the time, we'll be mapping objects to subsets of
+    $\mathbb R$, like $\mathbb N$ or even $\{0,1\}$. And while the standard
+    definition of a random variable is for $\mathbb R$, this can be extended to
+    more exotic co-domains than just $\mathbb R$, but we usually prefer numbers
+    so that we can eventually talk about averages. 
+
+    <p>Now, you may have noticed from our discussion that random variables are
+    not random and are not variables (a random variable is a function, as we can
+    see from the definition above).
+
+    <p>Having set up this mechanism, we can define the probability of a
+    particular outcome of a random variable.
+
+    <p><strong>Definition 20.3.</strong> If $X$ is a random variable, we define
+    the notation
+    $$\Pr(X = r) = \Pr(\{\omega \in \Omega \mid X(\omega) = r\}).$$
+
+	<p><strong>Example 20.4.</strong> Consider our random variable $T$ over the sample space of two dice. 
+	\[ T((x,y)) = x + y \]
+	We can write the probability of the total being four as 
+	$$\Pr(T = 4) = \Pr(\{(x,y) \mid x + y = 4 \}) = \Pr(\{(1,3),(2,2),(3,1) \}) = \frac{3}{36} = \frac{1}{12}$$ 
+
+    More generally we extend this notation as follows. If $Q$ is
+    any predicate on real numbers, we define
+    $$\Pr(Q(X)) = \Pr(\{\omega \in \Omega \mid Q(X(\omega)) \}).$$
+
+	Using $T$ again as an example: 
+	$$\Pr(T \leq 5) = \Pr(\{(x,y) \mid x + y \leq 5 \}) = \frac{4+3+2+1}{36} = \frac{10}{36}$$ 
+
+	<p>In the previous class, we noted that every event related to the first die is independent of every event related
+	to the second die. We can thereby extend this notion of independence to random variables:
+	
+    <p><strong>Definition 20.5.</strong> We say the random variables $X$ and $Y$ are <strong>independent</strong> if for all $r,s \in \mathbb R$, $\Pr(X = r \wedge Y = s) = \Pr(X = r) \cdot \Pr(Y = s)$.
+	
+	<p>By this definition, $D_1$ and $D_2$ are independent, since for every $r,s \in \{1,2,3,4,5,6\}$, $\Pr(X = r \wedge Y = s) = \frac{1}{36} = \Pr(X = r) \cdot \Pr(Y=s)$. By contrast, even though the event corresponding to $T=7$ is independent of $D_1$, $T$ and $D_1$ are <em>not</em> independent. As a counterexample, $\Pr(D_1 = 6 \wedge T = 12) = \frac{1}{36} \neq \Pr(D_1 = 6) \cdot \Pr(T = 12)$.
+	
+    <p>Notation for random variables often omits the input variable. So one
+    might define a new random variable $Z$ by saying $Z=|D_1-D_2|$, or in English:
+    $Z$ is the absolute difference between the two dice rolls. It is important
+    to understand that this is just defining a new function like you did
+    in calculus, where you'd write $h(x) = f(x)+g(x)$. For instance,
+    we could have have simply defined $T$ as $D_1 + D_2$ above.
+
+<h2>The Distribution of a Random Variable</h2>
+
+    When studying random variables and answering questions about them,
+    a very useful concept is their <em>distribution</em>, which is
+    defined next.
+
+    <p><strong>Definition 20.3.</strong> Let $X$ be a random variable
+    on a sample space $\Omega$. The <strong>distribution of $X$</strong>
+    is the function $p_X : \mathbb{R}\to\mathbb{R}$ defined by
+    $$
+    p_X(x) = \Pr(X = x).
+    $$
+    
+    <p><strong>Example.</strong> Using our random variables for dice we have
+    \begin{align*}
+    p_{D_1}(1) = 1/6 \\
+    p_{D_1}(2) = 1/6 \\
+    p_{D_1}(3) = 1/6 \\
+    p_{D_1}(4) = 1/6 \\
+    p_{D_1}(5) = 1/6 \\
+    p_{D_1}(6) = 1/6 
+    \end{align*}
+    and $p_{D_1}(x) = 0$ for all other $x$.
+
+	<p>The distribution for $T$ is a little bit more interesting:
+    \begin{align*}
+    p_{T}(2) &= 1/36 \\
+    p_{T}(3) &= 2/36 \\
+    p_{T}(4) &= 3/36 \\
+    p_{T}(5) &= 4/36 \\
+    p_{T}(6) &= 5/36 \\
+    p_{T}(7) &= 6/36 \\
+    p_{T}(8) &= 5/36 \\
+    p_{T}(9) &= 4/36 \\
+    p_{T}(10) &= 3/36 \\
+    p_{T}(11) &= 2/36 \\
+    p_{T}(12) &= 1/36 \\
+    \end{align*}
+    and $p_{T}(x) = 0$ for all other $x$.
+
+
+    <p>Now consider $D_2' = 7 - D_2$, this is a different random variable than $D_1$ or $D_2$
+	 (it is a different function!). But observe that its distribution is
+    \begin{align*}
+    p_{D_2'}(1) = 1/6 \\
+    p_{D_2'}(2) = 1/6 \\
+    p_{D_2'}(3) = 1/6 \\
+    p_{D_2'}(4) = 1/6 \\
+    p_{D_2'}(5) = 1/6 \\
+    p_{D_2'}(6) = 1/6 
+    \end{align*}
+    and $p_{D_2'}(x) = 0$ for all other $x$. This is <strong>exactly</strong>
+    the same distribution as $D_1$ and $D_2$. That is, $p_{D_2'} = p_{D_2} = p(D_2')$. This is a very common
+    situation, and the next definition records a term to describe this
+    situation.
+
+    <p><strong>Definition 20.4.</strong> Let $X,Y$ be random variables.  When
+    $p_X=p_Y$, we say that $X$ and $Y$ are <strong>identically
+    distributed</strong>.
+
+	<p>$D_1$, $D_2$ and $D_2'$ are all identically distributed. Of course, $D_1$ and $D_2$ are independent, 
+	while $D_2$ and $D_2'$ aren't independent at all (they depend on the same die roll and always add up to $7$). We call $D_1$ and $D_2$ <strong>independent and identically distributed</strong> or <strong>i.i.d.</strong> for short.
+		
+<h2>Bernoulli and Binomial Distributions</h2>
+
+	<p>A random variable won't always be a sum of elements from its sample space. For instance, consider the random variable
+		$$W((a,b)) = 
+		\begin{cases} 
+			1 & \text{if $a + b = 12$} \\ 
+			0 & \text{otherwise.} 
+			\end{cases}$$
+
+Here $W$ corresponds to a game where I have to roll two sixes to win. This is a member of a broader class of win-lose games.
+
+    <p><strong>Definition 20.5.</strong> A <strong>Bernoulli trial</strong> is a random variable $B$ whose image is $\{0,1\}$, where the event $\{\omega \in \Omega \mid B(\omega) = 1\}$ is the <strong>success</strong> event, and $\{\omega \in \Omega \mid B(\omega) = 0\}$ is the <strong>failure</strong> event. These are also sometimes called <strong>indicator random variables</strong>.  
+
+	<p>A classic example of a Bernoulli trial is a biased coin toss where
+		$$C(\omega) = 
+		\begin{cases} 
+			1 & \text{if $\omega$ is heads} \\ 
+			0 & \text{if $\omega$ is tails.} 
+			\end{cases}$$
+		
+	<p>We will assume $\Pr(C=1) = \frac{1}{3}$ for the remainder of the class.
+
+    <p><em>Repeated Bernoulli trials</em> are a repetition of $n$ mutually independent events. How should we interpret this in our probability framework? In other words, what do the sample space and the probability distribution look like?
+
+    <p>If we have a probability space $(\Omega,\Pr)$ and we want to conduct $n$ independent trials, then what we really want is to take the product of a bunch of these outcomes. So we define the space $(\Omega^n, \Pr_n)$, where $\Omega^n$ is the set of $n$-tuples $(a_1, a_2, \dots, a_n)$ with $a_i \in \Omega$ and 
+    $$\Pr_n((a_1, a_2, \dots, a_n)) = \Pr(a_1) \Pr(a_2) \cdots \Pr(a_n).$$
+    Here, each position $i$ corresponds to one of our trials and we can define the corresponding Bernoulli trial by $X_i((a_1, \dots, a_n)) = X(a_i)$. Since we're taking the product, none of the trials in our tuple depend on each other, so they're independent.
+	
+    <p><strong>Example 20.6.</strong> Suppose we flip a coin five times. Let
+    $X(\omega)$ be the random variable that equals the number of heads that
+    appear when $\omega$ is the outcome. What is the probability of getting $5$ heads?
+    $$\Pr(X = 5) = \Pr(HHHHH) = \Pr(H)^5 = \left(\frac{1}{3}\right)^5$$
+
+	Now let's consider the case of four heads. The probability of getting four heads followed by tails is 
+	$\Pr(H)^4\cdot\Pr(T)$. Since there are five different ways of inserting the tails, we get
+	$$\Pr(X = 4) = 5\left(\frac{1}{3}\right)^4 \left(\frac{2}{3}\right)$$
+	
+	Generalizing to other values for the number of heads, we have
+	$$\Pr(X = k) = \binom{5}{k}\left(\frac{1}{3}\right)^k \left(\frac{1}{3}\right)^{5-k}$$
+	
+	This gives us the following theorem:
+	
+    <p><strong>Theorem 20.7.</strong> The probability of $k$ successes in $n$ independent Bernoulli trials with probability of success $p$ and probability of failure $q = 1-p$ is
+    $$\binom n k p^k q^{n-k} = \binom n k p^k (1-p)^{n-k}$$
+
+    <p>This is called the <em>binomial distribution</em>, for the reason that this is what you'd get if you plugged in the $x = p$ and $y = (1-p)$ into the Binomial Theorem. It is from this that we get the definition
+    $$b(k;n,p) = \binom n k p^k (1-p)^{n-k}.$$
+
+    <p><strong>Example 20.8.</strong> Suppose we have an array of $b$ bins, and
+    we randomly toss $n$ balls so that each ball lands in any bin with
+    equal probability, independently of the other balls. For each
+    $j=1,\ldots,b$, we can define $X_j$ to the number of balls in the $j$-th
+    bin. Then for all $j$, $$\Pr(X_j = k)= \binom{n}{k} (1/b)^k (1-1/b)^{n-k}$$ since we can view
+    the balls as trials that succeed when the ball lands in the $j$-th bin.
+    Balls-in-bins problems are particularly important for data structures,
+    where the balls are data items and bins are hash table cells.
+

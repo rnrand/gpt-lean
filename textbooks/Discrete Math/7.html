@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 7</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 7</h1>
+
+    <h2>Divisibility</h2>
+    <p>Let's begin with some number theory. One of the first topics in elementary number theory is divsibility of integers. Division on integers is an interesting operation even though we've likely been dividing numbers since childhood without thinking about it too much. However, where it does come back to trip us up again is when we start to learn how to program. This usually comes in the form of trying to divide two numbers and then remembering that dividing two integers doesn't always give you an integer. This happens to be why division on integers is interesting.
+
+    <p><strong>Definition 6.1.</strong> Let $a,b$ be integers. We say that <strong>$a$ divides $b$</strong>, written $a \mid b$, if there exists an integer $n$ such that $a \cdot n = b$. We also say that <em>$b$ is a multiple of $a$</em>.
+
+    <p>First, note that divisbility defines a relation in the sense that we defined last class. Of course, when we defined relations, we treated them as a set. Often times, we treat them as operators, writing them infix like $a \lt b$ or $a \mid b$ instead of treating them as sets and writing them $(a,b) \in \lt$ or $(a,b) \in \mid$. 
+
+    <p>Observe that by this definition, we have that for all integers $n$, $n \mid 0$ and in particular, $0 \mid 0$. At first this seems a bit odd because it feels like we are tempting fate by talking about dividing by 0, but if we take a more careful look at the definition of divisibility, we see that there actually isn't any division going on. What we're really talking about is multiplication. This important to keep in mind because Rosen adds the condition that $a \neq 0$.
+
+    <p><strong>Theorem 6.2.</strong> For all integers $a, b, c$, if $a \mid b$ and $a \mid c$, then $a \mid (b + c)$.
+
+    <p>We can use what we've learned last week and translate it into logic-language: 
+    $$\forall a, b, c \in \mathbb Z, (a \mid b) \wedge (b \mid c) \rightarrow a \mid (b+c).$$
+    So in order to prove this statement is true, we need to consider every integer for $a,b,c$ and assume that our hypothesis, $a \mid b$ and $a \mid c$, is true. Remember that since this is an implication, we don't care about the case when we don't have $a,b,c$ such that $a \mid b$ and $a \mid c$.
+
+    <p><em>Proof.</em> Let $a,b,c$ be arbitrary integers and assume that $a \mid b$ and $a \mid c$. Since $a \mid b$, there exists an integer $m$ such that $b = m \cdot a$, and since $a \mid c$, there exists an integer $n$ such that $c = n \cdot a$. Now, consider the integer $b + c$. We have
+    $$b + c = a \cdot m + a \cdot n = a \cdot (m + n).$$
+    Since $m + n$ is an integer, by definition of divisibility we have $a \mid (b+c)$.
+    $$\tag*{$\Box$}$$
+    
+    <p>Let's take a more careful look at what it is that we've done in this proof.
+
+    <table class="proof">
+    <tr><td style="width:50%">Let $a,b,c$ be arbitrary integers <td>Since our claim about $a,b,c$ must hold for all possible integers, we simply say that they're arbitrarily chosen. We can think of $a,b,c$ as placeholders for any integers that satisfy our condition.
+    <tr><td>and assume that $a \mid b$ and $a \mid c$.  <td>Here is our condition under which we chose $a,b,c$ and the assumption that we need to make to prove the theorem.
+    <tr><td>Since $a \mid b$, there exists an integer $m$ such that $b = m \cdot a$,  <td>This is the definition of divisibility. Just like above, we don't know exactly which integer works, we only know that one of them works, so we give it a name (in this case $m$).
+    <tr><td>and since $a \mid c$, there exists an integer $n$ such that $c = n \cdot a$. <td>This is the definition of divsibility again. Here, we make sure to choose a different variable name that hasn't been used ($n$).
+    <tr><td>Now, consider the integer $b + c$. <td>This is because adding two integers gives us another integer.
+    <tr><td>We have $$b + c = a \cdot m + a \cdot n = a \cdot (m + n).$$ <td>This is some simple algebraic manipulation.
+    <tr><td>Since $m + n$ is an integer, by definition of divisibility we have $a \mid (b+c)$. <td>This follows from the above algebra, and we apply the definition of divisibility.
+    <tr><td> $$\tag*{$\Box$}$$ <td>We end proofs with a box. In typography, this is called a tombstone and you often see these in publications like magazines. In mathematics, some call this a halmos, after Paul Halmos, who first used it in the mathematical context. 
+    </table>
+
+    <p><strong>Theorem 6.3.</strong> For all integers $a, b, c$,  if $a \mid b$, then $a \mid bc$.
+
+    <p><em>Proof.</em> Let $a,b,c$ be arbitrary integers and assume that $a \mid b$. Since $a \mid b$, there exists an integer $n$ such that $a \cdot n = b$. Now, consider the integer $b \cdot c$. We have
+    $$b \cdot c = (a \cdot n) \cdot c = a \cdot (n \cdot c).$$
+    Since $n \cdot c$ is an integer, by definition of divisibility, we have $a \mid bc$.
+    $$\tag*{$\Box$}$$
+    
+    <p><strong>Theorem 6.4.</strong> The divides relation is transitive. That is, for all integers $a, b, c$, if $a \mid b$ and $b \mid c$, then $a \mid c$.
+
+    <p><em>Proof.</em> Let $a, b, c$ be arbitrary integers and assume that $a \mid b$ and $b \mid c$. Since $a \mid b$, there exists an integer $m$ such that $b = m \cdot a$. Since $b \mid c$, there exists an integer $n$ such that $c = n \cdot b$. Then we get
+    $$c = n \cdot b = n \cdot (m \cdot a) = (n \cdot m) \cdot a.$$
+    But $n \cdot m$ is also an integer, so by the definition of divisibility, we have $a \mid c$.
+    $$\tag*{$\Box$}$$
+
+    <p><strong>Theorem 6.5.</strong> For all integers $a,b,c,m,n$, if $a \mid b$ and $a \mid c$, then $a \mid (bm + cn)$.
+
+    <p>This is not too difficult to prove directly. However, we've already done some work, so let's make use of it.
+
+    <p><em>Proof.</em> Let $a,b,c$ be arbitrary integers and assume that $a \mid b$ and $a \mid c$. Since $a \mid b$, by Theorem 6.3, we have $a \mid bm$ for any integer $m$. Similarly, we have $a \mid cn$ for any integer $n$. Since $a \mid bm$ and $a \mid cn$, by Theorem 6.2, we have $a \mid (bm + cn)$.
+    $$\tag*{$\Box$}$$
+
+    <p>This is nice and neat. However, by examining the proofs of the theorems that we cited, it is not too difficult to see how we might have proved this directly.
+
+    <h3>Division</h3>
+    <p>Now, we'll take a trip back to grade school and think about division again. Recall that if we divide two numbers $a$ by $b$, if $a$ is a multiple of $b$ (if $b \mid a$), we get an integer $q$ which we call the <em>quotient</em>. But if $a$ isn't a multiple of $b$, we get a remainder $r$. The following theorem, called the Division Theorem formally states that whenever we divide two numbers $a$ and $b$, we will always be able to "get" the integers $q$ and $r$ (they exist) and that they're unique.
+
+    <p><strong>Theorem 6.6 (Division Theorem).</strong> For all integers $n$ and $d \gt 0$, there exist unique integers $q$ and $r$ such that $n = d \cdot q + r$ and $0 \leq r \lt d$.
+
+    <p>We refer to $d$, $q$ and $r$ as the <em>divisor</em>, <em>quotient</em>, and <em>remainder</em>. However, we will primarily use divisor to refer to the $a$ in $a \mid b$.
+
+    <p>To prove this theorem, we have to show two things:
+    <ol>
+        <li>that the appropriate integers $q$ and $r$ actually exist, and
+        <li>that the appropriate integers $q$ and $r$ are unique.
+    </ol>
+
+    <p>Let's split this into two lemmas.
+
+    <p><strong>Lemma 6.7.</strong> For all integers $n$ and $d \gt 0$, there exist integers $q$ and $r$ such that $n = d \cdot q + r$ and $0 \leq r \lt d$.
+
+    <p><em>Proof.</em> Let $n$ and $d \gt 0$ be arbitrary integers. Consider the set $S = \{n - d \cdot q \mid q \in \mathbb Z\}$. Since $d \gt 0$ and $q \in \mathbb Z$, there must be some non-negative element in $S$. Let $r$ be the <em>smallest</em> non-negative member of $S$ and let $q$ be such that $r = n - d \cdot q$. We want to show that $r \lt d$.
+
+    <p>Suppose that it isn't and we have $r \geq d$. Then we have $0 \leq r-d \lt r$, and $r-d$ is also a non-negative element of $S$. However, this means that there is a <em>smaller</em> element of $S$ than $r$, which contradicts our assumption that $r$ was the smallest non-negative element of $S$. Therefore, it can't be the case that $r \geq d$.
+
+    <p>Since $q \in \mathbb Z$ is such that $r \in S$, we have that $r = n - d \cdot q$. This gives us $n = d \cdot q + r$ with $0 \leq r \lt d$ as desired.
+    $$\tag*{$\Box$}$$
+
+    <p>This proof of Lemma 6.7 is nice and neat but doesn't tell us very directly how to find $q$ and $r$. However, this proof gives us a hint at how we might wrangle a more concrete algorithm out of it. Just pick a positive member of $S$ and see if it's less than $d$. If it is, then we're good. Otherwise, we know that we have to find a smaller one. We do this by increasing our candidate $q$ by 1, since $n$ and $d$ are fixed. Eventually, we'll hit the $r$ that we want and that will give us the $q$ that we want too. Of course, this isn't a complete algorithm, since I haven't defined what "picking" or "searching" entails, but it's not too hard to see how you might be able to work out those details. Of course, proving formally that such an algorithm works is another challenge, but again, doable.
+
+<p>We will prove the uniqueness of $q$ and $r$ in the next class.

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 24</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="index.html">CMSC 27100</a> &mdash; Lecture 24</h1>
+	
+	<h2>Deviation Bounds and the Law of Large Numbers</h2>
+	
+    <p><strong>Theorem 22.9 (Chebyshev's Inequality).</strong> Let $X$ be a random variable. For all $a \gt 0$,
+    $$\Pr(|X - E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+
+    <p><em>Proof.</em> Let $Y = (X - E(X))^2$ be a random variable. Then $E(Y) = V(X)$ by definition. We can apply Markov's inequality, since $Y$ is non-negative, to get
+    $$\Pr(Y \geq a^2) \leq \frac{E(Y)}{a^2}.$$
+    Since $Y = (X-E(X))^2$, consider $(X-E(X))^2 \geq a^2$. We have $(X-E(X))^2 \geq a^2$ if and only if $|X - E(X)| \geq a$. Then, together with $E(Y) = V(X)$, we substitute into the above to get
+    $$\Pr(|X-E(X)| \geq a) \leq \frac{V(X)}{a^2}.$$
+    $\tag*{$\Box$}$
+
+		<p><strong>Example 22.10.</strong> Let $X$ be the random variable for the
+		number of heads when a fair coin is tossed $n$ times. Recall that this is
+		just the number of successful outcomes for $n$ independent Bernoulli trials
+		with $p = \frac 1 2$. One can calculate that $E(X) = \frac n 2$ and from
+		last class, we have that $V(X) = \frac n 4$ (since $p = (1-p) =
+		\frac 1 2$). Now, we apply Chebyshev's inequality, using $a = \sqrt n$ to
+		get
+    $$
+		\Pr\left( \left|X - \frac n 2 \right| \geq \sqrt n \right) 
+		\leq \frac{V(X)}{\sqrt n^2} = \frac n 4 \cdot \frac 1 n = \frac 1 4.
+		$$
+
+		<p>What this says is there is at most a $\frac 1 4$ probability that the
+		number of heads that we get differs from the expected number ($\frac 1 2)$
+		by more than $\sqrt n$. So, if we make 100 rolls, then we have
+    $$\Pr(|X - 50| \geq 10) \leq \frac 1 4.$$
+		In other words, the probability that we get more than 60 heads or less than
+		40 heads is at most $\frac 1 4$.
+	
+	<p><strong>Example 22.11.</strong> On the other hand, suppose I set $a$ to $\varepsilon n$ for some small $\varepsilon$. Now I get
+        $$\Pr\left( \left|X - \frac n 2 \right| \geq \varepsilon n \right) \leq \frac{V(X)}{(\varepsilon n)^2} = \frac n 4 \cdot \frac{1}{\varepsilon^2 n^2} = \frac{1}{{4\varepsilon^2 n}}$$
+		which we can simplify to
+		$$\Pr\left( \left|\frac X n - \frac 1 2 \right| \geq \varepsilon \right) \leq \frac{1}{{4\varepsilon^2 n}}$$
+		or equivalently (by taking the complement)
+	    $$\Pr\left( \left|\frac{X}{n} - \frac 1 2 \right| \lt \varepsilon \right) \geq 1 - \frac{1}{4\varepsilon^2 n}$$
+
+		<p>Note that for any positive $\varepsilon$ and $\varepsilon'$, there is
+		some $n$ such that $\frac{1}{4\varepsilon^2 n} \lt \varepsilon'$. That is
+		to say as $n$ grows, the average of our Bernoulli trials converges towards
+		$\frac 1 2$ with the probability approaching $1$. This is known as the
+		<a href="https://mathworld.wolfram.com/WeakLawofLargeNumbers.html"><strong>Weak Law of Large Numbers</strong></a> (specialized to fair Bernoulli
+		trials).
+	
+		<p>Our final bound is the strongest, but has the narrowest range
+		of application since it only applies to binomial random variables
+		(and while there are generalizations, they all assume something
+		binomial-like about the random variable).
+
+		<p><strong>Theorem 22.12 (Chernoff's Inequality).</strong> Let $X$ be a
+		binomial random variable $n$ trials and probability of success $p$. 
+		Then for all $a \gt 0$, 
+		$$\Pr(|X - E(X)| \geq a) \leq
+		\frac{2}{e^{2a^2/n}}.$$
+
+		<p>We won't prove this now. More important is to understand intuitively
+		what is happening, and then technically how to apply this bound.
+		When $X$ has a binomial distribution, it is measuring the outcomes
+		of several independent experiments. Chernoff's Inequality is saying
+		that these independent experiments tend to fight against each other,
+		causing the aggregate result to cluster very tightly around its 
+		expectation. The tightness comes from the exponential term in the
+		denominator: The bigger the denominator, the smaller the probability,
+		and this denominator gets very big very fast.
+
+
+	<p><strong>Example 22.13.</strong> Suppose we toss a fair coin $200$ times
+	and let $X$ the number of heads. We are
+	interested in the probability that $X$ is $40$ or more off from its
+	expectation, which is $100$. That is, we want to bound
+	$$
+	\Pr(|X - 100| \geq 40).
+	$$
+	Let's do this with Markov's, Chebyshev's, and Chernoff's inequalities.
+	Markov's doesn't exactly bound this, but we can use it to say that
+	$$
+	\Pr(X - 100 \geq 40)=
+	\Pr(X \geq 140) \leq \frac{E(X)}{140} = \frac{5}{7} \approx 0.71.
+	$$
+	To apply Chebyshev's, we need the variance, which is
+	$V(X)=200\cdot(1/2)\cdot(1/2) = 50$. This gives
+	$$
+	\Pr(|X - 100| \geq 40)
+	 \leq \frac{V(X)}{40^2} = \frac{50}{1600} = 0.03125.
+	$$
+	This is already <em>ten times smaller than the bound from Markov</em>,
+	and Markov's bound was only one-sided (i.e. it only bounded upswings).
+	Note the effect of the square in the denominator of Chebyshev's: It's
+	what makes the bound smaller.
+	
+	<p>Finally let's apply Chernoff's. This gives
+	$$
+	\Pr(|X - 100| \geq 40)
+	\leq \frac{2}{e^{2\cdot 40^2}} = \frac{2}{e^{16}} \approx 2 \times 10^{-7}.
+	$$
+	That's a lot smaller! All of these bounds are correct, but the first
+	two are very "loose": They are missing the real story, which is that
+	such a deviation is very unlikely.
+	
+			<h2>Probability Theory in Action</h2>
+
+			<p>I recently read a New York Times article titled <a href="https://www.nytimes.com/2021/11/15/opinion/risk-investing-market-hedge.html">The Risk-Return Trade-Off Is Phony</a>. The title contradicts established financial wisdom badly, so I thought it would be worth trying to work through the math to at least understand what the author is claiming: 
+				
+	<blockquote cite="https://www.nytimes.com/2021/11/15/opinion/risk-investing-market-hedge.html">	
+		Let’s say the payoff from rolling a one is minus 50 percent, the payoff from rolling a six is plus 50 percent, and the payoff from the other four sides is plus 5 percent. The average return for the 300 people who roll once each would be 3.3 percent — not bad for a moment’s work. Things are likely to turn out far worse for the poor person who rolls 300 times. Now those ones with their negative payoffs are like land mines. The compound growth rate here will be around negative 1.5 percent, and after 300 rolls the starting stake of $1 will most likely be down to a mere penny. A person who played that game and by chance never rolled a one would make a killing, but it’s probably not going to be you.
+	</blockquote>
+
+	Okay!
+
+	$$D_1(i) = \begin{cases}
+				0.5 \qquad \text{ if i=1} \\
+				1.5 \qquad \text{ if i=6} \\
+				1.05 \qquad \text{otherwise}
+				\end{cases}$$
+			
+	<p>Then $E(D_1) = \frac{1}{6}0.5 + \frac{4}{6}1.05 + \frac{1}{6}1.5 = \frac{31}{30} = 1.0333\dots$. So far, so good. In fact, let's calculate the variance. $E(D_1^2) = \frac{1}{6}0.25 + \frac{4}{6}1.1025 + \frac{1}{6}2.25 \approx 1.15$ and $E(D_1)^2 \approx 1.067$ so the variance is roughly $0.083$. Multiplying these by $300$ independent trials, we get $E(D)=310$ and $V(D)=25$. Plugging these into Chebyshev's Inequality
+	    $$\Pr(|D - 310| \geq 25) \leq \frac{25}{25^2}$$
+		so the total (across 300 players) is very likely to come out in the $[285,335]$ range.
+			
+	<p>What if one player throws $300$ dice in a row? Since the $D_i$s are i.i.d. $E(D)=E(D_1)^{300} \approx 18,712$. That's actually a fantastic payoff. Unfortunately, it's one that any individual player is unlikely to realize. Using a slightly handwavey application of the law of large numbers, with very high probability I will roughly get $50$ of each outcomes. This gets me $1.5^{50}*0.5^{50}*1.05^{200} \approx 0.0098$ dollars. (A Python simulation repeatedly says that the median is $0.010077164738461$, which is pretty close! This is worth trying in the programming language of your choice.)
+
+	<p>Why the discrepancy between mean and median? This game has tremendous variance – just try calculating $E((D_1\cdot D_2 \cdot \dots \cdot D_n)^2)$. Its close relative is 300 rounds of double-or-nothing: You have a $\frac{1}{2^{300}} \approx \frac{1}{10^{100}}$ of multiplying your initial bet by $2^{300} \approx 10^{100}$ (yes, a googol), but in all the other cases you lose. The expectation, of course, is $1^{300} = 1$. And hence the variance is easy to calculate: It's $\frac{1}{20^{300}}(20^{300})^2 - 1 \approx 10^{100}$. This isn't a game you want to play.
+	
+	<p>Of course, when people talk about Risk-Return Tradeoffs they aren't referring to the <a href="https://en.wikipedia.org/wiki/St._Petersburg_paradox">St. Petersburg Paradox</a>. (<a href="https://economistwritingeveryday.com/2022/12/06/gambler-ruined-sam-bankman-frieds-bizarre-notions-of-risk-and-the-blow-up-of-ftx/">Unless you're disgraced a former cryptocurrency king</a> you probably believe in the <a href="https://www.investopedia.com/ask/answers/072815/what-marginal-utility-income.asp">diminishing marginal value of wealth</a> - your first $\$100$ is much more useful to you than your second, and so forth.) They're referring to trade-offs like stocks vs. bonds, where greater risk (variance) is widely believed to correspond to greater reward (expected value).
+		
+	<p>What's the lesson here? I guess it's partly that you shouldn't read financial advice column without knowing probability theory (and ideally be comfortable doing a few simulations in the programming language of your choice). But it's also that the techniques we covered over the past week will serve you well.

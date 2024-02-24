@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 5</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 5</h1>
+    <h2>Set theory</h2>
+
+    <blockquote>
+    <p>This book, like almost every other modern mathematics book, develops its subject matter assuming a knowledge of elementary set theory. This assumption is often not justified.
+    <footer>&mdash;<cite>Logic for Applications, Anil Nerode and Richard Shore</cite></footer>
+    </blockquote>
+
+    <p>Now that we've defined the language of first-order logic, we can move on to talking about set theory. Modern mathematics happens to be built on the idea that everything is a set. Everything. Functions? Sets. Numbers? Sets. Problems? Sets. Sets? Sets. So, it's important to familiarize ourselves with the basics of sets and how they work.
+
+    <p><strong>Definition 4.1.</strong> A <strong>set</strong> is an unordered collection of objects. If $S$ is a set and $a$ is a member of $S$, then we write $a \in S$. Similarly, if $a$ is not a member of $S$, then we write $a \not \in S$.
+
+    <p>Here, objects is used loosely. Often, we'll just stick to numbers, but these can really be anything: books, trees, other sets, or anything else.
+
+    <p>Note that since sets are unordered, this means that $\{1,2,3\}$ and $\{3,2,1\}$ are the same set. Furthermore, since an element is either a member or not a member of a set, each element occurs in a set at most once. This means that $\{2,1,3,2\}$ is really just $\{1,2,3\}$.
+
+    <p><strong>Definition 4.2.</strong> The set $\{\}$ containing no elements is the <strong>empty set</strong> and is denoted by $\emptyset = \{\}$.
+
+    <p>In light of the above remark about objects in sets, note that $\{\emptyset\}$ is <em>not</em> the same as $\emptyset = \{\}$. The set $\{\emptyset\}$ is actually <em>the set containing the empty set</em>, which means it is not empty; it contains one element: the empty set.
+
+    <p>There are two common ways to define sets. First, we can just list the elements of the set, like $\{1, 2, 3\}$. This is easy to do for finite sets. For infinite sets, we can do something like $\{1, 2, 3, \dots\}$ and usually, that's enough for us to understand that this is the set containing all natural numbers. 
+
+    <p>For more complicated definitions, we define sets using <em>comprehensions</em>, also called <em>set-builder notation</em>.
+
+    <p><strong>Example 4.3.</strong> Similar to what we did above, if we wanted to define the set of even natural numbers, we can write something like $\{2,4,6,\dots\}$. Using comprehensions, we can also write
+    $$\{n \in \mathbb N \mid \exists m \in \mathbb N, n = 2 \cdot m \},$$
+    which says that we want the set of all natural numbers $n$ such that $n$ can be expressed as $2 \cdot m$ for some natural number $m$. That, of course, turns out to be the even natural numbers. 
+
+    <p>We can do more complicated things with this, since there aren't very many hard rules about what kinds of conditions we can or cannot place on our sets. For instance, we can define the set
+    $$\{n \in \mathbb N \mid \exists m \in \mathbb N, (2 \cdot m = n) \wedge (\forall k \in \mathbb N, n \neq k^2) \}.$$
+    Sometimes, we don't even bother with that level of formality and just write something like
+    $$\{n \in \mathbb N \mid \text{$n$ is even and not a square}\}.$$
+    This means that we have a lot of power in how we want to define our sets. Without any further restrictions on what we can say when defining sets, this puts us in the realm of <em>naive</em> set theory. This system was devised by Georg Cantor and later, Gottlob Frege as part of his quest to formalize a foundation for mathematics.
+
+    <p>However, we can get into trouble if we're not careful about how we define sets. Bertrand Russell noticed this problem, leading to the following famous example:
+    $$S = \{T \mid T \not \in T\}.$$
+    If we let something like this happen, then we get to conclude $S \in S \iff S \not \in S$, which is very bad if we want mathematics to be consistent (when Russell communicated this to Frege, he was quite spooked). This led to the development of <em>axiomatic</em> set theory. For our purposes, we won't need to delve into axiomatic set theory, but it is important to note that when we talk about set theory being the basis of all mathematics, what we really mean is the axiomatic set theory.
+    
+
+    <p><strong>Definition 4.4.</strong> Two sets $A$ and $B$ are <strong>equal</strong> if and only if they have the same elements. That is,
+    $$A = B \iff (\forall x, x \in A \iff x \in B).$$
+
+    <p><strong>Definition 4.5.</strong> A set $S$ is a <strong>subset</strong> of $T$, written $S \subseteq T$, when every element of $S$ belongs to $T$. A set $S$ is a <strong>proper subset</strong> of a set $T$, written $S \subset T$ or $S \subsetneq T$, when $S$ is a subset of $T$ and there exists an element of $T$ which does not belong to $S$. Note that some mathematicians use $\subset$ to mean any subset, hence the alternative notation.
+
+    <p>Early on we might confuse $S \subseteq T$ with $s \in T$. One thing to keep in mind is that subsets ($\subseteq$) will always be <em>sets</em> while elements ($\in$) will often be numbers. (We'll see that numbers can be represented as sets but they generally won't be.) 
+		
+    <p>From the definition above, we note that $S \subseteq S$ and that $S = T$ if and only if $S \subseteq T \wedge T \subseteq S$. This second definition gives us an alternate characterization of two sets that are equal.
+
+    <p><strong>Definition 4.6.</strong> The <strong>cardinality</strong> of a set $S$ is the number of elements in $S$ and is denoted $|S|$. If $S$ is finite, then this will be a natural number. So, the size of the set $\{1,2,4,8\}$ would be $|\{1,2,4,8\}| = 4$.
+
+    <p>If $S$ is an infinite set, then things are a bit trickier. The cardinality of the natural numbers is defined to be $|\mathbb N| = \aleph_0$, while the cardinality of the real numbers is $|\mathbb R| = 2^{\aleph_0}$. Here, we reach into the Hebrew alphabet for $\aleph$ (aleph). Anyhow, the cardinalities of $\mathbb N$ and $\mathbb R$ are clearly not the same, a fact famously proved by Cantor in 1891. There are many infinite sets that have cardinality $\aleph_0$, such as the set of even natural numbers $\{n \mid \exists m \in \mathbb N, n = 2\cdot m\}$ or the set of rational numbers $\mathbb Q = \{\frac m n \mid \exists m,n \in \mathbb N\}$. There are also many sets with cardinality $2^{\aleph_0}$. This brings us to a fun problem for you to think about in your spare time: are there any infinite sets that have cardinality <em><a href="https://en.wikipedia.org/wiki/Continuum_hypothesis">strictly between</a></em> $|\mathbb N| = \aleph_0$ and $|\mathbb R| = 2^{\aleph_0}$? 
+
+    <p><strong>Definition 4.7.</strong> The <strong>power set</strong> of a set $A$ is the set containing all of the subsets of $A$,
+    $$\mathcal P(A) = \{S \mid S \subseteq A\}.$$
+
+    <p><strong>Theorem 4.8.</strong> If $A$ is a finite set, then $|\mathcal P(A)| = 2^{|A|}$.
+
+    <p>We will prove this later, once we learn about mathematical induction. However, because of this fact, you'll sometimes see the power set of a set $A$ denoted by $2^A$. This also gives you some insight about why it might be that $|\mathbb R| = 2^{\aleph_0}$.
+
+    <p>Recall that sets are unordered collections and don't contain multiples of elements. But what if order does matter? We need to define another structure to work with.
+
+    <p><strong>Definition 4.10.</strong> The <strong>union</strong> of two sets $S$ and $T$, denoted $S \cup T$ is the set of all elements in $S$ or $T$:
+    $$S \cup T = \{x \mid x \in S \vee x \in T\}.$$ 
+	
+    The <strong>intersection</strong> of two sets $S$ and $T$, denoted $S \cap T$, is the set of all elements in $S$ and $T$:
+    $$S \cap T = \{x \mid x \in S \wedge x \in T\}.$$
+
+    <p><strong>Definition 4.11.</strong> The <strong>set difference</strong> of two sets $S$ and $T$, denoted $S \setminus T$, is defined
+    $$S \setminus T = \{x \mid x \in S \wedge x \not \in T\}.$$
+
+    <p><strong>Definition 4.12.</strong> The <strong>complement</strong> of a set $S$, written $\overline S$, is the set of all elements not in $S$,
+    $$\overline S = \{x \mid x \not \in S\}.$$
+
+    <p>We can also define $\overline S$ relative to a universal set $U$ by $\overline S = U \setminus S$. If we wanted to get much more formal and delve into the world of axiomatic set theory, we would have to place some conditions on what the universal set $U$ can or can't be. However, for our purposes, this is fine and the notion of the universal set corresponds nicely with the notion of the domain from first-order logic.
+
+    <p>Since we have a remaining logical connective, $\to$, it's worth pointing out how it relates to subsets:
+		$$S \subseteq T \Leftrightarrow (x \in S \to x \in T).$$ 
+
+    <p><strong>Theorem 4.13. (De Morgan's laws).</strong> For two sets $A$ and $B$,
+    \begin{align}
+    \overline{A \cup B} &= \overline A \cap \overline B, \\
+    \overline{A \cap B} &= \overline A \cup \overline B.
+    \end{align}
+
+<p>Let's prove the second statement. Recall from above that $A = B$ if and only if $A \subseteq B$ and $B \subseteq A$. Equivalently, $x \in A \Leftrightarrow x \in B$. Unpacking the definitions of $\cap$, $\cup$ and $\overline{S}$, we want to show that
+	$$\neg (x \in A \wedge x \in B) \Leftrightarrow \neg (x \in A) \vee \neg (x \in B)$$  
+
+    <p>Note that this is exactly De Morgan's law for logic, where $x \in A$ is $P$ and $x \in B$ is $Q$. For fun, we'll use natural deduction to prove the forward direction, using $A$ as shorthand for $x \in A$ and likewise for $B$:
+		
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{LEM}
+\UnaryInfC{$A \vee \neg A$}
+\AxiomC{}
+\RightLabel{$2$}
+\UnaryInfC{$A$}
+\AxiomC{}
+\RightLabel{$1$}
+\UnaryInfC{$B$}
+\RightLabel{$\wedge$-I}
+\BinaryInfC{$A \wedge B$}
+\AxiomC{}
+\RightLabel{$4$}
+\UnaryInfC{$\neg (A \wedge B)$}
+\RightLabel{$\to$-E}
+\BinaryInfC{$\bot$}
+\RightLabel{$\to$-I-$1$}
+\UnaryInfC{$\neg B$}
+\RightLabel{$\vee$-I-R}
+\UnaryInfC{$\neg A \vee \neg B$}
+\RightLabel{$\to$-I-$2$}
+\UnaryInfC{$A \to (\neg A \vee \neg B)$}
+\AxiomC{}
+\RightLabel{$3$}
+\UnaryInfC{$\neg A$}
+\RightLabel{$\vee$-I-L}
+\UnaryInfC{$\neg A \vee \neg B$}
+\RightLabel{$\to$-I-$3$}
+\UnaryInfC{$\neg A \to (\neg A \vee \neg B)$}
+\RightLabel{$\vee$-E}
+\TrinaryInfC{$\neg A \vee \neg B$}
+\RightLabel{$\to$-I-$4$}
+\UnaryInfC{$\neg (A \wedge B) \to (\neg A \vee \neg B)$}
+\end{prooftree}
+
+Note that this direction actually relies on the Law of the Excluded Middle! That's perfectly reasonable in context, because for any set $A$ and element $x$, either $x \in A$ or $x \notin A$ (pronounced "$x$ is not in $A$").
+		
+<!-- <p>This is a bit long-winded, so we'll do the other direction in a slightly less formal manner.
+
+<p>Assume $x \in \overline A \cap \overline B$. Then $x$ is not in $A$ and $x$ is not in $B$. Therefore $x$ isn't in the combination of $A$ and $B$, written $A \cup B$. Ergo, $x \in $overline{A \vee B}$.
+
+<p>Note that this could be written in the level of detail we gave our proof above, but in general throughout this class, we will move to using  mathematical English over inference rules. However, it is important not to lose precision in this process.  -->
+			
+<p>Here's an approach to directly proving the first equality, which will assume De Morgan's law for logic:
+
+    \begin{align*}
+    \overline{A \cup B} &= \{x \mid x \notin A \cup B\} &\text{definition of complement} \\
+    &= \{x \mid \neg(x \in A \cup B)\} &\text{definition of set membership} \\
+    &= \{x \mid \neg(x \in A \vee x \in B)\} &\text{definition of union} \\
+    &= \{x \mid \neg(x \in A) \wedge \neg(x \in B)\} &\text{De Morgan's laws} \\
+    &= \{x \mid x \not\in A \wedge x \not\in B\} &\text{definition of set membership} \\
+    &= \{x \mid x \in \overline A \wedge x \in \overline B\} &\text{definition of complement} \\
+    &= \{x \mid x \in \overline A \cap \overline B\} &\text{definition of intersection} \\
+    &= \overline A \cap \overline B &\text{set definition} \\
+    \end{align*}
+    $$\tag*{$\Box$}$$
+
+<p> Our proofs will become less formal and increasingly rely on prior proofs throughout this course.
+	
+    <p><strong>Theorem 4.14. (Inclusion-Exclusion).</strong> For all finite sets $A$ and $B$, $|A \cup B| = |A| + |B| - |A \cap B|$.
+
+    <p>A simple proof of this goes like this: we count all of the elements in $A$ and then count all of the elements of $B$. However, if there are elements in both $A$ and $B$, we've counted them twice, so we have to take out $|A \cap B|$ from our count. 
+
+    <p><strong>Definition 4.15.</strong> We say two sets $S$ and $T$ are <strong>disjoint</strong> if $S \cap T = \emptyset$.
+
+    <p><strong>Lemma 4.16.</strong> If $A$ and $B$ are disjoint sets, then $|A \cup B| = |A| + |B|$.
+
+    <p>This is easy to see, since the intersection of $A$ and $B$ is empty.
+
+    <!-- <p><strong>Definition 4.17.</strong> Let $A_i$ be a family of sets, with $1 \leq i \leq n$. We define
+    \begin{align*}
+    \bigcup_{i=1}^n A_i &= A_1 \cup A_2 \cup \cdots \cup A_n, \\
+    \bigcap_{i=1}^n A_i &= A_1 \cap A_2 \cap \cdots \cap A_n. \\
+    \end{align*}
+
+-->
+
+<p><strong>Definition 4.17.</strong> We can actually use sets to construct the <em>natural numbers</em>. We define 
+    \begin{align*}
+    0 &= \emptyset \\
+    n + 1 &= n \cup \{n\}
+    \end{align*}
+	
+Hence the first few natural numbers are:	
+    \begin{align*}
+    0 &= \emptyset \\
+    1 &= 0 \cup \{0\} = \{\emptyset\} \\
+    2 &= 1 \cup \{1\}  = \{\emptyset, \{\emptyset\}\} \\
+    3 &= 2 \cup \{2\}  = \{\emptyset, \{\emptyset\}, \{\emptyset, \{\emptyset\}\}\}
+    \end{align*}
+
+<p>	An interesting consequence of this formulation is that for any natural number $n$, $|n| = n$. Moreover, if $n < m$ then $n \subset m$ and $n \in m$. 
+
+<p>This system forms the basis of <em>Zermelo-Frankel set theory</em> (ZF), which is the standard foundation for modern mathematics.

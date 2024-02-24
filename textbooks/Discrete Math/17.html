@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 17</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 17</h1>
+
+    <h2>The Binomial Theorem</h2>
+    <p>Let's think about binomials. This will seem like out of left field, but there is a connection, I promise. Recall that a binomial is an expression of two terms.
+
+    <p>Hopefully, we are all familiar with how to expand a binomial. For instance, we have
+    $$(x+y)^2 = x^2 + xy + xy + y^2 = x^2 + 2xy + y^2.$$
+    Of course, we can do the same thing with higher degrees, like
+    \begin{align*}
+    (x+y)^3 &= (x+y)^2 (x+y) \\
+    &= (x^2 + 2xy + y^2)(x+y) \\
+    &= x^3 + 2x^2y + xy^2 + x^2y + 2xy^2 + y^3 \\
+    &= x^3 + 3x^2y + 3xy^2 + y^3
+    \end{align*}
+
+    <p>Now, this process is straightforward but a bit tedious. Perhaps there is an alternative way to think about the resulting coefficients. This becomes a bit more clear if we step away from our algebraic impulses a bit. We can write
+    \begin{align*}
+    (x+y)^4 &= (x+y)(x+y)(x+y)(x+y) \\
+    &= xxxx + xxxy + xxyx + xxyy + xyxx + xyxy + xyyx + xyyy + \\
+    &\quad\: yxxx + yxxy + yxyx + yxyy + yyxx + yyxy + yyyx + yyyy
+    \end{align*}
+    When written in this way, each term looks much more like the kinds of objects that we've been working with over the past week. That is, we can think of each term as a <em>combination</em> of the terms from each binomial. In other words, how many terms of the form $x^3y$ are there? Exactly as there are many ways to <em>choose</em> three $x$'s and one $y$ from each binomial. This leads us to the following result.
+
+    <p><strong>Theorem 16.1 (Binomial Theorem).</strong> For all $n \in \mathbb N$,
+    $$(x+y)^n = \sum^n_{j=0} \binom n j x^{n-j} y^j.$$
+
+    <p><em>Proof.</em> One can prove this via induction and it makes a nice exercise. We will prove this via a combinatorial argument similar to the above. Each term of our polynomial is of the form $x^{n-j}y^j$. Then the coefficients are exactly the number of ways to choose $j$ $y$'s from each binomial which is $\binom n j$. 
+    $\tag*{$\Box$}$
+
+    <p><strong>Example 16.2.</strong> Suppose you have to prove the inductive case in some proof and you're faced with expanding $(k+1)^5$. Luckily, you don't need to futz around with expanding this polynomial and can directly apply the binomial theorem:
+    \begin{align*}
+    (k+1)^5 &= \binom 5 0 k^5 1^0 + \binom 5 1 k^4 1^1 + \binom 5 2 k^3 1^2 + \binom 5 3 k^2 1^3 + \binom 5 4 k 1^4 + \binom 5 5 k^0 1^5 \\
+    &= k^5 + 5k^4 + 10k^3 + 10k^2 + 5^k + 1
+    \end{align*}
+
+    <p>This example suggests the following result, which follows from the Binomial Theorem by setting $y = 1$.
+
+    <p><strong>Theorem 16.3.</strong> For all $n \in \mathbb N$,
+    $$(x+1)^n = \sum_{i=0}^n \binom n i x^i.$$
+
+    <p>The following is a neat consequence of the binomial theorem that should match with our intution about what the binomial coefficients mean.
+
+    <p><strong>Theorem 16.4.</strong> For all $n \in \mathbb N$,
+    $$\sum_{i=0}^n \binom n i = 2^n.$$
+
+    <p><em>Proof.</em> We have
+    $$2^n = (1+1)^n = \sum_{i=0}^n \binom n i 1^{n-i} 1^i = \sum_{i=0} \binom n i.$$
+    $\tag*{$\Box$}$
+
+    <p>Of course, this makes total sense: if $\binom n i$ is the number of subsets of $n$ elements of size $i$, then adding the number of these subsets together is the total number of subsets of a set of size $n$, which is $2^n$.
+
+    <p>There are a lot of other neat results that fall out of the Binomial Theorem. Perhaps the most famous one is due to Blaise Pascal in the 1600s.
+
+    <p><strong>Theorem 16.5 (Pascal's Identity).</strong> For all natural numbers $n \gt k \gt 0$,
+    $$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}.$$
+
+    <p><em>Proof.</em> As has been the case throughout this part of the course, there is a straightforward algebraic proof of this fact as well as a combinatorial proof. We will go through the combinatorial argument. 
+    
+    <p>Let $A$ be a set of $n \geq 2$ elements. We want to count the number of subsets of $A$ of size $k$, which is $\binom{n}{k}$. Choose an element $a \in A$ and a subset $B \subseteq A$ of size $k$. Then either $a \in B$ or $a \not \in B$; these two cases are disjoint. If $a \in B$, then $B$ contains $k-1$ elements in $A \setminus \{a\}$ and there are $\binom{n-1}{k-1}$ such sets. On the other hand, if $a \not \in B$, then $B$ contains $k$ elements in $A \setminus \{a\}$ and there are $\binom{n-1}{k}$ such sets. Together, this gives us $\binom{n-1}{k-1} + \binom{n-1}{k}$ subsets of $A$ of size $k$.  
+    $\tag*{$\Box$}$
+
+    <p>This identity leads us to the famous Pascal's Triangle:
+    $$
+    \begin{matrix}
+    &&&&&& \binom 0 0 &&&&&&  \\
+    &&&&& \binom 1 0 && \binom 1 1 &&&&&  \\
+    &&&& \binom 2 0  && \binom 2 1  && \binom 2 2  &&&&  \\
+    &&& \binom 3 0  && \binom 3 1  && \binom 3 2  && \binom 3 3  &&&  \\
+    && \binom 4 0  && \binom 4 1  && \binom 4 2  && \binom 4 3  && \binom 4 4  &&  \\
+    & \binom 5 0  && \binom 5 1  && \binom 5 2  && \binom 5 3 && \binom 5 4  && \binom 5 5  &  \\
+    \binom 6 0  && \binom 6 1  && \binom 6 2  && \binom 6 3  && \binom 6 4  && \binom 6 5  && \binom 6 6 
+    \end{matrix}
+    $$
+    Filling in the values for the coefficients, the triangle looks like this:
+    $$
+    \begin{matrix}
+    &&&&&& 1 &&&&&&  \\
+    &&&&& 1 && 1 &&&&&  \\
+    &&&& 1 && 2 && 1 &&&&  \\
+    &&& 1 && 3 && 3 && 1 &&&  \\
+    && 1 && 4 && 6 && 4 && 1 &&  \\
+    & 1 && 5 && 10 && 10 && 5 && 1 &  \\
+    1 && 6 && 15 && 20 && 15 && 6 && 1
+    \end{matrix}
+    $$
+    When viewed like this, it's easy to see how Pascal's identity is used to construct the following row.
+
+    <p>This arrangement leads us to even more interesting identities or interpretations of identities with respect to the triangle. For example, Theorem 16.4 is just the sum of the $n$th row of the triangle. We can observe another interesting row identity.
+
+    <p><strong>Theorem 16.6.</strong> For all $n \gt 0$,
+    $$\sum_{i=0}^n (-1)^i \binom n i = 0.$$
+
+    <p><em>Proof.</em> We take $x = 1$ and $y = -1$ to get $(1-1)^n$. This is obviously 0, and we get the equality when we apply the Binomial theorem to get
+    $$0 = (1-1)^n = \sum_{i=0}^n \binom{n}{i} 1^{n-i}(-1)^i = \sum_{i=0}^n (-1)^i \binom n i.$$
+    $\tag*{$\Box$}$
+
+    <p>Looking at the triangle, this seems obvious for odd $n$, and even without the triangle, what we get is that the terms $\binom n k$ cancel out with the corresponding $\binom n {n-k}$. For even $n$, this is not as obvious, although the triangle gives us some hints as to why this might work out.
+
+    <p>We can say something about the sum of a particlar column too.
+
+    <p><strong>Theorem 16.7.</strong> For $n \geq k \gt 0$, we have
+    $$\binom{n+1}{k+1} = \sum_{i=k}^n \binom i k.$$
+
+	<p>I don't have an intuitive counting proof for this one, so lets use induction. Fixing $k > 0$, we want to prove that
+		$$\forall n, n \geq k \to \binom{n+1}{k+1} = \sum_{i=k}^n \binom i k.$$
+		We'll do induction on $n$.
+		
+	<p>Base case: n = k. (This is a reasonable base case since $n$ can't be smaller than $k$).
+		$$\binom{k+1}{k+1} = 1 = \binom k k = \sum_{i=k}^k \binom k k.$$
+
+	<p>Inductive case: Let n = m. Assume 
+		$$\binom{m+1}{k+1} = \sum_{i=k}^m \binom i k \qquad \qquad  \text{    (IH)}.$$
+		(Note that we've dropped the $n \geq k$ assumption on account of starting with $n=k$.)
+
+	<p>We want to prove that 
+		$$\binom{m+2}{k+1} = \sum_{i=k}^{m+1} \binom i k.$$
+
+We have		
+	\begin{align*}
+	\binom{m+2}{k+1} &= \binom{m+1}{k} + \binom{m+1}{k+1} & \text{ by Pascal's Identity}  \\
+	         		 &= \binom{m+1}{k} + \sum_{i=k}^m \binom i k & \text{ by IH} \\
+					 &= \sum_{i=k}^{m+1} \binom i k  
+	\end{align*}
+	
+Hence this is true for all $n$. $\tag*{$\Box$}$ 
+
+    <!-- <p><em>Proof.</em> We can get this just by iterating Pascal's identity above:
+		$$\binom{n+1}{k+1} = \binom{n}{k} + \binom{n}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-1}{k+1} = \binom{n}{k} + \binom{n-1}{k} + \binom{n-2}{k} + \binom{n-2}{k+1} = \dots $$
+		until we get to $\binom{k+1}{k+1} = \binom{k}{k} = 1$. This makes for a nice inductive proof as well.
+    $\tag*{$\Box$}$ -->
+
+    <p>The following identity is due to Alexandre-Théophile Vandermonde from the late 1700s.
+
+    <p><strong>Theorem 16.8 (Vandermonde's Identity).</strong> For all $n,m \geq r \gt 0$, 
+    $$ \binom{m+n}{r} = \sum_{k=0}^r \binom{m}{r-k} \binom n k.$$
+
+    <p><em>Proof.</em> If we have disjoint sets $A$ and $B$ with $|A| = m$ and $|B| = n$, then $\binom{m+n}{r}$ is the number of subsets of $A \cup B$ of size $r$. 
+    
+    <p>We can consider this method for choosing an $r$-element subset of $A \cup B$. First, we choose $r-k$ elements from $A$. Then we choose the remaining $k$ elements from $B$. This gives us a total of $\binom{m}{r-k} \binom n k$ sets. The total number of such sets will depend on $k$, so we sum over $k$ to get
+    $$\sum_{k=0}^r \binom{m}{r-k} \binom n k.$$
+    $\tag*{$\Box$}$
+
+    <p>The following interesting fact follows from Vandermonde's identity.
+
+    <p><strong>Corollary 16.9.</strong> For all $n \gt 0$,
+    $$\binom{2n}{n} = \sum_{k=0}^n \binom n k ^2.$$
+
+    <p><em>Proof.</em> Using Vandermonde's identity, we set $m = r = n$ to get
+    $$\binom{2n}{n} = \sum_{i=0}^n \binom{n}{n-k} \binom n k.$$
+    Then we observe that $\binom{n}{n-k} = \binom n k$.
+    $\tag*{$\Box$}$
+

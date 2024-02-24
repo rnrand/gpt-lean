@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 3</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+<script>
+MathJax = {
+  loader: {load: ['[tex]/bussproofs']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+	packages: {'[+]': ['bussproofs']}  
+  },
+  svg: {
+    fontCache: 'global'
+  }  
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 3</h1>
+
+<h3>Completing the System</h3>	
+	
+<p>The rules we have seen are powerful enough to give us <em>intuitionistic logic</em>, a system popular among type theorists that allows for the possibility that neither $P$ nor $\neg P$ holds. Here we care about <em>classical</em> logic, which believes every statement must be true or false, so we'll add the following axiom to that effect:
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{LEM}
+\UnaryInfC{$P \vee \neg P$}
+\end{prooftree}
+
+<p> We call this the "Law of the the Excluded Middle" and can freely assume it in any proof.
+
+<p> Our system is now <em>complete</em>. This means that any tautology (statement that is always true) can be drived using the inference rules above. Clearly, it is also <em>sound</em>, meaning that we can't prove any non-tautologies in the system.
+Classical propositional logic was shown to be complete by Emil Post in 1920.
+<!-- He later invented the Post correspondence problem, which followed Turing's halting problem and Hilbert's Entscheidungsproblem as an example of a puzzle that no algorithm can solve.  -->
+Post turns out to be a fairly important logician with several important contributions to computability theory later on, along with people like Turing, Gödel, and Church.
+
+<p>It's not surprising then that this line of questioning turns out to lead us directly to the notion of computability. Since proof rules are really mechanical, the idea is that if we're able to express mathematical theorems formally, we should be able to build a machine that just crunches a bunch of rules to produce a proof for us. Since "provable" implies "true", this means we can figure out whether a given theorem is true or not by sticking it in the machine. 
+
+    <p>This sounds suspiciously like a computer and we can think of logicians of this era as basically the earliest computer scientists (like modern computer scientists, they appear keen on disrupting the mathematics industry and putting mathematicians out of jobs by replacing them with machines). But the fact that we now have both extremely powerful computers in our pockets and open problems in mathematics is a sign that this original dream may have run into some complications.
+
+    <h1>Predicate Logic</h1>
+
+    <p>Now, one thing you might notice is that propositions as we've defined them don't quite let us say everything we may want to. For instance, if I wanted to talk about some property about integers, I can certainly define propositions for them. However, there's no way to relate the various propositions about integers to the fact that we're talking about the same kinds of objects. For that, we need to expand our language a bit further. The extension that we'll be talking about is called <em>predicate</em> or <em>first-order</em> logic.
+
+    <p>First, we need to determine a <strong>domain</strong> of discourse, which is the set to which all of our objects belong. This can be something like the natural numbers $\mathbb N$ or the integers $\mathbb Z$ or matrices or functions or graphs and so on. There's also nothing stopping us from making our domain the set of all dogs, if what we really wanted to do was express statements about dogs, or other "real-world" types of objects. This occurs less in math but more in places like database theory. 
+    
+    <p>This brings us to an important thing to keep in mind: statements that may be true in one domain will not necessarily be true in another domain. Obviously, statements that we make about integers will not necessarily hold true for dogs, but it is important to remember that the same could be said for integers vs. natural numbers.
+
+    <p><strong>Definition 2.1.</strong> Here are some useful domains/sets:
+    <ul>
+    <li>the set of <strong>integers</strong>, $\mathbb Z = \{\dots, -3, -2, -1, 0, 1, 2, 3, \dots \}$,
+    <li>the set of <strong>natural numbers</strong>, $\mathbb N = \{0, 1, 2, \dots\}$,
+    <li>the set of <strong>real numbers</strong>, $\mathbb R$,
+    <li>the set of <strong>rational numbers</strong>, $\mathbb Q$,
+    <li>the set of <strong>complex numbers</strong>, $\mathbb C$.
+    </ul>
+
+    <p>Note that in this course, <strong>we consider 0 to be a natural number</strong>. Not everyone agrees!
+
+	<p>Often, particularly when analyzing logical systems alone, we will not specify a domain. This is fine. The only important underlying assumption is that our domain is non-empty (assuming otherwise would create problems where saying "for every $x$" could be vacuously true).
+
+    <p>Then, we want to express properties and relationships about the objects in our domain. For this, we need to define <strong>predicates</strong>. Predicates have an <em>arity</em> associated with them. A $k$-ary predicate is a predicate with $k$ arguments. So a unary or 1-ary predicate would be expressing some property of a particular object, while predicates with arity greater than 1 can be thought of as expressing some relationship between a number of objects.
+
+    <p><strong>Example 2.2.</strong> For example, if we define $E$ to be a unary predicate that expresses the evenness property, then we can say that $E(x)$ means "$x$ is an even number". We would then have $E(12000)$ is true while $E(765)$ is false.
+
+    <p>The less-than relation is another example of a predicate, although because it's pretty important, we've given it its own symbol and usage. We can define a predicate $L(x,y)$ to mean "$x$ is less than $y$" or "$x \lt y$". Then we can say that $L(3,30)$ is true and $L(30,3)$ is false.
+
+    <p>In the previous examples, almost instinctively, we used both concrete objects and <strong>variables</strong> with our predicates. When we use specific objects with predicates, our statements are not all that different from propositions. However, variables are considered placeholders for objects in the domain and it's the use of variables, together with <strong>quantifiers</strong>, that gives us more expressive power than propositional logic.
+
+    <p><strong>Definition 2.3.</strong> The symbol $\forall$ is called the <strong>universal quantifier</strong> and is read "for all". The symbol $\exists$ is called the <strong>existential quantifier</strong> and is read "there exists".
+
+    <p>Basically, we use $\forall$ when we want to make a statement about all objects in our domain and we use $\exists$ when we want to say that there is some object out there in our domain that has a particular property.
+
+    <p><strong>Example 2.4.</strong> We can use predicates and quantifiers together with the logical connectives we introduced with propositional logic to say things like $\forall x (E(x) \rightarrow \neg E(x+1))$. If we take our domain to be $\mathbb Z$, this says that for every integer $x$, if $x$ is even, then $x+1$ is not even.
+
+    <p><strong>Example 2.5.</strong> Let's fix our domain to be $\mathbb N$. Recalling our less than predicate $L$ from above, we can consider the following proposition:
+    $$\forall x \exists y L(x,y).$$
+    This reads "for every natural number $x$, there exists a natural number $y$ such that $x \lt y$". This statement turns out to be true: every natural number does have some other natural number that it's less than. Now, let's consider the following similar statement, where the order of the quantifiers is reversed:
+    $$\exists y \forall x L(x,y).$$
+    Here, we're saying that there is a natural number $y$ for which every other natural number $x$ is less than it. In other words, this says that there is a "biggest" natural number, which is obviously not true. As we can see, the order of the quantifiers matters.
+
+    <p><strong>Note:</strong> Remember that the domain is important. For instance, if we are working in $\mathbb N$ and we modify the above example slightly to $\forall x \exists y L(y,x)$, we have the statement that "for every natural number $x$, there is some natural number $y$ that is less than $x$". This statement is false if we consider $x = 0$. However, this statement is true if our domain is $\mathbb Z$ (for every integer $x$, there is some integer $y$ that is less than $x$).

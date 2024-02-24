@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 12</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 12</h1>
+
+<h3>Strong Induction</h3>
+
+Sometimes, ordinary induction will prove inconvenient for accomplishing a given task. Conveniently, probably the best example of this is the <strong>Fundamental Theorem of Arithmetic</strong>, which we want to prove anyway. Here's the statement of the theorem:
+
+<p><strong>Theorem 11.1.</strong> Every natural number $n \gt 1$ can be written uniquely as a product of primes.
+
+    <p>First, let's think about the problem, leaving the "uniquely" aside for the moment. We want to show that every natural number $n$ has a prime factorization. So assuming that we set everything up properly, we make our hypothesis, that if $n$ has a prime factorization, then $n+1$ has a prime factorization. So we consider $n+1$. If it's prime, then we're good. If it isn't, then we observe that $n+1 = ab$ for some natural numbers $a$ and $b$. What we want is that we can apply our inductive hypothesis to $a$ and $b$. However, our inductive hypothesis doesn't quite say what we want: it only says that $n$ has a prime factorization, not $a$ or $b$!
+
+    <p>Strong induction is a reformulation of induction that gives us a "stronger" hypothesis to say these kinds of things.
+
+    <p><strong>Definition 11.2.</strong> Let $P(n)$ be a statement that depends on $n \in \mathbb N$. If
+    <ol>
+    <li>$P(0)$, and
+    <li>for all $n \in \mathbb N$, if $P(k)$ for all $k \lt n$, then $P(n)$
+    </ol>
+    <p> are both true, then the following is true:
+    <ol start="3">
+    <li>for all $n \in \mathbb N$, $P(n)$ holds.
+    </ol>
+    <p>This is called the <strong>principle of strong induction</strong>.
+
+    <p>What is the difference between ordinary mathematical induction and <em>strong</em> induction? Or, in other words, what makes strong induction strong? The hypothesis that we make in each of our implications is stronger. Recall that ordinary induction was stated as a chain of implications $P(k) \rightarrow P(k+1)$. Strong induction is a chain of implications of the form
+    $$P(0) \wedge P(1) \wedge P(2) \wedge \cdots \wedge P(k) \rightarrow P(k+1).$$
+    Then what we're really proving is all of the following statements,
+    \begin{align*}
+    &P(0), \\
+    P(0) \rightarrow &P(1), \\
+    P(0) \wedge P(1) \rightarrow &P(2), \\
+    P(0) \wedge P(1) \wedge P(2) \rightarrow &P(3), \\
+    & \vdots
+    \end{align*}
+    
+    <p>It's important to note that strong induction is not stronger in the sense that it allows us to prove things that we wouldn't be able to with mathematical induction. This is why I described strong induction as an alternate form of mathematical induction. It is possible to use mathematical induction to prove anything we would prove with strong induction, but this involves slightly altering the statement that you want to prove to incorporate your stronger assumptions.
+    
+    <p>A proof by strong induction looks similar to a proof by mathematical induction.
+    <ol>
+    <li><strong>Statement.</strong> Clearly state the statement $P$ that you want to prove and what you want to show induction on.
+    <li><strong>Base case.</strong> Prove $P(0)$.
+    <li><strong>Inductive case.</strong> State the <em>inductive hypothesis</em>, $\forall k \lt n, P(k)$. Then, using the assumption that $P(k)$ for all $k \lt n$, prove $P(n)$. Clearly indicate when the inductive hypothesis is used.
+    </ol>
+
+    <p><strong>Theorem 11.1a.</strong> Every natural number $n \gt 1$ can be written as a product of primes.
+
+    <p><em>Proof.</em> We will prove that for $n \gt 1$, $n$ can be written as a product of primes via strong induction on $n$.
+
+    <p><strong>Base case.</strong> $n = 2$. Clearly, 2 is a product of primes because 2 itself is a prime number.
+
+    <p><strong>Inductive case.</strong> Assume that for $2 \leq m \lt k$, $m$ can be written as a product of primes. We want to show that $k$ can be written as a product of primes. There are two cases to consider.
+    <ul>
+    <li>If $k$ is <em>prime</em>, then $k$ can clearly be written as a product of primes since $k$ is itself a prime number.
+    <li>If $k$ is <em>composite</em>, then we can write $k = a \cdot b$ for some $a, b \in \mathbb N$. Observe that $2 \leq a, b \lt k$. Therefore, by the inductive hypothesis, $a$ and $b$ can be written as a product of primes. Let $a = p_1 p_2 \cdots p_s$ and $b = q_1 q_2 \cdots q_t$, where $p_1, p_2, \dots, p_s, q_1, q_2, \dots, q_t$ are primes. Then
+    $$k = a \cdot b = p_1 p_2 \cdots p_s q_1 q_2 \cdots q_t$$
+    and therefore $k$ can be written as a product of primes.
+    </ul>
+    $\tag*{$\Box$}$
+	
+    <h3>Fibonacci numbers</h3>
+
+    <p>Another really nice example for strong induction is the Fibonacci numbers.
+
+    <p><strong>Definition 11.3.</strong> The <strong>Fibonacci numbers</strong> are defined by
+    <ol>
+    <li>$f_0 = 0$, $f_1 = 1$, and
+    <li>$f_n = f_{n-1} + f_{n-2}$ for $n \geq 2$.
+    </ol>
+
+    <p>In this form, the Fibonacci numbers lend themselves to inductive proofs quite naturally. However, just like with sums, sometimes we just want a nice neat formula to compute one term. It turns out that one can get an exact formula for $f_n$ in terms of the solutions to $x^2 - x - 1 = 0$. These are $\varphi = \frac{1 + \sqrt 5}{2}$, the Golden Ratio, and its conjugate root, $\widetilde \varphi = 1 - \varphi = \frac{1-\sqrt 5}{2}$. What we get is
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+    This is now known as Binet's formula, although it seems like it was known by a bunch of mathematicians like Euler, Bernoulli, and de Moivre over a century earlier.
+
+    <p><strong>Theorem 11.4.</strong> For all $n \in \mathbb N$,
+    $$f_n = \frac{\varphi^n - \widetilde \varphi^n}{\sqrt 5}.$$
+
+    <p><em>Proof.</em> We will show this by strong induction on $n$.
+
+    <p><strong>Base case.</strong> For $n = 0$, we have $f_0 = 0 = \frac{\varphi^0 - \widetilde \varphi^0}{\sqrt 5}$. For $n = 1$, we have 
+    \begin{align*}
+    \frac{\varphi - \widetilde \varphi}{\sqrt 5} &= \frac{\frac{1+\sqrt 5}{2} - \frac{1-\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\frac{2\sqrt 5}{2}}{\sqrt 5} \\
+    &= \frac{\sqrt 5}{\sqrt 5} \\
+    &= 1
+    \end{align*}
+
+    <p><strong>Inductive case.</strong> Suppose that $f_j = \frac{\varphi^j - \widetilde \varphi^j}{\sqrt 5}$ for all $j$ with $j \leq k$. Consider $f_{k+1}$.
+    \begin{align*}
+    f_{k+1} &= f_k + f_{k-1} \\
+    &= \frac{\varphi^k - \widetilde \varphi^k}{\sqrt 5} + \frac{\varphi^{k-1} - \widetilde \varphi^{k-1}}{\sqrt 5} &\text{by ind. hyp.} \\
+    &= \frac{\varphi^k + \varphi^{k-1} - (\widetilde \varphi^k + \widetilde \varphi^{k-1})}{\sqrt 5} \\
+    &= \frac{(1 + \varphi) \varphi^{k-1} - (1 + \widetilde \varphi) \widetilde \varphi^{k-1}}{\sqrt 5} \\
+    &= \frac{\varphi^2 \varphi^{k-1} - \widetilde \varphi^2 \widetilde \varphi^{k-1}}{\sqrt 5} &\text{since $\varphi^2 = \varphi + 1$ and $\widetilde \varphi^2 = \widetilde \varphi+1$}\\
+    &= \frac{\varphi^{k+1} - \widetilde \varphi^{k+1}}{\sqrt 5}
+    \end{align*}
+    $\tag*{$\Box$}$
+
+    <h3>Algorithmic Implications</h3>
+
+	<p><em>This is post-class material that may be of interest but isn't required reading.</em>
+
+    <p>Using this property of the Fibonacci numbers, we can prove something interesting about the Euclidean algorithm. The following is a result attributed to Gabriel Lamé in 1844, which makes it likely the earliest example of both <a href="https://www.sciencedirect.com/science/article/pii/S0315086084710317">analysis of an algorithm</a> and an application of the Fibonacci numbers.
+
+    <p><strong>Theorem 11.5 (Lamé's Theorem).</strong> Suppose $a_n \gt a_{n-1} \gt \cdots \gt a_1 \gt a_0 = 0$ is the sequence of numbers obtained from Euclid's algorithm. Then $a_i \geq f_i$ for all $i \leq n$.
+
+    <p><em>Proof.</em> We will prove this by (strong) induction on $n$.
+
+    <p><strong>Base case.</strong> From the statement, we have $a_0 = f_0$ and $0 \lt a_1$ and $f_1 = 1 \leq a_1$.
+
+    <p><strong>Inductive case.</strong> Assume that $a_j \geq f_j$ for all $j \lt n$. By the Division Theorem, there exists an integer $q$ such that $a_n = q \cdot a_{n-1} + a_{n-2}$ and that $a_{n-2} \lt a_{n-1}$. Then $q \geq 1$ and
+    \begin{align*}
+    a_n &= q \cdot a_{n-1} + a_{n-2} \\
+    & \geq a_{n-1} + a_{n-2} \\
+    & \geq f_{n-1} + f_{n-2} & \text{by ind. hyp.} \\
+    & = f_n
+    \end{align*}
+    $\tag*{$\Box$}$
+		
+	<p>When analyzing algorithms, we are concerned with the number of elementary operations that are performed in proportion to the size of the input and we are concerned with the growth of this function. Here, we consider the number of divisions to be our elementary operation, since that's the most important and costly operation we execute.
+
+    <p><strong>Corollary 11.6.</strong> Let $a \gt b \geq 0$ be natural numbers such that the representation of $a$ requires $d$ decimal digits and the calculation of $\gcd(a,b)$ via Euclid's algorithm requires $k$ division steps. Then $k \leq 5 \cdot d$.
+
+    <p><em>Proof.</em> Since the decimal representation of $a$ requires $d$ digits, we have $a \lt 10^d$. If the computation of $\gcd(a,b)$ by Euclid's algorithm requires $k$ steps, by Lamé's Theorem, we have $a \geq f_k$. Then we have
+    \begin{align*}
+    f_k &\lt 10^d \\
+    \frac{\varphi^k}{\sqrt 5} &\leq 10^d \\
+    k \log \varphi - \frac{\log 5}{2} &\leq d \log 10 \\
+    k &\leq \frac{d \log 10}{\log \varphi} - \frac{\log 5}{2 \log \varphi} \\
+    k &\leq 4.789d + 1.673
+    \end{align*}
+    That this implies $k \leq 5d$ is clear for large $d$. For small $d$, we can check the values by hand.
+    $\tag*{$\Box$}$
+
+    <p>This is a neat result that goes back to our brief discussion about the efficiency of trying to find a gcd. What Lamé's theorem tells us is that Euclid's algorithm executes operations roughly linearly to the number of digits of the largest number $a$. The number of digits of a number turns out to be about $\log a$, so Euclid's algorithm scales roughly logarithmically with $a$.
+
+    <p>If we compare this to the computing all the divisors method, we would be executing approximately as many operations as there are numbers from 1 to $n$. This means that our naive algorithm scales roughly linearly with $a$. Comparing the two algorithms, we have an approximately exponential difference between the two.	

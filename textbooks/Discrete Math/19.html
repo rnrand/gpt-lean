@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    
+	<title>CMSC 27100 &mdash; Lecture 19</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link type="../text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">	
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+
+<body>
+	<h1><a href="../">CMSC 27100</a> &mdash; Lecture 19</h1>
+
+    <h2>Probability</h2>
+    <p>Now that we have spent some time on learning how to enumerate outcomes, we can start to think about the likelihood of particular outcomes. This is where probability theory comes into play. In particular, we are interested in discrete probability, which deals with countably many outcomes and is attacked using many of the tools that we've been using. The other branch of probability theory deals with uncountably many outcomes and is approached using methods from calculus and analysis. For instance, while we can get away with summation, you will see a lot of integration when working in continuous probability theory.
+
+    <p>At first glance, even though we're primarily concerned with discrete probability, it seems a bit strange that we'd try to stuff probability theory into this course which is already chock full of other things to cover. But probability and randomness play an important role in computer science and particularly in theoretical computer science. Probabilistic methods are an important part of analysis of algorithms and algorithm design. There are some problems for which we may not know of an efficient deterministic algorithm, but we can come up with a provably efficient randomized algorithm. (To be honest, these are few and far between. Primality testing <a href="https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test">used to be</a> a prime example of such a problem, but <a href="https://en.wikipedia.org/wiki/AKS_primality_test">no longer is</a>.) Probability also plays a large role in cryptography, machine learning and quantum computing. To study these topics, we need a basic understanding of discrete probability.
+
+    <p><strong>Definition 18.1.</strong> A <strong>probability space</strong> $(\Omega,\Pr)$ is a finite set $\Omega \neq \emptyset$ together with a function $\Pr : \Omega \to \mathbb R^+$ such that
+    <ol>
+        <li>$\forall \omega \in \Omega, \Pr(\omega) \gt 0$,
+        <li>$\sum_{\omega \in \Omega} \Pr(\omega) = 1$.
+    </ol>
+    <p>We say that $\Omega$ is the <strong>sample space</strong> and $\Pr$ is the <strong>probability distribution</strong>. The above two conditions are known as the probability axioms and is due to Andrey Kolmogorov in the 1930s. Kolmogorov was a Soviet mathematician and was particularly influential in computer science by developing notions of algorithmic information theory in the 1960s. It might be a bit surprising to learn (as I did) that the formalization of basic probability concepts didn't come about until the 20th century, despite there being analysis of games of chance dating back to 17th century France.
+
+    <p>An <strong>event</strong> is a subset $A \subseteq \Omega$ and $\Pr : \mathcal P(\Omega) \to \mathbb R$ defined by $\Pr(A) = \sum_{\omega \in A} \Pr(\omega)$ is the <strong>probability of $A$</strong>. The <strong>atomic events</strong> are singleton sets $\{\omega\}$ with $\Pr(\{\omega\}) = \Pr(\omega)$ and the <strong>trivial events</strong> are events with probability 0 ($\emptyset$) or 1 ($\Omega$).
+
+    <p><strong>Example 18.2.</strong> A sample space for flipping a coin would be whether it lands on heads and tails $\{H,T\}$. A sample space for the outcome of a die roll would be $\{1,2,3,4,5,6\}$. An event can be something simple like flipping a coin and it landing on heads, in which case the event would be the set $\{H\}$. It can also be more complicated, like a die roll landing on a square, which would be the set $\{1,4\}$, or perhaps the positive divisors of 6, which would be the set $\{1,2,3,6\}$.
+
+    <p><strong>Definition 18.3.</strong> The <strong>uniform distribution</strong> over a sample space $\Omega$ defines $\Pr(\omega) = \frac 1 {|\Omega|}$ for all $\omega \in \Omega$. Thus, $\Pr(A) = \frac{|A|}{|\Omega|}$.
+
+    <p><strong>Example 18.4.</strong> Recall that a standard deck of playing cards consists of four <em>suits</em>, $\spadesuit, \heartsuit, \clubsuit, \diamondsuit$ with cards numbered from 2 through 10, and a Jack, Queen, King, and Ace (called the card's <em>rank</em>). This gives us 52 cards in total ($4 \times 13$). What is the probability that a poker hand contains a full house (i.e. a three of a kind together with a pair)? First, let's consider what our sample space is. Since we're concerned with possible poker hands, this should be all of the 5-card hands from our 52 cards. In this case, the size of our sample space is 
+    $$|\Omega| = \binom{52}5 = \frac{52 \cdot 51 \cdot 50 \cdot 49 \cdot 48}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = 2598960.$$
+    Now, let $F$ denote the event for full houses. First, we need to choose two ranks. These will not be the same, since otherwise, we'd need five of the same rank. We also need to distinguish between the rank for the three of a kind and the rank for the pair, so this is a 2-permutation and not a combination, which gives us $P(13,2)$. From this selection, we have $\binom 4 3$ ways to choose a three of a kind for one rank and $\binom 4 2$ ways to choose a pair. Putting this all together, we get
+    $$|F| = P(13,2) \binom 4 3 \binom 4 2 = (13 \cdot 12) \cdot \frac{4 \cdot 3 \cdot 2}{3 \cdot 2 \cdot 1} \cdot \frac{4 \cdot 3}{2 \cdot 1} = 13 \cdot 12 \cdot 4 \cdot 6 = 3744.$$
+    Then the probability that we get a full house is
+    $$\Pr(F) = \frac{|F|}{|\Omega|} = \frac{3744}{2598960} \approx 0.00144.$$
+
+<!--
+    <p><strong>Example 18.3.</strong> Suppose we deal a hand of 13 cards from a standard 52 card deck to four players: North, East, South, and West. What is the probability that North holds all the aces? First, we need to think about what our sample space should be. Since we are concerned with hands, this will be the result of the deal: all of the possible ways to distribute 13 card hands to four people. Combinatorially, this is distributing 52 distinguishable objects into four distinguishable boxes with 13 objects each. Then the size of our sample space is
+    $$|\Omega| = \binom{52}{13,13,13,13}.$$
+    Now, we want to count the number of such hands where North holds all the aces. In this case, North holds four cards that are fixed already, so we need to count how the other 48 cards are distributed. Let's call this event $N_{4A}$. This gives us
+    $$|N_{4A}| = \binom{48}{9,13,13,13}.$$
+    Then the probability of our event is just
+    \begin{align*}
+    \Pr(N_{4A}) &= \frac{|N_{4A}|}{|\Omega|} \\
+    &= \frac{\binom{48}{9,13,13,13}}{\binom{52}{13,13,13,13}} \\
+    &= \frac{13 \cdot 12 \cdot 11 \cdot 10}{52 \cdot 51 \cdot 50 \cdot 49} \\
+    &\approx 0.00264
+    \end{align*}
+-->
+
+    <p>So determining the probability of a single event amounts to counting the possible outcomes, or the sizes of the sets for the event and the sample space. And since we are dealing with sets, we can combine our sets in the same way as we've been doing to consider the probability of multiple events together. 
+
+    <p><strong>Theorem 18.5.</strong> $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$.
+
+    <p>You might notice that this corresponds to the Inclusion-Exclusion Principle from set theory. It leads to the following simple, but very useful theorem:
+		
+    <p><strong>Theorem 18.6 (Union Bound).</strong> $\Pr(A \cup B) \leq \Pr(A) + \Pr(B)$.		
+		
+		This will be an equality precisely when the intersection of $A$ and $B$ is empty. We call these events <em>disjoint</em>.
+
+    <p><strong>Definition 18.7.</strong> Events $A$ and $B$ are disjoint if $A \cap B = \emptyset$.
+
+	<p>We can generalize the union bound to the union of an arbitrary number of events:
+
+    <p><strong>Theorem 18.8 (Boole's Inequality).</strong> $\Pr \left( \bigcup_{i=1}^k A_i \right) \leq \sum_{i=1}^k \Pr(A_i)$. Furthermore, this is an equality if and only if the $A_i$ are pairwise disjoint.
+
+    <p>This is an easy theorem to prove using induction. As you might have noticed, this result is due to George Boole, who is the same Boole that gave us Boolean algebra.
+
+    <p>Something that doesn't quite have a direct analogue from our discussions on set theory is the notion of conditional events.
+
+    <p><strong>Definition 18.9.</strong> If $A$ and $B$ are events, then the <strong>conditional probability of $A$ relative to $B$</strong> is
+    $$\Pr(A \mid B) = \frac{\Pr(A \cap B)}{\Pr(B)}.$$
+    Note that by this definition, $\Pr(A \cap B) = \Pr(A \mid B) \cdot \Pr(B)$.
+
+    <p>One way of looking at this is if we restrict our attention to the event $B$ and ask, what is the probability of $A$ in this space? In this case, we are asking for the intersection of the events $A$ and $B$. Then to "zoom out" back to the sample space $\Omega$, we divide by the probability of $B$.
+		
+	    <p><strong>Example 18.10.</strong> Consider a roll of two dice. 
+	    <ol type="A">
+	        <li>What is the probability that the sum of the dice is 4?
+	        <li>What is the probability that the first die shows 3?
+	        <li>What is the probability that the sum of the dice is 4, given that the first die shows 3?
+			<li>What is the probability that the first die shows 3, given that the sum of the dice is 4?
+	    </ol>
+
+	    <p>Here, if we want to talk about the "first" die, we need our dice to be distinguishable. This means that our sample space is an arrangement of the outcome of the two dice after a roll. Each of the three dice can take on a value from 1 through 6, giving us $6^2 = 36$ possible outcomes.
+
+	    <ol type="A">
+	        <li>There are only three satisfying outcomes $(1,3), (2,2)$ and $(3,1)$ for a $\frac{3}{36} = \frac{1}{12}$ chance.
+	        <li>Here, we fix one of the dice, leaving the other one free. This is exactly $1 \cdot 6$, so the probability of this event is $\frac{6}{36} = \frac 1 6$.
+	        <li>This is a conditional probability question. For convenience, let $A$ be the event "sum of the dice is 4" and let $B$ be the event "first die shows 3". We know that the probability of $B$ is $\frac{1}{6}$ and $\Pr(A \cap B) = \Pr(\{(3,1)\}) = \frac{1}{36}$. Hence the conditional probability is $\frac{1/36}{1/6} = \frac{1}{6}$. Of course, we could have just looked at the $B = \{(3,1), (3,2), (3,3), (3,4), (3,5), (3,6)\}$ and noticed that one of the six possibilities corresponded to $A$. That's really what we're doing when we compute conditional probabilities!
+	        <li>Turning things around, $A = \{(1,3), (2,2), (3,1)\}$ of which one satisfies $B$, immediately giving us the answer $\frac{1}{3}$. This works out mathematically since the denominator is just $\frac{1}{12}$ and $\frac{1/36}{1/12}=\frac{1}{3}$.
+	    </ol>
+		
