@@ -10,6 +10,7 @@ from coq_to_lean.destinations.english import English as EnglishDest
 from coq_to_lean.destinations.lean4 import Lean4 as Lean4Dest
 from coq_to_lean.sources import Source
 from coq_to_lean.sources.coq import Coq as CoqSrc
+from coq_to_lean.sources.english import English as EnglishSrc
 
 
 class LanguageSpec(TypedDict):
@@ -90,7 +91,7 @@ example : (next_weekday (next_weekday .saturday)) = .tuesday := sorry""",
         "human_readable_name": "English",
         "syntax_name": "english",
         "dest_manager": EnglishDest,
-        "src_manager": None,
+        "src_manager": EnglishSrc,
         "lexer": NotmuchLexer,
         "examples": [
             "A day is either Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, or Saturday.",
