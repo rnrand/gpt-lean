@@ -81,7 +81,7 @@ def next_weekday (d : Day) : Day :=
    | .saturday => .monday
    | .sunday => .monday""",
             """\
-example text_next_weekday : (next_weekday (next_weekday .saturday)) = .tuesday := sorry""",
+example : (next_weekday (next_weekday .saturday)) = .tuesday := sorry""",
         ],
     },
 }

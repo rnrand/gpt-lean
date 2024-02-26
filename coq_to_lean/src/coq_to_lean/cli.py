@@ -12,9 +12,7 @@ from rich.syntax import Syntax
 
 from coq_to_lean import PROJECT_ROOT, truncate
 from coq_to_lean.destinations import Err
-from coq_to_lean.destinations.lean4 import Lean4
 from coq_to_lean.languages import LANGUAGES
-from coq_to_lean.sources.coq import Coq
 
 Q_TEMPLATE = """\
 Q:
@@ -23,15 +21,14 @@ Q:
 
 A:"""
 
-QA_TEMPLATE = (
-    Q_TEMPLATE
-    + """\
+A_TEMPLATE = """\
 
 ```{lang2}
 {cmd2}```
 
 """
-)
+
+QA_TEMPLATE = Q_TEMPLATE + A_TEMPLATE
 
 
 @click.command()
@@ -83,8 +80,12 @@ def main(project_root, file, model, src_lang, dest_lang, ctx_size):
     ):
         dest_manager = dest_lang_spec["dest_manager"]()
 
+    messages = examples
+
     for cmd1 in src_manager.commands[3:]:
-        messages = examples + Q_TEMPLATE.format(lang1=src_lang, cmd1=cmd1)
+        messages += Q_TEMPLATE.format(lang1=src_lang, cmd1=cmd1)
+
+        print(f"Prompt now is:\n{messages}")
 
         # print(f"Trying to translate the following command:\n{cmd}")
 
@@ -131,7 +132,7 @@ def main(project_root, file, model, src_lang, dest_lang, ctx_size):
             if not isinstance(new_state, Err):
                 dest_manager.state = new_state
 
-                messages += QA_TEMPLATE.format(
+                messages += A_TEMPLATE.format(
                     lang1=src_lang, cmd1=cmd1, lang2=dest_lang, cmd2=cmd2
                 )
                 break
