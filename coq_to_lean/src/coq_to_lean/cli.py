@@ -33,7 +33,7 @@ QA_TEMPLATE = Q_TEMPLATE + A_TEMPLATE
 
 @click.command()
 @click.option(
-    "--project_root",
+    "--project-root",
     default=PROJECT_ROOT / "data" / "lf",
     help="Root of the source project",
 )
@@ -82,7 +82,7 @@ def main(project_root, file, model, src_lang, dest_lang, ctx_size):
 
     messages = examples
 
-    for cmd1 in src_manager.commands[3:]:
+    for cmd1 in src_manager.commands:
         messages += Q_TEMPLATE.format(lang1=src_lang, cmd1=cmd1)
 
         print(f"Prompt now is:\n{messages}")

@@ -11,6 +11,7 @@ from coq_to_lean.destinations.lean4 import Lean4 as Lean4Dest
 from coq_to_lean.sources import Source
 from coq_to_lean.sources.coq import Coq as CoqSrc
 from coq_to_lean.sources.english import English as EnglishSrc
+from coq_to_lean.sources.lean4 import Lean4 as Lean4Src
 
 
 class LanguageSpec(TypedDict):
@@ -61,7 +62,7 @@ Example test_next_weekday:
         "human_readable_name": "Lean 4",
         "syntax_name": "lean",
         "lexer": Lean3Lexer,
-        "src_manager": None,
+        "src_manager": Lean4Src,
         "dest_manager": Lean4Dest,
         "examples": [
             """\
